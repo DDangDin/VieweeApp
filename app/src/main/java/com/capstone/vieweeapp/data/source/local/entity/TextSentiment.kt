@@ -1,0 +1,8 @@
+package com.capstone.vieweeapp.data.source.local.entity
+
+import com.capstone.viewee.data.source.network.clova_api.dto.Confidence
+
+data class TextSentiment(
+    val sentiment: String,
+    val confidence: Confidence,
+)

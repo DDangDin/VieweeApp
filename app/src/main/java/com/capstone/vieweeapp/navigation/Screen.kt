@@ -11,10 +11,14 @@ import androidx.compose.ui.res.vectorResource
 import com.capstone.vieweeapp.R
 
 sealed class Screen(val route: String, val title: String, val icon: Int?) {
+    // BottomNavigation Screens
     object Home: Screen("home_screen", "홈", R.drawable.ic_nav_item_home)
     object Interview: Screen("interview_screen", "면접", R.drawable.ic_nav_item_interview)
     object Calendar: Screen("calendar_screen", "캘린더", R.drawable.ic_nav_item_calendar)
     object Profile: Screen("profile_screen", "프로필", R.drawable.ic_nav_item_profile)
+
+    // Other Screens
+    object Test: Screen("test_screen", "테스트", null)
 }
 
 val bottomNavItems = listOf(

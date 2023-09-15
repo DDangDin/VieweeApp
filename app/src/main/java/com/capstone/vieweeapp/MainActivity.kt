@@ -8,7 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.capstone.vieweeapp.navigation.bottom_nav.VieweeBottomNavigation
+import androidx.navigation.compose.rememberNavController
+import com.capstone.vieweeapp.navigation.nav.VieweeBottomNavigation
 import com.capstone.vieweeapp.ui.theme.VieweeAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import org.opencv.android.OpenCVLoader
@@ -33,7 +34,9 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
 //                    Text(text = "Hello!")
-                    VieweeBottomNavigation()
+
+                    val navController = rememberNavController()
+                    VieweeBottomNavigation(navController = navController)
                 }
             }
         }

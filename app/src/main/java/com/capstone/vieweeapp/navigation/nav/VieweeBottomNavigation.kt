@@ -1,4 +1,4 @@
-package com.capstone.vieweeapp.navigation.bottom_nav
+package com.capstone.vieweeapp.navigation.nav
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
@@ -42,12 +42,11 @@ import com.capstone.vieweeapp.ui.theme.VieweeColorShadow
 import com.capstone.vieweeapp.utils.CustomRippleEffect
 
 @Composable
-fun VieweeBottomNavigation() {
+fun VieweeBottomNavigation(navController: NavHostController) {
 
     val context = LocalContext.current
 
     val scaffoldState = rememberScaffoldState()
-    val navController = rememberNavController()
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
@@ -141,5 +140,5 @@ fun MyBottomBar(
 @Preview
 @Composable
 fun BottomBarWithFab2Preview() {
-    VieweeBottomNavigation()
+    VieweeBottomNavigation(rememberNavController())
 }
