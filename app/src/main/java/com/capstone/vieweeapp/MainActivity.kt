@@ -7,13 +7,13 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import com.capstone.vieweeapp.navigation.bottom_nav.VieweeBottomNavigation
 import com.capstone.vieweeapp.ui.theme.VieweeAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 import org.opencv.android.OpenCVLoader
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val TAG = "MainActivity(LOG)"
@@ -25,13 +25,15 @@ class MainActivity : ComponentActivity() {
         Log.d(TAG, "OpenCV_initDebug(): $isInitialized")
 
         setContent {
+
             VieweeAppTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-
+//                    Text(text = "Hello!")
+                    VieweeBottomNavigation()
                 }
             }
         }
