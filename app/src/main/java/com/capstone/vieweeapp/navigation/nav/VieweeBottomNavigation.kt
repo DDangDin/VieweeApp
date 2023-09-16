@@ -1,5 +1,6 @@
 package com.capstone.vieweeapp.navigation.nav
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -19,6 +20,7 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -34,12 +36,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.capstone.vieweeapp.navigation.Screen
 import com.capstone.vieweeapp.navigation.bottomNavItems
 import com.capstone.vieweeapp.navigation.graph.BottomNavigationGraph
 import com.capstone.vieweeapp.ui.theme.VieweeColorGray
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
 import com.capstone.vieweeapp.ui.theme.VieweeColorShadow
 import com.capstone.vieweeapp.utils.CustomRippleEffect
+import kotlinx.coroutines.flow.collect
 
 @Composable
 fun VieweeBottomNavigation(navController: NavHostController) {
@@ -49,12 +53,16 @@ fun VieweeBottomNavigation(navController: NavHostController) {
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
 
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
     Scaffold(
         scaffoldState = scaffoldState,
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
+            Log.d("navBackStackEntry(currentRoute)", "currentRoute: $currentRoute")
             AnimatedVisibility(
-                visible = true,
+                visible = bottomNavItems.map { it.route }.contains(currentRoute),
                 enter = slideInVertically(initialOffsetY = { it }),
                 exit = slideOutVertically(targetOffsetY = { it })
             ) {
