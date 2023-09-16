@@ -31,12 +31,7 @@ fun HomeTopBar(
 ) {
 
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(
-                start = (Constants.HOME_PADDING_VALUE-5).dp,
-                end = Constants.HOME_PADDING_VALUE.dp
-            ),
+        modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {

@@ -12,5 +12,7 @@ object Constants {
     const val FEEDBACK_SEPARATOR = "\n"
 
     // PaddingValues
-    const val HOME_PADDING_VALUE = 30
+    const val HOME_PADDING_VALUE_HORIZONTAL = 30
+    const val HOME_PADDING_VALUE_VERTICAL = 40
+    const val BOTTOM_NAV_BAR_PADDING = 56
 }

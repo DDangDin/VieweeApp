@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">VieweeApp</string>
+
+<!-- 형식: (스크린/뷰)_(위젯)_(옵션) -->
+
+<!-- HomeScreen -->
+    <string name="home_text_title_1">환영합니다. 김길동님!</string>
+    <string name="home_text_title_2">오늘도 좋은 기운 받아가세요!</string>
 </resources>

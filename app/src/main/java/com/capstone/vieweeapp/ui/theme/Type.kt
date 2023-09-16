@@ -2,9 +2,12 @@ package com.capstone.vieweeapp.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.capstone.vieweeapp.R
 
 // Set of Material typography styles to start with
 val Typography = Typography(
@@ -31,4 +34,16 @@ val Typography = Typography(
         letterSpacing = 0.5.sp
     )
     */
+)
+
+val noToSansKr = FontFamily(
+    Font(R.font.noto_sans_kr_black, FontWeight.Black, FontStyle.Normal),
+    Font(R.font.noto_sans_kr_bold, FontWeight.Bold, FontStyle.Normal),
+    Font(R.font.noto_sans_kr_extra_bold, FontWeight.ExtraBold, FontStyle.Normal),
+    Font(R.font.noto_sans_kr_extra_light, FontWeight.ExtraLight, FontStyle.Normal),
+    Font(R.font.noto_sans_kr_light, FontWeight.Light, FontStyle.Normal),
+    Font(R.font.noto_sans_kr_medium, FontWeight.Medium, FontStyle.Normal),
+    Font(R.font.noto_sans_kr_regular, FontWeight.Normal, FontStyle.Normal),
+    Font(R.font.noto_sans_kr_semi_bold, FontWeight.SemiBold, FontStyle.Normal),
+    Font(R.font.noto_sans_kr_thin, FontWeight.Thin, FontStyle.Normal),
 )

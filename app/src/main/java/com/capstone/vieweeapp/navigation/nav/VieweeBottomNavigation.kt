@@ -42,6 +42,7 @@ import com.capstone.vieweeapp.navigation.graph.BottomNavigationGraph
 import com.capstone.vieweeapp.ui.theme.VieweeColorGray
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
 import com.capstone.vieweeapp.ui.theme.VieweeColorShadow
+import com.capstone.vieweeapp.utils.Constants
 import com.capstone.vieweeapp.utils.CustomRippleEffect
 import kotlinx.coroutines.flow.collect
 
@@ -88,7 +89,7 @@ fun MyBottomBar(
     BottomAppBar(
         modifier = Modifier
             .fillMaxWidth()
-            .height(56.dp)
+            .height(Constants.BOTTOM_NAV_BAR_PADDING.dp)
             .clip(RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp))
             .shadow(
 //                shape = RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp),
@@ -147,6 +148,6 @@ fun MyBottomBar(
 
 @Preview
 @Composable
-fun BottomBarWithFab2Preview() {
+fun BottomNavigationPreview() {
     VieweeBottomNavigation(rememberNavController())
 }
