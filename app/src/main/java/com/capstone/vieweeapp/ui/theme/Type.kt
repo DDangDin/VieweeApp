@@ -39,8 +39,6 @@ val Typography = Typography(
 val noToSansKr = FontFamily(
     Font(R.font.noto_sans_kr_black, FontWeight.Black, FontStyle.Normal),
     Font(R.font.noto_sans_kr_bold, FontWeight.Bold, FontStyle.Normal),
-    Font(R.font.noto_sans_kr_extra_bold, FontWeight.ExtraBold, FontStyle.Normal),
-    Font(R.font.noto_sans_kr_extra_light, FontWeight.ExtraLight, FontStyle.Normal),
     Font(R.font.noto_sans_kr_light, FontWeight.Light, FontStyle.Normal),
     Font(R.font.noto_sans_kr_medium, FontWeight.Medium, FontStyle.Normal),
     Font(R.font.noto_sans_kr_regular, FontWeight.Normal, FontStyle.Normal),

@@ -11,5 +11,6 @@ data class InterviewResult(
     val textSentiment: List<TextSentiment>,
     val emotions: List<Emotion>,
     val feedbacks: Feedbacks,
-    val feedbackTotal: String
+    val feedbackTotal: String,
+    val date: String
 )

@@ -18,9 +18,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.capstone.vieweeapp.R
 import com.capstone.vieweeapp.ui.theme.VieweeColorHomeSearchBarLeadingIcon
 import com.capstone.vieweeapp.ui.theme.VieweeColorHomeText
 
@@ -60,7 +63,7 @@ fun SearchBar(
         leadingIcon = {
             Icon(
                 modifier = Modifier.padding(start = 10.dp),
-                imageVector = Icons.Default.Search,
+                imageVector = ImageVector.vectorResource(R.drawable.ic_search),
                 contentDescription = "leadingIcon",
                 tint = VieweeColorHomeSearchBarLeadingIcon
             )
