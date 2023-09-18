@@ -47,7 +47,10 @@ import com.capstone.vieweeapp.utils.CustomRippleEffect
 import kotlinx.coroutines.flow.collect
 
 @Composable
-fun VieweeBottomNavigation(navController: NavHostController) {
+fun VieweeBottomNavigation(
+    navController: NavHostController,
+    startInterview: () -> Unit
+) {
 
     val context = LocalContext.current
 
@@ -74,6 +77,7 @@ fun VieweeBottomNavigation(navController: NavHostController) {
         BottomNavigationGraph(
             modifier = Modifier.padding(it),
             navController = navController,
+            startInterview = startInterview
         )
     }
 }
@@ -149,5 +153,8 @@ fun MyBottomBar(
 @Preview
 @Composable
 fun BottomNavigationPreview() {
-    VieweeBottomNavigation(rememberNavController())
+    VieweeBottomNavigation(
+        navController = rememberNavController(),
+        startInterview = {}
+    )
 }

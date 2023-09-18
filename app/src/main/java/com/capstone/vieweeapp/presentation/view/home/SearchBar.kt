@@ -4,10 +4,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.capstone.vieweeapp.R
 import com.capstone.vieweeapp.ui.theme.VieweeColorHomeSearchBarLeadingIcon
-import com.capstone.vieweeapp.ui.theme.VieweeColorHomeText
+import com.capstone.vieweeapp.ui.theme.VieweeColorText
 
 @Composable
 fun SearchBar(
@@ -46,7 +43,7 @@ fun SearchBar(
             .border(
                 1.dp,
                 if (isSearchBarFocused) {
-                    VieweeColorHomeText.copy(alpha = 0.5f)
+                    VieweeColorText.copy(alpha = 0.5f)
                 } else {
                     Color.Transparent
                 },
@@ -57,7 +54,7 @@ fun SearchBar(
             },
         text = text,
         onTextChanged = { onTextChanged(it) },
-        textColor = VieweeColorHomeText.copy(alpha = 0.7f),
+        textColor = VieweeColorText.copy(alpha = 0.7f),
         fontSize = 17.sp,
         placeholderText = "",
         leadingIcon = {

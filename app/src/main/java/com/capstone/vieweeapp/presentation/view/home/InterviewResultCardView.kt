@@ -3,11 +3,8 @@ package com.capstone.vieweeapp.presentation.view.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -22,13 +19,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.capstone.vieweeapp.R
 import com.capstone.vieweeapp.data.source.local.entity.InterviewResult
-import com.capstone.vieweeapp.ui.theme.VieweeColorHomeText
+import com.capstone.vieweeapp.ui.theme.VieweeColorText
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
 import com.capstone.vieweeapp.ui.theme.noToSansKr
 import com.capstone.vieweeapp.utils.Constants
@@ -44,7 +40,7 @@ fun InterviewResultCardView(
     Box(
         modifier = modifier
             .wrapContentSize()
-            .background(VieweeColorHomeText.copy(alpha = 0.05f))
+            .background(VieweeColorText.copy(alpha = 0.05f))
     ) {
         Row(
             modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 1.dp, bottom = 6.dp),
@@ -77,7 +73,7 @@ fun InterviewResultCardView(
                 fontSize = 14.sp,
                 fontFamily = noToSansKr,
                 fontWeight = FontWeight.Light,
-                color = VieweeColorHomeText.copy(alpha = 0.5f),
+                color = VieweeColorText.copy(alpha = 0.5f),
                 style = TextStyle(
                     platformStyle = PlatformTextStyle(
                         includeFontPadding = false

@@ -3,6 +3,8 @@ package com.capstone.vieweeapp.utils
 import androidx.compose.ui.unit.dp
 import com.capstone.vieweeapp.data.source.local.entity.Feedbacks
 import com.capstone.vieweeapp.data.source.local.entity.InterviewResult
+import com.capstone.vieweeapp.data.source.local.entity.Resume
+import com.capstone.vieweeapp.data.source.local.entity.ResumeDetail
 
 object Constants {
 
@@ -18,6 +20,9 @@ object Constants {
     const val HOME_PADDING_VALUE_VERTICAL = 40
     const val BOTTOM_NAV_BAR_PADDING = 56
 
+    // InputProfileScreen - ResumeText 글자 수 제한
+    const val RESUME_TEXT_MAX_LENGTH = 600
+
     // DummyData
     val INTERVIEW_RESULT_EMPTY_DATA = InterviewResult(
         id = 0,
@@ -30,10 +35,36 @@ object Constants {
         date = "2023.09.18"
     )
 
+    val RESUME_DUMMY_DATA = Resume(
+        id = 0,
+        birth = "",
+        education = "",
+        career = "",
+        etc = "",
+        name = "자기소개서",
+        resumeDetail = ResumeDetail(
+            supportJob = "",
+            certificate = emptyList(),
+            skill = emptyList(),
+            resumeText = "자기소개서 텍스트 테스트 자기소개서 텍스트 테스트 자기소개서 텍스트 테스트 자기소개서 " +
+                    "텍스트 테스트 자기소개서 텍스트 테스트" +
+                    " 자기소개서 텍스트 테스트 자기소개서 텍스트 테스트 자기소개서 텍스트 테스트 " +
+                    "자기소개서 텍스트 테스트 자기소개서 텍스트 테스트"
+        )
+    )
+
     fun getInterviewResultList(): List<InterviewResult> {
         val datas = arrayListOf<InterviewResult>()
         repeat(10) {
             datas.add(INTERVIEW_RESULT_EMPTY_DATA)
+        }
+        return datas
+    }
+
+    fun getResumeList(): List<Resume> {
+        val datas = arrayListOf<Resume>()
+        repeat(10) {
+            datas.add(RESUME_DUMMY_DATA)
         }
         return datas
     }

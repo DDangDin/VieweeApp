@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.capstone.vieweeapp.ui.theme.VieweeColorHomeSearchBarBackground
-import com.capstone.vieweeapp.ui.theme.VieweeColorHomeText
+import com.capstone.vieweeapp.ui.theme.VieweeColorText
 
 @Composable
 fun CustomTextField(
@@ -36,7 +36,7 @@ fun CustomTextField(
         onValueChange = { onTextChanged(it) },
         singleLine = true,
         maxLines = 1,
-        cursorBrush = SolidColor(VieweeColorHomeText.copy(alpha = 0.7f)),
+        cursorBrush = SolidColor(VieweeColorText.copy(alpha = 0.7f)),
         textStyle = LocalTextStyle.current.copy(
             color = textColor,
             fontSize = fontSize
@@ -52,7 +52,7 @@ fun CustomTextField(
                     if (text.isEmpty()) Text(
                         text = placeholderText,
                         style = LocalTextStyle.current.copy(
-                            color = VieweeColorHomeText.copy(alpha = 0.7f),
+                            color = VieweeColorText.copy(alpha = 0.7f),
                             fontSize = fontSize
                         )
                     )

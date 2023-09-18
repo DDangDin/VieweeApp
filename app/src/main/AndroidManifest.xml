@@ -14,6 +14,11 @@
         android:theme="@style/Theme.VieweeApp"
         tools:targetApi="31">
         <activity
+            android:name=".InterviewActivity"
+            android:exported="false"
+            android:label="@string/title_activity_interview"
+            android:theme="@style/Theme.VieweeApp" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"

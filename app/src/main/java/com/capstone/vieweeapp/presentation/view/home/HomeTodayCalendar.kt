@@ -18,7 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.capstone.vieweeapp.R
-import com.capstone.vieweeapp.ui.theme.VieweeColorHomeText
+import com.capstone.vieweeapp.ui.theme.VieweeColorText
 import com.capstone.vieweeapp.ui.theme.noToSansKr
 
 @Composable
@@ -41,7 +41,7 @@ fun HomeTodayCalendar(
                         spanStyle = SpanStyle(
                             fontFamily = noToSansKr,
                             fontWeight = FontWeight.SemiBold,
-                            color = VieweeColorHomeText.copy(0.8f)
+                            color = VieweeColorText.copy(0.8f)
                         )
                     )
                 )
@@ -51,7 +51,7 @@ fun HomeTodayCalendar(
                         spanStyle = SpanStyle(
                             fontFamily = noToSansKr,
                             fontWeight = FontWeight.Normal,
-                            color = VieweeColorHomeText.copy(0.8f)
+                            color = VieweeColorText.copy(0.8f)
                         )
                     )
                 )
@@ -65,7 +65,7 @@ fun HomeTodayCalendar(
             text = stringResource(id = R.string.home_text_calendar_2),
             fontFamily = noToSansKr,
             fontWeight = FontWeight.Normal,
-            color = VieweeColorHomeText.copy(0.7f)
+            color = VieweeColorText.copy(0.7f)
         )
     }
 }

@@ -1,0 +1,24 @@
+package com.capstone.vieweeapp.data.source.local.db
+
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import com.capstone.vieweeapp.data.source.local.entity.InterviewResult
+
+@Dao
+interface InterviewResultDao {
+
+    @Query("SELECT * FROM interview_result_db")
+    suspend fun getInterviewResults(): List<InterviewResult>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertInterviewResult(interviewResult: InterviewResult)
+
+    @Delete
+    suspend fun deleteInterviewResult(interviewResult: InterviewResult)
+
+    @Query("DELETE FROM interview_result_db")
+    suspend fun deleteAllInterviewResult()
+}

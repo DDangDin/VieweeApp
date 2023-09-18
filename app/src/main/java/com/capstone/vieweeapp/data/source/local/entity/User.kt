@@ -7,5 +7,6 @@ import androidx.room.PrimaryKey
 data class User(
     @PrimaryKey(autoGenerate = true) val id: Int,
     val name: String,
-    val profileImage: String
+    val profileImage: String,
+    val etc: String
 )

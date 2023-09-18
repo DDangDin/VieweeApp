@@ -19,6 +19,14 @@ sealed class Screen(val route: String, val title: String, val icon: Int?) {
 
     // Other Screens
     object Test: Screen("test_screen", "테스트", null)
+
+    // InterviewNavigation Screens
+    object SelectResume: Screen("select_resume_screen", "자기소개서 선택", null)
+    object InputProfileNavigation: Screen("input_profile_navigation", "정보입력 네비게이션", null)
+    object InputProfileFirst: Screen("input_profile_screen_1", "정보입력-1", null)
+    object InputProfileSecond: Screen("input_profile_screen_2", "정보입력-2", null)
+    object InputProfileThird: Screen("input_profile_screen_3", "정보입력-3", null)
+    object InputProfileFinish: Screen("input_profile_finish_screen", "정보입력 완료", null)
 }
 
 val bottomNavItems = listOf(

@@ -3,7 +3,6 @@ package com.capstone.vieweeapp.presentation.view.home
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,12 +14,10 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.capstone.vieweeapp.R
-import com.capstone.vieweeapp.ui.theme.VieweeColorHomeText
+import com.capstone.vieweeapp.ui.theme.VieweeColorText
 import com.capstone.vieweeapp.ui.theme.noToSansKr
-import com.capstone.vieweeapp.utils.Constants
 
 @Composable
 fun HomeInterviewResultText(
@@ -42,7 +39,7 @@ fun HomeInterviewResultText(
                         spanStyle = SpanStyle(
                             fontFamily = noToSansKr,
                             fontWeight = FontWeight.SemiBold,
-                            color = VieweeColorHomeText.copy(0.8f)
+                            color = VieweeColorText.copy(0.8f)
                         )
                     )
                 )
@@ -52,7 +49,7 @@ fun HomeInterviewResultText(
                         spanStyle = SpanStyle(
                             fontFamily = noToSansKr,
                             fontWeight = FontWeight.Normal,
-                            color = VieweeColorHomeText.copy(0.8f)
+                            color = VieweeColorText.copy(0.8f)
                         )
                     )
                 )

@@ -18,7 +18,8 @@ import com.capstone.vieweeapp.utils.Constants
 @Composable
 fun BottomNavigationGraph(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    startInterview: () -> Unit
 ) {
 
     NavHost(
@@ -37,7 +38,9 @@ fun BottomNavigationGraph(
         }
 
         composable(route = Screen.Interview.route) {
-            InterviewScreen()
+            InterviewScreen(
+                startInterview = startInterview
+            )
         }
 
         composable(route = Screen.Calendar.route) {

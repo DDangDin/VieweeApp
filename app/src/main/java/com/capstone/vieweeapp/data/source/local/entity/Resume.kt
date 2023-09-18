@@ -7,12 +7,13 @@ import com.capstone.vieweeapp.utils.Constants
 
 @Entity("resume_db")
 data class Resume(
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Int? = null,
     val name: String,       // resume name
     val birth: String,
     val education: String,  // 학력
     val career: String,     // 경력
-    val resumeDetail: ResumeDetail
+    val resumeDetail: ResumeDetail,
+    val etc: String = "",
 )
 
 fun Resume.toCreateQuestionReqDto(): CreateQuestionReqDto {
