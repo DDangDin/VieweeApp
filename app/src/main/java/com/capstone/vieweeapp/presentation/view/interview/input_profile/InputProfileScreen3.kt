@@ -113,6 +113,7 @@ fun InputProfileScreen3(
                     if (
                         inputProfileViewModel.inputResumeText.value.isNotEmpty()
                     ) {
+                        // 저장
                         inputProfileViewModel.insertResume()
                         onNavigateNext()
                     }

@@ -2,7 +2,7 @@ package com.capstone.vieweeapp.data.source.local.converter
 
 import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
-import com.capstone.vieweeapp.utils.JsonParser
+import com.capstone.vieweeapp.utils.parser.JsonParser
 import com.google.gson.reflect.TypeToken
 
 @ProvidedTypeConverter

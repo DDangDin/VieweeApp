@@ -1,6 +1,5 @@
 package com.capstone.vieweeapp.navigation.graph
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -19,7 +18,7 @@ import com.capstone.vieweeapp.utils.Constants
 fun BottomNavigationGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    startInterview: () -> Unit
+    startSelectResume: () -> Unit
 ) {
 
     NavHost(
@@ -39,7 +38,7 @@ fun BottomNavigationGraph(
 
         composable(route = Screen.Interview.route) {
             InterviewScreen(
-                startInterview = startInterview
+                startSelectResume = startSelectResume
             )
         }
 

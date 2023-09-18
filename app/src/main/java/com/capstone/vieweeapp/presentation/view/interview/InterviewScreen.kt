@@ -7,10 +7,8 @@ import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,7 +33,7 @@ import com.capstone.vieweeapp.ui.theme.VieweeColorMain
 @Composable
 fun InterviewScreen(
     modifier: Modifier = Modifier,
-    startInterview: () -> Unit
+    startSelectResume: () -> Unit
 ) {
 
     Column(
@@ -45,7 +43,7 @@ fun InterviewScreen(
     ) {
         Image(
             modifier = Modifier.bounceClick {
-                startInterview()
+                startSelectResume()
             },
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_play_button),
             contentDescription = "StartInterview"
@@ -93,6 +91,6 @@ fun Modifier.bounceClick(onClick: () -> Unit) = composed {
 @Composable
 fun InterviewScreenPreview() {
     InterviewScreen(
-        startInterview = {}
+        startSelectResume = {}
     )
 }

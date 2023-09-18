@@ -23,9 +23,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val isInitialized = OpenCVLoader.initDebug()
-        Log.d(TAG, "OpenCV_initDebug(): $isInitialized")
-
         val interviewActivityIntent = Intent(this, InterviewActivity::class.java)
 
         setContent {
@@ -41,7 +38,7 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     VieweeBottomNavigation(
                         navController = navController,
-                        startInterview = {
+                        startSelectResume = {
                             startActivity(interviewActivityIntent)
                         }
                     )

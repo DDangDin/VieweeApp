@@ -9,9 +9,11 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,7 +35,6 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,7 +43,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -52,25 +55,28 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.capstone.vieweeapp.R
 import com.capstone.vieweeapp.data.source.local.entity.Resume
+import com.capstone.vieweeapp.presentation.event.SelectResumeUiEvent
 import com.capstone.vieweeapp.presentation.state.ResumeState
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
 import com.capstone.vieweeapp.ui.theme.VieweeColorOrange
 import com.capstone.vieweeapp.ui.theme.VieweeColorText
-import com.capstone.vieweeapp.utils.Constants
 
 @Composable
 fun SelectResumeScreen(
     modifier: Modifier = Modifier,
     resumeState: ResumeState,
-    onBackStack: () -> Unit,
+    onFinish: () -> Unit,
     onAddResume: () -> Unit,
-    prepareInterview: (Resume) -> Unit
+    selectResumeUiEvent: (SelectResumeUiEvent) -> Unit,
+    prepareInterview: () -> Unit
 ) {
 
     val resumes = resumeState.resumes
 
     // 선택한 자기소개서 index가 됨
     var selectedIndex by remember { mutableStateOf(-1) }
+    var longClickSelectedIndex by remember { mutableStateOf(-1) }
+    var isLongClick by remember { mutableStateOf(false) }
 
     Box(modifier.fillMaxSize()) {
         Column(
@@ -90,7 +96,7 @@ fun SelectResumeScreen(
                 IconButton(
                     modifier = Modifier
                         .size(50.dp),
-                    onClick = onBackStack
+                    onClick = onFinish
                 ) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
@@ -128,18 +134,26 @@ fun SelectResumeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 items(resumes.size) { idx ->
-                    val borderColor = if (idx == selectedIndex) VieweeColorOrange else VieweeColorMain
+                    val borderColor = if ((idx == selectedIndex)) VieweeColorOrange else VieweeColorMain
+                    val backgroundColor = if (isLongClick && idx == longClickSelectedIndex) Color.Gray else Color.Transparent
 
                     ResumeCardView(
                         modifier = Modifier
-                            .border(1.dp, borderColor, RoundedCornerShape(10.dp)),
+                            .border(1.dp, borderColor, RoundedCornerShape(10.dp))
+                            .background(backgroundColor, RoundedCornerShape(10.dp)),
                         resume = resumes[idx],
-                        onSelected = {
-                            if (borderColor == VieweeColorOrange) {
+                        onClick = {
+                            if (borderColor == VieweeColorOrange || isLongClick) {
                                 selectedIndex = -1
                             } else {
                                 selectedIndex = idx
                             }
+                            isLongClick = false
+                            longClickSelectedIndex = -1
+                        },
+                        onLongClick = {
+                            isLongClick = true
+                            longClickSelectedIndex = idx
                         },
                         idx = idx
                     )
@@ -158,19 +172,39 @@ fun SelectResumeScreen(
             ShowNextButton(
                 onClick = {
                     Log.d("ShowNextButton_Click_Log", "selectedIndex: $selectedIndex")
-                    prepareInterview(resumes[selectedIndex])
+                    selectResumeUiEvent(SelectResumeUiEvent.SelectedResume(resumes[selectedIndex]))
+                    prepareInterview()
+                }
+            )
+        }
+        AnimatedVisibility(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 50.dp),
+            visible = isLongClick,
+            enter = slideInVertically() + fadeIn(),
+            exit = slideOutVertically() + fadeOut(),
+        ) {
+            ShowDeleteButton(
+                onClick = {
+                    Log.d("ShowNextButton_Click_Log", "selectedIndex: $longClickSelectedIndex")
+                    selectResumeUiEvent(SelectResumeUiEvent.DeleteResume(resumes[longClickSelectedIndex]))
+                    isLongClick = false
+                    longClickSelectedIndex = -1
                 }
             )
         }
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ResumeCardView(
     modifier: Modifier = Modifier,
     resume: Resume,
     idx: Int,
-    onSelected: () -> Unit
+    onClick: () -> Unit,
+    onLongClick: () -> Unit
 ) {
 
     var expanded by remember { mutableStateOf(false) }
@@ -182,8 +216,12 @@ fun ResumeCardView(
             )
             .clip(RoundedCornerShape(10.dp))
             .clickable {
-                onSelected()
+                onClick()
             }
+            .combinedClickable(
+                onClick = onClick,
+                onLongClick = onLongClick,
+            )
     ) {
         Column(
             modifier = Modifier
@@ -277,13 +315,35 @@ fun ShowNextButton(
     }
 }
 
+@Composable
+fun ShowDeleteButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    IconButton(
+        modifier = modifier
+            .background(VieweeColorOrange, CircleShape)
+            .clip(CircleShape)
+            .size(65.dp),
+        onClick = onClick
+    ) {
+        Icon(
+            modifier = Modifier.size(40.dp),
+            imageVector = ImageVector.vectorResource(R.drawable.ic_exit),
+            contentDescription = "확인",
+            tint = Color.White
+        )
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun SelectResumeScreenPreview() {
     SelectResumeScreen(
         resumeState = ResumeState(),
-        onBackStack = { /*TODO*/ },
+        onFinish = { /*TODO*/ },
         onAddResume = { /*TODO*/ },
+        selectResumeUiEvent = {},
         prepareInterview = {}
     )
 }

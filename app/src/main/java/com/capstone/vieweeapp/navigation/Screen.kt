@@ -1,13 +1,5 @@
 package com.capstone.vieweeapp.navigation
 
-import android.graphics.drawable.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CalendarToday
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
 import com.capstone.vieweeapp.R
 
 sealed class Screen(val route: String, val title: String, val icon: Int?) {
@@ -20,13 +12,19 @@ sealed class Screen(val route: String, val title: String, val icon: Int?) {
     // Other Screens
     object Test: Screen("test_screen", "테스트", null)
 
-    // InterviewNavigation Screens
+    // InputProfileNavigation Screens
     object SelectResume: Screen("select_resume_screen", "자기소개서 선택", null)
     object InputProfileNavigation: Screen("input_profile_navigation", "정보입력 네비게이션", null)
     object InputProfileFirst: Screen("input_profile_screen_1", "정보입력-1", null)
     object InputProfileSecond: Screen("input_profile_screen_2", "정보입력-2", null)
     object InputProfileThird: Screen("input_profile_screen_3", "정보입력-3", null)
     object InputProfileFinish: Screen("input_profile_finish_screen", "정보입력 완료", null)
+
+    // RealInterviewNavigation Screens
+    object RealInterviewNavigation: Screen("real_interview_navigation", "실제 면접 네비게이션", null)
+    object InterviewPrepare: Screen("interview_prepare_screen", "면접 준비(안내사항)", null)
+    object InterviewLoading: Screen("interview_loading_screen", "면접 로딩(면접 데이터 준비)", null)
+    object RealInterview: Screen("real_interview_screen", "실제 면접 진행", null)
 }
 
 val bottomNavItems = listOf(

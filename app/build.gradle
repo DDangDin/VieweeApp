@@ -32,8 +32,8 @@ android {
         }
 
 //        buildConfigField "String", "GPT_API_KEY", properties['gpt_api_key']
-//        buildConfigField "String", "CLOVA_SENTIMENT_API_KEY_ID", properties['x_ncp_apigw_api_key_id']
-//        buildConfigField "String", "CLOVA_SENTIMENT_API_KEY", properties['x_ncp_apigw_api_key']
+        buildConfigField "String", "CLOVA_SENTIMENT_API_KEY_ID", properties['x_ncp_apigw_api_key_id']
+        buildConfigField "String", "CLOVA_SENTIMENT_API_KEY", properties['x_ncp_apigw_api_key']
 
         ndk {
             // Specifies the ABI configurations of your native

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.capstone.vieweeapp.data.source.local.entity.Resume
 import com.capstone.vieweeapp.data.source.local.entity.ResumeDetail
 import com.capstone.vieweeapp.domain.repository.ResumeRepository
+import com.capstone.vieweeapp.presentation.event.SelectResumeUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -55,6 +56,17 @@ class InputProfileViewModel @Inject constructor(
     }
     fun inputResumeChanged(value: String) {
         inputResumeText.value = value
+    }
+
+    fun initializeInputData() {
+        inputName.value = ""
+        inputBirthdate.value = ""
+        inputEducation.value = ""
+        inputCareer.value = ""
+        inputSupportJobs.value = ""
+        inputCertifications.value = ""
+        inputSkills.value = ""
+        inputResumeText.value = ""
     }
 
     fun insertResume() {

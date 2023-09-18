@@ -1,10 +1,13 @@
 package com.capstone.vieweeapp.di
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Room
+import com.capstone.vieweeapp.data.repository.ClovaSentimentRepositoryImpl
 import com.capstone.vieweeapp.data.repository.InterviewResultRepositoryImpl
 import com.capstone.vieweeapp.data.repository.ResumeRepositoryImpl
 import com.capstone.vieweeapp.data.repository.UserRepositoryImpl
+import com.capstone.vieweeapp.data.repository.VieweeRepositoryImpl
 import com.capstone.vieweeapp.data.source.local.converter.EmotionListTypeConverter
 import com.capstone.vieweeapp.data.source.local.converter.FeedbacksTypeConverter
 import com.capstone.vieweeapp.data.source.local.converter.ResumeDetailTypeConverter
@@ -16,16 +19,27 @@ import com.capstone.vieweeapp.data.source.local.db.ResumeDao
 import com.capstone.vieweeapp.data.source.local.db.ResumeDatabase
 import com.capstone.vieweeapp.data.source.local.db.UserDao
 import com.capstone.vieweeapp.data.source.local.db.UserDatabase
+import com.capstone.vieweeapp.data.source.remote.clova.dto.ClovaSentimentApi
+import com.capstone.vieweeapp.data.source.remote.viewee.dto.VieweeApi
+import com.capstone.vieweeapp.domain.repository.ClovaSentimentRepository
 import com.capstone.vieweeapp.domain.repository.InterviewResultRepository
 import com.capstone.vieweeapp.domain.repository.ResumeRepository
 import com.capstone.vieweeapp.domain.repository.UserRepository
-import com.capstone.vieweeapp.utils.GsonParser
+import com.capstone.vieweeapp.domain.repository.VieweeRepository
+import com.capstone.vieweeapp.utils.Constants
+import com.capstone.vieweeapp.utils.parser.GsonParser
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import org.json.JSONObject
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -98,4 +112,104 @@ object AppModule {
     fun provideInterviewResultRepository(dao: InterviewResultDao): InterviewResultRepository {
         return InterviewResultRepositoryImpl(dao)
     }
+
+    // API
+    @Provides
+    @Singleton
+    fun provideClovaApi(): ClovaSentimentApi {
+        fun String?.isJsonObject(): Boolean {
+            return this?.startsWith("{") == true && this.endsWith("}")
+        }
+
+        fun String?.isJsonArray(): Boolean {
+            return this?.startsWith("[") == true && this.endsWith("]")
+        }
+
+        val client = OkHttpClient.Builder()
+
+        val loggingInterceptor = HttpLoggingInterceptor { message ->
+            when {
+                message.isJsonObject() ->
+                    Log.d("Retrofit_Log", JSONObject(message).toString(4))
+
+                message.isJsonArray() ->
+                    Log.d("Retrofit_Log", JSONObject(message).toString(4))
+
+                else -> {
+                    try {
+                        Log.d("Retrofit_Log", JSONObject(message).toString(4))
+                    } catch (e: Exception) {
+                        Log.d("Retrofit_Log", message)
+                    }
+                }
+            }
+        }
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+        client.addInterceptor(loggingInterceptor)
+
+        return Retrofit.Builder()
+            .baseUrl(Constants.CLOVA_SENTIMENT_BASE_URL)
+            .client(client.build())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(ClovaSentimentApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideVieweeApi(): VieweeApi {
+        fun String?.isJsonObject(): Boolean {
+            return this?.startsWith("{") == true && this.endsWith("}")
+        }
+
+        fun String?.isJsonArray(): Boolean {
+            return this?.startsWith("[") == true && this.endsWith("]")
+        }
+
+        val client = OkHttpClient
+            .Builder()
+            .readTimeout(25, TimeUnit.SECONDS)
+//            .connectTimeout(15, TimeUnit.SECONDS)
+//            .writeTimeout(15, TimeUnit.SECONDS)
+
+        val loggingInterceptor = HttpLoggingInterceptor { message ->
+            when {
+                message.isJsonObject() ->
+                    Log.d("Retrofit_Log", JSONObject(message).toString(4))
+
+                message.isJsonArray() ->
+                    Log.d("Retrofit_Log", JSONObject(message).toString(4))
+
+                else -> {
+                    try {
+                        Log.d("Retrofit_Log", JSONObject(message).toString(4))
+                    } catch (e: Exception) {
+                        Log.d("Retrofit_Log", message)
+                    }
+                }
+            }
+        }
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+        client.addInterceptor(loggingInterceptor)
+
+        return Retrofit.Builder()
+            .baseUrl(Constants.VIEWEE_MOCK_SERVER_BASE_URL)
+            .client(client.build())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(VieweeApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideVieweeRepository(api: VieweeApi): VieweeRepository {
+        return VieweeRepositoryImpl(api)
+    }
+
+    @Provides
+    @Singleton
+    fun provideClovaSentimentRepository(api: ClovaSentimentApi): ClovaSentimentRepository {
+        return ClovaSentimentRepositoryImpl(api)
+    }
+
 }

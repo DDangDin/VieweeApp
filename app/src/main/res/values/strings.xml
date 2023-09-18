@@ -39,4 +39,14 @@
 
     <string name="input_profile_finish_btn">면접 시작</string>
     <string name="input_profile_finish_text">정보 입력 완료!</string>
+
+    <!-- RealInterview Screen -->
+    <string name="interview_prepare_text_1">면접 화면은 어둡지 않은,\n밝은 환경에서 진행 해주세요</string>
+    <string name="interview_prepare_text_2">면접 환경은 조용한 곳에서\n진행 해주세요!</string>
+    <string name="interview_prepare_text_3">면접 화면에는 지원자만\n나오도록 해주세요!</string>
+
+    <!-- RealInterview Loading Screen -->
+    <string name="interview_loading_error">다시 시도해주세요</string>
+    <string name="interview_loading_main_text">면접관 입장중</string>
+    <string name="interview_loading_exit_text">종료하기</string>
 </resources>

@@ -20,7 +20,6 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -36,7 +35,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.capstone.vieweeapp.navigation.Screen
 import com.capstone.vieweeapp.navigation.bottomNavItems
 import com.capstone.vieweeapp.navigation.graph.BottomNavigationGraph
 import com.capstone.vieweeapp.ui.theme.VieweeColorGray
@@ -44,12 +42,11 @@ import com.capstone.vieweeapp.ui.theme.VieweeColorMain
 import com.capstone.vieweeapp.ui.theme.VieweeColorShadow
 import com.capstone.vieweeapp.utils.Constants
 import com.capstone.vieweeapp.utils.CustomRippleEffect
-import kotlinx.coroutines.flow.collect
 
 @Composable
 fun VieweeBottomNavigation(
     navController: NavHostController,
-    startInterview: () -> Unit
+    startSelectResume: () -> Unit
 ) {
 
     val context = LocalContext.current
@@ -77,7 +74,7 @@ fun VieweeBottomNavigation(
         BottomNavigationGraph(
             modifier = Modifier.padding(it),
             navController = navController,
-            startInterview = startInterview
+            startSelectResume = startSelectResume
         )
     }
 }
@@ -155,6 +152,6 @@ fun MyBottomBar(
 fun BottomNavigationPreview() {
     VieweeBottomNavigation(
         navController = rememberNavController(),
-        startInterview = {}
+        startSelectResume = {}
     )
 }
