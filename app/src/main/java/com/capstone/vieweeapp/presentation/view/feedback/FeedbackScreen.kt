@@ -65,7 +65,7 @@ fun FeedbackScreen(
     questionState: QuestionsState,
     feedbackState: FeedbackState,
     onNavigateHome: () -> Unit,
-    saveInterviewResult: () -> Unit
+    saveInterviewResult: () -> Unit,
 ) {
 
     val scrollState = rememberScrollState()

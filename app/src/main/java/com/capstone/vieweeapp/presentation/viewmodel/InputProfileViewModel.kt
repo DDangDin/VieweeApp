@@ -73,7 +73,7 @@ class InputProfileViewModel @Inject constructor(
         viewModelScope.launch {
 
             val resume = Resume(
-                name = "자기소개서",
+                name = inputName.value,
                 birth = inputBirthdate.value,
                 education = inputEducation.value,
                 career = inputCareer.value,

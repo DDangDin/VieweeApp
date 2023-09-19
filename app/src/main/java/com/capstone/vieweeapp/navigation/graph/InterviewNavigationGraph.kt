@@ -162,7 +162,7 @@ fun InterviewNavigationGraph(
                     questionState = questionsState.value,
                     feedbackState = feedbackState.value,
                     onNavigateHome = onFinish,
-                    saveInterviewResult = { interviewViewModel.saveInterviewResult() }
+                    saveInterviewResult = { interviewViewModel.saveInterviewResult() },
                 )
             }
         }
