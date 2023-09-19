@@ -11,7 +11,10 @@ fun CreateQuestionResDto.makeQuestionList(): List<String> {
     // issue:
     // 1. 가끔 '세요.' 라는 텍스트가 있음
     return if (questions.contains("\n")) {
-        questions.split("\n").map { it.substring(3) }
+        questions
+            .split("\n")
+            .filter { it.isNotEmpty() }
+            .map { it.substring(3) }
     } else {
         listOf(questions)
     }

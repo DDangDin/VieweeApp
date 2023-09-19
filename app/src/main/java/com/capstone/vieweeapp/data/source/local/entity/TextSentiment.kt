@@ -6,3 +6,7 @@ data class TextSentiment(
     val sentiment: String,
     val confidence: Confidence,
 )
+
+fun TextSentiment.toFeedbackReq(): String {
+    return sentiment
+}

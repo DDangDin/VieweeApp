@@ -1,13 +1,17 @@
 package com.capstone.vieweeapp.navigation.graph
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.capstone.vieweeapp.navigation.Screen
+import com.capstone.vieweeapp.presentation.event.RealInterviewUiEvent
+import com.capstone.vieweeapp.presentation.view.feedback.FeedbackScreen
 import com.capstone.vieweeapp.presentation.view.interview.input_profile.InputProfileFinishScreen
 import com.capstone.vieweeapp.presentation.view.interview.input_profile.InputProfileScreen1
 import com.capstone.vieweeapp.presentation.view.interview.input_profile.InputProfileScreen2
@@ -18,6 +22,8 @@ import com.capstone.vieweeapp.presentation.view.interview.real_interview.prepare
 import com.capstone.vieweeapp.presentation.view.interview.select_resume.SelectResumeScreen
 import com.capstone.vieweeapp.presentation.viewmodel.InputProfileViewModel
 import com.capstone.vieweeapp.presentation.viewmodel.InterviewViewModel
+import com.capstone.vieweeapp.presentation.viewmodel.TextVoiceSpeechViewModel
+import com.capstone.vieweeapp.utils.opencv.FacialExpressionRecognition
 
 @Composable
 fun InterviewNavigationGraph(
@@ -26,6 +32,7 @@ fun InterviewNavigationGraph(
     interviewViewModel: InterviewViewModel,
     inputProfileViewModel: InputProfileViewModel,
     requestPermissions: () -> Unit,
+    facialExpressionRecognition: FacialExpressionRecognition
 ) {
 
     NavHost(
@@ -92,6 +99,7 @@ fun InterviewNavigationGraph(
                     questionsState = questionsState.value,
                     backToMain = onFinish,
                     startInterview = {
+                        interviewViewModel.realInterviewUiEvent(RealInterviewUiEvent.StartInterview)
                         navController.navigate(Screen.RealInterview.route) {
                             popUpTo(Screen.InterviewLoading.route) {
                                 inclusive = true
@@ -103,7 +111,59 @@ fun InterviewNavigationGraph(
             }
 
             composable(route = Screen.RealInterview.route) {
-                RealInterviewScreen()
+
+                val textVoiceSpeechViewModel: TextVoiceSpeechViewModel = hiltViewModel()
+                val interviewTime = interviewViewModel.interviewTime.collectAsState()
+                val interviewerTurnState = interviewViewModel.interviewerTurnState.collectAsState()
+                val questionsState = interviewViewModel.questionsState.collectAsState()
+                val interviewFinishState = interviewViewModel.finishState.collectAsState()
+
+                LaunchedEffect(key1 = Unit) {
+                    Log.d("RealInterview_Log", "${interviewViewModel.questionsState.value.questions}")
+                }
+
+
+                RealInterviewScreen(
+                    interviewerTurnState = interviewerTurnState.value,
+                    time = interviewTime.value.toString(),
+                    onStop = onFinish,
+                    uiEvent = interviewViewModel::realInterviewUiEvent,
+                    recognizeImage = { mRgba, mGray, rotationDegrees ->
+                        facialExpressionRecognition.recognizeImage(
+                            mRgba,
+                            interviewViewModel,
+                            rotationDegrees
+                        )
+                    },
+                    textVoiceSpeechViewModel = textVoiceSpeechViewModel,
+                    questionsState = questionsState.value,
+                    interviewFinishState = interviewFinishState.value,
+                    onNavigateFeedbackScreen = {
+                        navController.navigate(Screen.FeedbackNavigation.route) {
+                            popUpTo(Screen.RealInterviewNavigation.route) {
+                                inclusive = true
+                            }
+                        }
+                    }
+                )
+            }
+        }
+
+        navigation(
+            route = Screen.FeedbackNavigation.route,
+            startDestination = Screen.Feedback.route
+        ) {
+            composable(route = Screen.Feedback.route) {
+
+                val feedbackState = interviewViewModel.feedbackState.collectAsState()
+                val questionsState = interviewViewModel.questionsState.collectAsState()
+
+                FeedbackScreen(
+                    questionState = questionsState.value,
+                    feedbackState = feedbackState.value,
+                    onNavigateHome = onFinish,
+                    saveInterviewResult = { interviewViewModel.saveInterviewResult() }
+                )
             }
         }
 

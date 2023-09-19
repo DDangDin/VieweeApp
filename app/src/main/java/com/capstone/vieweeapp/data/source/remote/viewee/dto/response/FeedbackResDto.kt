@@ -11,6 +11,8 @@ data class FeedbackResDto(
 
 fun FeedbackResDto.toFeedbacks(): Feedbacks {
     return Feedbacks(
-        feedbacks = feedbacks.split(Constants.FEEDBACK_SEPARATOR)
+        feedbacks = feedbacks
+            .split(Constants.FEEDBACK_SEPARATOR)
+            .filter { it.isNotEmpty() }
     )
 }

@@ -1,5 +1,7 @@
 package com.capstone.vieweeapp.data.source.local.entity
 
+import java.util.Collections.max
+
 data class Emotion(
     val surprise: Int,
     val fear: Int,
@@ -9,3 +11,7 @@ data class Emotion(
     val disgust: Int,
     val happy: Int
 )
+
+//fun Emotion.toFeedbackReq(): String {
+//
+//}

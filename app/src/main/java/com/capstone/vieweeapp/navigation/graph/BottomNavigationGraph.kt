@@ -1,13 +1,17 @@
 package com.capstone.vieweeapp.navigation.graph
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.capstone.vieweeapp.navigation.Screen
 import com.capstone.vieweeapp.presentation.view.calendar.CalendarScreen
+import com.capstone.vieweeapp.presentation.view.feedback.FeedbackScreenForHome
 import com.capstone.vieweeapp.presentation.view.home.HomeScreen
 import com.capstone.vieweeapp.presentation.view.interview.InterviewScreen
 import com.capstone.vieweeapp.presentation.view.profile.ProfileScreen
@@ -26,15 +30,29 @@ fun BottomNavigationGraph(
         startDestination = Screen.Home.route
     ) {
         composable(route = Screen.Home.route) {
-            val homeViewModel: HomeViewModel = viewModel()
+            val homeViewModel: HomeViewModel = hiltViewModel()
+            val interviewResultsState = homeViewModel.interviewResultsState.collectAsState()
+
+            LaunchedEffect(Unit) {
+                homeViewModel.getInterviewResults()
+            }
 
             HomeScreen(
                 searchText = homeViewModel.searchText.value,
                 onSearchTextChanged = homeViewModel::onSearchTextChanged,
                 username = "김길동", // SharedPreference 사용 예정
-                interviewResults = Constants.getInterviewResultList()
+                interviewResultsState = interviewResultsState.value,
+                openInterviewResult = {  }
             )
         }
+
+//        composable(route = "feedback_display") {
+//            FeedbackScreenForHome(
+//                interviewResult = ,
+//                onNavigateHome = { /*TODO*/ },
+//                name =
+//            )
+//        }
 
         composable(route = Screen.Interview.route) {
             InterviewScreen(

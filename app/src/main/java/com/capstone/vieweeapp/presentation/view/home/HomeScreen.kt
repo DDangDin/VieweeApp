@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.capstone.vieweeapp.R
 import com.capstone.vieweeapp.data.source.local.entity.InterviewResult
+import com.capstone.vieweeapp.presentation.state.InterviewResultsState
 import com.capstone.vieweeapp.ui.theme.VieweeColorText
 import com.capstone.vieweeapp.ui.theme.noToSansKr
 import com.capstone.vieweeapp.utils.Constants
@@ -35,10 +36,13 @@ fun HomeScreen(
     searchText: String,
     onSearchTextChanged: (String) -> Unit,
     username: String,
-    interviewResults: List<InterviewResult>
+    interviewResultsState: InterviewResultsState,
+    openInterviewResult: () -> Unit
 ) {
 
     val scrollState = rememberScrollState()
+
+    val interviewResults = interviewResultsState.interviewResults
 
     Column(
         modifier = Modifier
@@ -131,7 +135,7 @@ fun HomeScreen(
                             InterviewResultCardView(
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(15.dp))
-                                    .clickable {  },
+                                    .clickable { openInterviewResult() },
                                 index = index,
                                 listSize = interviewResults.size,
                                 interviewResult = interviewResult
@@ -151,6 +155,7 @@ fun HomeScreenPreview() {
         searchText = "",
         onSearchTextChanged = {},
         username = "김길동",
-        interviewResults = Constants.getInterviewResultList()
+        interviewResultsState = InterviewResultsState(),
+        openInterviewResult = {}
     )
 }

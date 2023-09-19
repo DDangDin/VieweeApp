@@ -169,6 +169,7 @@ class InterviewActivity : ComponentActivity() {
                         interviewViewModel = interviewViewModel,
                         inputProfileViewModel = inputProfileViewModel,
                         requestPermissions = { requestPermissions() },
+                        facialExpressionRecognition = facialExpressionRecognition
                     )
                 }
             }
