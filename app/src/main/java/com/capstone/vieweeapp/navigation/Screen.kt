@@ -26,8 +26,12 @@ sealed class Screen(val route: String, val title: String, val icon: Int?) {
     object InterviewLoading: Screen("interview_loading_screen", "면접 로딩(면접 데이터 준비)", null)
     object RealInterview: Screen("real_interview_screen", "실제 면접 진행", null)
 
+    // Feedback Screens
     object FeedbackNavigation: Screen("feedback_navigation", "피드백 네비게이션", null)
     object Feedback: Screen("feedback_screen", "피드백", null)
+
+    // Feedback For LocalDB(HomeScreen)
+    object FeedbackForHomeScreen: Screen("feedback_for_home_screen", "홈화면을 위한 피드백", null)
 }
 
 val bottomNavItems = listOf(

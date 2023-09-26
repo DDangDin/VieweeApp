@@ -12,16 +12,18 @@ object Constants {
 
     // API Endpoint
     const val CLOVA_SENTIMENT_BASE_URL = "https://naveropenapi.apigw.ntruss.com"
-    const val VIEWEE_MOCK_SERVER_BASE_URL = "https://4dfc4c1a-ecd0-4d8a-9979-aeeb3a874d29.mock.pstmn.io"
+//    const val VIEWEE_MOCK_SERVER_BASE_URL = "https://4dfc4c1a-ecd0-4d8a-9979-aeeb3a874d29.mock.pstmn.io"
+    const val VIEWEE_REAL_SERVER_BASE_URL = "http://ec2-52-79-155-234.ap-northeast-2.compute.amazonaws.com:8080"
 
     // Messages
     const val UNKNOWN_NAME = "Unknown"
     const val COMMON_ERROR_MESSAGE = "알 수 없는 오류"
     const val INTERVIEW_FINISH_MESSAGE = " 수고하셨습니다. 면접이 종료 되었습니다. 하단에 완료 버튼을 눌러, 결과를 기다려 주시기 바랍니다."
+    const val INTERVIEW_QUESTION_FINISH = "질문 종료"
 
     // Separator
     const val RESUME_SEPARATOR = ","
-    const val FEEDBACK_SEPARATOR = "\n"
+    const val FEEDBACK_SEPARATOR = "#"
 
     // PaddingValues
     const val HOME_PADDING_VALUE_HORIZONTAL = 30
@@ -60,6 +62,9 @@ object Constants {
                     "자기소개서 텍스트 테스트 자기소개서 텍스트 테스트"
         )
     )
+
+    // SharedPreference
+    const val USER_SHARED_PREFERENCE = "user"
 
     fun getInterviewResultList(): List<InterviewResult> {
         val datas = arrayListOf<InterviewResult>()

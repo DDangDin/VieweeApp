@@ -29,16 +29,18 @@ fun HomeIntroductionText(
                     text = stringResource(id = R.string.home_text_title_1_1),
                 )
             )
-            append(
-                AnnotatedString(
-                    text = " $username",
+            if (username.isNotEmpty()) {
+                append(
+                    AnnotatedString(
+                        text = " $username",
+                    )
                 )
-            )
-            append(
-                AnnotatedString(
-                    text = stringResource(id = R.string.home_text_title_1_2),
+                append(
+                    AnnotatedString(
+                        text = stringResource(id = R.string.home_text_title_1_2),
+                    )
                 )
-            )
+            }
             append("\n")
             append(
                 AnnotatedString(

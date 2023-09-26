@@ -35,16 +35,18 @@ fun HomeTodayCalendar(
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = buildAnnotatedString {
-                append(
-                    AnnotatedString(
-                        text = username,
-                        spanStyle = SpanStyle(
-                            fontFamily = noToSansKr,
-                            fontWeight = FontWeight.SemiBold,
-                            color = VieweeColorText.copy(0.8f)
+                if (username.isNotEmpty()) {
+                    append(
+                        AnnotatedString(
+                            text = "${username}님의 ",
+                            spanStyle = SpanStyle(
+                                fontFamily = noToSansKr,
+                                fontWeight = FontWeight.SemiBold,
+                                color = VieweeColorText.copy(0.8f)
+                            )
                         )
                     )
-                )
+                }
                 append(
                     AnnotatedString(
                         text = stringResource(id = R.string.home_text_calendar_1),

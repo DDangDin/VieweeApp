@@ -316,6 +316,11 @@ class InterviewViewModel @Inject constructor(
     }
 
     fun saveInterviewResult() {
+        // 의문점->
+        // 뷰모델에서 관찰한 상태 값을 가지고 뷰에서 데이터를 가지고 놀다가
+        // 해당 데이터를 저장하거나 가공하고 싶을 때는
+        // 뷰에서 데이터를 전달해주나?
+        // 아니면 어차피 뷰모델이 가지고 있는 데이터니까 밑에 처럼 하나?
         viewModelScope.launch {
             interviewResultRepository.insertInterviewResult(
                 InterviewResult(

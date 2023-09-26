@@ -168,9 +168,9 @@ object AppModule {
 
         val client = OkHttpClient
             .Builder()
-            .readTimeout(25, TimeUnit.SECONDS)
-//            .connectTimeout(15, TimeUnit.SECONDS)
-//            .writeTimeout(15, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
 
         val loggingInterceptor = HttpLoggingInterceptor { message ->
             when {
@@ -193,7 +193,7 @@ object AppModule {
         client.addInterceptor(loggingInterceptor)
 
         return Retrofit.Builder()
-            .baseUrl(Constants.VIEWEE_MOCK_SERVER_BASE_URL)
+            .baseUrl(Constants.VIEWEE_REAL_SERVER_BASE_URL)
             .client(client.build())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -211,5 +211,4 @@ object AppModule {
     fun provideClovaSentimentRepository(api: ClovaSentimentApi): ClovaSentimentRepository {
         return ClovaSentimentRepositoryImpl(api)
     }
-
 }

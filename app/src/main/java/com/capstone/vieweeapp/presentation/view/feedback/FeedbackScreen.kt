@@ -1,6 +1,5 @@
 package com.capstone.vieweeapp.presentation.view.feedback
 
-import android.util.Log
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
@@ -25,14 +24,12 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,21 +45,23 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.capstone.vieweeapp.presentation.state.FeedbackState
 import com.capstone.vieweeapp.presentation.state.QuestionsState
+import com.capstone.vieweeapp.presentation.view.feedback.graph.GraphView
 import com.capstone.vieweeapp.presentation.view.interview.input_profile.CustomTitleText
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
 import com.capstone.vieweeapp.utils.CustomRippleEffect
 import com.capstone.vieweeapp.utils.CustomRippleEffect.clickableWithoutRipple
-import org.opencv.android.Utils
 
 @Composable
 fun FeedbackScreen(
     modifier: Modifier = Modifier,
     questionState: QuestionsState,
+    answerList: List<String>,
     feedbackState: FeedbackState,
     onNavigateHome: () -> Unit,
     saveInterviewResult: () -> Unit,
@@ -123,6 +122,7 @@ fun FeedbackScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
+                    GraphView()
                     CustomTitleText(
                         Modifier.padding(top = 50.dp),
                         "✓ ${feedbackState.resumeForFeedback!!.name} 님 면접의 총평 피드백"
@@ -153,7 +153,8 @@ fun FeedbackScreen(
                         .padding(bottom = 30.dp)
                         .background(Color.White),
                     feedbackState = feedbackState,
-                    questionState = questionState
+                    questionState = questionState,
+                    answerList = answerList
                 )
             }
 
@@ -196,7 +197,6 @@ fun FeedbackScreen(
             )
         }
     }
-
 }
 
 
@@ -204,7 +204,8 @@ fun FeedbackScreen(
 fun FeedbackDetailCardGrid(
     modifier: Modifier = Modifier,
     feedbackState: FeedbackState,
-    questionState: QuestionsState
+    questionState: QuestionsState,
+    answerList: List<String>
 ) {
     CustomTitleText(
         Modifier.padding(top = 20.dp, bottom = 30.dp),
@@ -217,11 +218,12 @@ fun FeedbackDetailCardGrid(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        feedbackState.feedbacks.feedbacks.subList(0,feedbackState.feedbacks.feedbacks.size-1).forEachIndexed { index, answer ->
+        feedbackState.feedbacks.feedbacks.subList(0,feedbackState.feedbacks.feedbacks.size-1).forEachIndexed { index, feedback ->
             FeedbackDetailCardView(
                 modifier = Modifier.padding(bottom = 10.dp),
-                DetailTitle = questionState.questions[index],
-                DetailContent = answer
+                detailTitle = questionState.questions[index],
+                detailContent = answerList[index],
+                feedbackContent = feedback
             )
         }
     }
@@ -249,8 +251,9 @@ fun FeedbackDetailCardGrid(
 @Composable
 fun FeedbackDetailCardView(
     modifier: Modifier = Modifier,
-    DetailTitle: String,
-    DetailContent: String
+    detailTitle: String,
+    detailContent: String,
+    feedbackContent: String,
 ) {
     var isExpanded by remember { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
@@ -284,7 +287,7 @@ fun FeedbackDetailCardView(
                 ) {
 
                 Text(
-                    text = DetailTitle,
+                    text = detailTitle,
                     modifier = Modifier
                         .padding(top = 10.dp),
                     textAlign = TextAlign.Center,
@@ -305,17 +308,41 @@ fun FeedbackDetailCardView(
 
                     )
                 }
-                if (isExpanded) Text(
-                    text = DetailContent,
-                    modifier = Modifier
-                        .padding(10.dp),
-                    textAlign = TextAlign.Left,
-                    fontSize = 13.sp,
-                    color = Color.Gray,
-                ) else " "
+                if (isExpanded) {
+                    Text(
+                        text = detailContent,
+                        modifier = Modifier
+                            .padding(10.dp),
+                        textAlign = TextAlign.Left,
+                        fontSize = 13.sp,
+                        color = Color.Gray,
+                    )
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp),
+                        text = "-> $feedbackContent",
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.DarkGray,
+                        textAlign = TextAlign.Start
+                    )
+                } else {
+                    " "
+                }
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun FeedFeedbackDetailCardViewPreview() {
+    FeedbackDetailCardView(
+        detailContent = "DetailContent",
+        detailTitle = "DetailTitle",
+        feedbackContent = "피드백 들어갈 부분"
+    )
 }
 
 private val VerticalScrollConsumer = object : NestedScrollConnection {

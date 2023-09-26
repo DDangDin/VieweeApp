@@ -1,13 +1,10 @@
 package com.capstone.vieweeapp.presentation.view.interview.real_interview
 
-import android.graphics.Paint.Align
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
@@ -26,20 +23,25 @@ import com.capstone.vieweeapp.R
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
 import com.capstone.vieweeapp.ui.theme.VieweeColorOrange
 import com.capstone.vieweeapp.ui.theme.noToSansKr
+import com.capstone.vieweeapp.utils.Constants
 
 @Composable
 fun RealInterviewScreenTopBar(
     modifier: Modifier = Modifier,
     interviewerTurn: Boolean,
     index: Int,
+    isFinish: Boolean,
 ) {
 
-    val icon = if(interviewerTurn) R.drawable.ic_speacker else R.drawable.ic_microphone
+    val icon = if (interviewerTurn) R.drawable.ic_speacker else R.drawable.ic_microphone
 
     Row(
         modifier = modifier
             .fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp, alignment = Alignment.CenterHorizontally),
+        horizontalArrangement = Arrangement.spacedBy(
+            8.dp,
+            alignment = Alignment.CenterHorizontally
+        ),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -49,7 +51,13 @@ fun RealInterviewScreenTopBar(
             tint = VieweeColorMain
         )
         Text(
-            text = if (interviewerTurn) "${index+1}번째 질문" else "${index+1}번째 답변",
+            text = if (isFinish) {
+                Constants.INTERVIEW_QUESTION_FINISH
+            } else if (interviewerTurn) {
+                "${index + 1}번째 질문"
+            } else {
+                "${index + 1}번째 답변"
+            },
             fontFamily = noToSansKr,
             fontSize = 20.sp,
             fontWeight = FontWeight.SemiBold,
@@ -69,6 +77,7 @@ fun RealInterviewScreenTopBar(
 fun RealInterviewTopBarPreview() {
     RealInterviewScreenTopBar(
         interviewerTurn = true,
-        index = 0
+        index = 0,
+        isFinish = true
     )
 }

@@ -106,7 +106,7 @@ fun InterviewNavigationGraph(
                             }
                         }
                     },
-                    onPopBackStack = {  }
+                    onPopBackStack = { navController.popBackStack() }
                 )
             }
 
@@ -160,6 +160,7 @@ fun InterviewNavigationGraph(
 
                 FeedbackScreen(
                     questionState = questionsState.value,
+                    answerList = interviewViewModel.answerList,
                     feedbackState = feedbackState.value,
                     onNavigateHome = onFinish,
                     saveInterviewResult = { interviewViewModel.saveInterviewResult() },

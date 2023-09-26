@@ -94,13 +94,9 @@ fun RealInterviewScreen(
                 .fillMaxWidth()
                 .fillMaxHeight(0.07f),
             interviewerTurn = isInterviewerTurn,
-            index = 0
+            index = interviewerTurnState.turnIndex,
+            isFinish = questionsState.questions.size == interviewerTurnState.turnIndex-1,
         )
-//        Column(
-//            modifier = Modifier.fillMaxSize(),
-//            horizontalAlignment = Alignment.CenterHorizontally,
-//            verticalArrangement = Arrangement.Center
-//        ) {
         Image(
             modifier = Modifier
                 .weight(1f)
