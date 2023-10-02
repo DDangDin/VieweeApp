@@ -12,8 +12,11 @@ object Constants {
 
     // API Endpoint
     const val CLOVA_SENTIMENT_BASE_URL = "https://naveropenapi.apigw.ntruss.com"
-//    const val VIEWEE_MOCK_SERVER_BASE_URL = "https://4dfc4c1a-ecd0-4d8a-9979-aeeb3a874d29.mock.pstmn.io"
+    const val VIEWEE_MOCK_SERVER_BASE_URL = "https://4dfc4c1a-ecd0-4d8a-9979-aeeb3a874d29.mock.pstmn.io"
     const val VIEWEE_REAL_SERVER_BASE_URL = "http://ec2-52-79-155-234.ap-northeast-2.compute.amazonaws.com:8080"
+
+    // Toast Message - RealInterviewScreen
+    const val SPOKEN_ANSWER_TEXT_EMPTY = "답변 후 다음 질문으로 넘어갈 수 있습니다."
 
     // Messages
     const val UNKNOWN_NAME = "Unknown"

@@ -33,7 +33,7 @@ import java.io.IOException
 @AndroidEntryPoint
 class InterviewActivity : ComponentActivity() {
 
-    private val TAG = "InterviewActivity"
+    private val TAG = "InterviewActivity(Log)"
 
     private val shouldShowCamera = mutableStateOf(false)
     private val shouldRecordAudio = mutableStateOf(false)

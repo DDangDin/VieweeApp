@@ -1,5 +1,7 @@
 package com.capstone.vieweeapp.presentation.view.interview.real_interview
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -25,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.capstone.vieweeapp.R
@@ -34,6 +37,8 @@ import com.capstone.vieweeapp.presentation.state.QuestionsState
 import com.capstone.vieweeapp.presentation.viewmodel.TextVoiceSpeechViewModel
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
 import com.capstone.vieweeapp.utils.Constants
+import com.capstone.vieweeapp.utils.opencv.makeGrayMat
+import com.capstone.vieweeapp.utils.opencv.makeRgbaMat
 import kotlinx.coroutines.delay
 import org.opencv.core.Mat
 
@@ -51,6 +56,13 @@ fun RealInterviewScreen(
     textVoiceSpeechViewModel: TextVoiceSpeechViewModel,
     onNavigateFeedbackScreen: () -> Unit
 ) {
+    // 답변 차례일 때 다음 질문으로 넘어가기 위한 조건
+    // 1. tts 상태가 아니여야 함 즉, 말하고 있는 상태가 아니여야 함
+    // (ttsState에서 isSpeak 값 체크)
+    // 2. interviewerTurn이 아니여야 함
+    // (interviewerTurnState에서 isInterviewTurn 값 체크)
+
+    val context = LocalContext.current
 
     val ttsState = textVoiceSpeechViewModel.ttsState.value
     val voiceToTextState = textVoiceSpeechViewModel.voiceToTextState.collectAsState()
@@ -95,8 +107,12 @@ fun RealInterviewScreen(
                 .fillMaxHeight(0.07f),
             interviewerTurn = isInterviewerTurn,
             index = interviewerTurnState.turnIndex,
-            isFinish = questionsState.questions.size == interviewerTurnState.turnIndex-1,
+            isFinish = questionsState.questions.size == interviewerTurnState.turnIndex,
         )
+        LaunchedEffect(interviewerTurnState) {
+            Log.d("InterviewScreenTopBar", "questionSize: ${questionsState.questions.size}" +
+                    "turnIndex: ${interviewerTurnState.turnIndex - 1}")
+        }
         Image(
             modifier = Modifier
                 .weight(1f)
@@ -109,50 +125,57 @@ fun RealInterviewScreen(
             contentDescription = "interviewer"
         )
         Spacer(modifier = Modifier.height(10.dp))
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .weight(1f)
-                .border(
-                    color = if (!isInterviewerTurn) VieweeColorMain else Color.Transparent,
-                    width = 4.5.dp,
-                    shape = RoundedCornerShape(15.dp)
-                ),
-        ) {
-            Icon(
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .clip(CircleShape)
-                    .size(50.dp)
-                    .background(VieweeColorMain)
-                    .clickable {
-                        if (interviewerTurnState.turnIndex < questionsState.questions.size) {
-                            textVoiceSpeechViewModel.startListening(Constants.VOICE_TO_TEXT_LANGUAGE)
-                        }
-                    },
-                imageVector = Icons.Filled.Mic,
-                contentDescription = "말하기",
-                tint = Color.White
-            )
-        }
-//        RealInterviewApplicantView(
+//        Box(
 //            modifier = Modifier
+//                .fillMaxSize()
 //                .weight(1f)
 //                .border(
 //                    color = if (!isInterviewerTurn) VieweeColorMain else Color.Transparent,
 //                    width = 4.5.dp,
 //                    shape = RoundedCornerShape(15.dp)
-//                )
-//                .clip(RoundedCornerShape(15.dp)),
-//            onImageAnalysis = { imageProxy ->
-//                val mRgba = makeRgbaMat(imageProxy.image!!)
-//                val mGray = makeGrayMat(imageProxy.image!!)
-//                val rotationDegrees = imageProxy.imageInfo.rotationDegrees
-//
-//                recognizeImage(mRgba!!, mGray!!, rotationDegrees)
-//            },
-//            startListening = {}
-//        )
+//                ),
+//        ) {
+//            Icon(
+//                modifier = Modifier
+//                    .align(Alignment.Center)
+//                    .clip(CircleShape)
+//                    .size(50.dp)
+//                    .background(VieweeColorMain)
+//                    .clickable {
+//                        if (interviewerTurnState.turnIndex < questionsState.questions.size) {
+//                            textVoiceSpeechViewModel.startListening(Constants.VOICE_TO_TEXT_LANGUAGE)
+//                        }
+//                    },
+//                imageVector = Icons.Filled.Mic,
+//                contentDescription = "말하기",
+//                tint = Color.White
+//            )
+//        }
+        RealInterviewApplicantView(
+            modifier = Modifier
+                .weight(1f)
+                .border(
+                    color = if (!isInterviewerTurn) VieweeColorMain else Color.Transparent,
+                    width = 4.5.dp,
+                    shape = RoundedCornerShape(15.dp)
+                )
+                .clip(RoundedCornerShape(15.dp)),
+            onImageAnalysis = { imageProxy ->
+                val mRgba = makeRgbaMat(imageProxy.image!!)
+                val mGray = makeGrayMat(imageProxy.image!!)
+                val rotationDegrees = imageProxy.imageInfo.rotationDegrees
+
+                recognizeImage(mRgba!!, mGray!!, rotationDegrees)
+            },
+            startListening = {
+                if (interviewerTurnState.turnIndex < questionsState.questions.size &&
+                    !ttsState.isSpeak &&
+                    !interviewerTurnState.isInterviewerTurn
+                ) {
+                    textVoiceSpeechViewModel.startListening(Constants.VOICE_TO_TEXT_LANGUAGE)
+                }
+            }
+        )
         RealInterviewScreenBottomBar(
             modifier = Modifier
                 .fillMaxWidth()
@@ -166,6 +189,15 @@ fun RealInterviewScreen(
                             answer = voiceToTextState.value.spokenText,
                         )
                     )
+//                    if (voiceToTextState.value.spokenText.isEmpty()) {
+//                        Toast.makeText(context, Constants.SPOKEN_ANSWER_TEXT_EMPTY, Toast.LENGTH_SHORT).show()
+//                    } else {
+//                        uiEvent(
+//                            RealInterviewUiEvent.NextQuestion(
+//                                answer = voiceToTextState.value.spokenText,
+//                            )
+//                        )
+//                    }
                 }
             },
             interviewFinishState = interviewFinishState,

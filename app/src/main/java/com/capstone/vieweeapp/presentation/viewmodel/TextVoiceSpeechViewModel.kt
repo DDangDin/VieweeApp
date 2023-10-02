@@ -214,6 +214,13 @@ class TextVoiceSpeechViewModel @Inject constructor(
         tts.setSpeechRate(1.4f)
     }
 
+    override fun onCleared() {
+        // tts
+        if (tts != null) {
+            tts.stop()
+            tts.shutdown()
+        }
+    }
 
     fun onDestroy() {
         // tts

@@ -193,7 +193,7 @@ object AppModule {
         client.addInterceptor(loggingInterceptor)
 
         return Retrofit.Builder()
-            .baseUrl(Constants.VIEWEE_REAL_SERVER_BASE_URL)
+            .baseUrl(Constants.VIEWEE_MOCK_SERVER_BASE_URL)
             .client(client.build())
             .addConverterFactory(GsonConverterFactory.create())
             .build()

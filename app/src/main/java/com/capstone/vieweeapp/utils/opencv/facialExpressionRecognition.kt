@@ -194,6 +194,7 @@ class FacialExpressionRecognition internal constructor(
             // create a function that return text emotion
             val emotion_s = get_emotion_text(emotion_v)
             Log.d("emotion_text", "emotion: $emotion_s, rotationDegrees: $rotationDegrees")
+            Log.d("emotion_log", "emotion_s: $emotion_s emotion_v: $emotion_v")
             // now put text on original frame(mat_image)
             //             input/output    text: Angry (2.934234)
             Imgproc.putText(
@@ -220,7 +221,7 @@ class FacialExpressionRecognition internal constructor(
 //                faceArray[i].br(),
 //                "$emotion_s ($emotion_v)\""
 //            )
-            interviewViewModel.updateFacialExpression(emotion_s, emotion_v)
+            interviewViewModel.updateEmotionList(emotion_s, emotion_v)
         }
 
 

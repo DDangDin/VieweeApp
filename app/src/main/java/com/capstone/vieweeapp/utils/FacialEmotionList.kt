@@ -11,4 +11,14 @@ object FacialEmotionList {
         "Disgust",
         "Happy",
     )
+
+    val emotionNames = listOf(
+        "놀람",
+        "두려움",
+        "화남",
+        "보통",
+        "슬픔",
+        "혐오",
+        "행복"
+    )
 }

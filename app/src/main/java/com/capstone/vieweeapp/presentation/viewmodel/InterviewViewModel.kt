@@ -148,11 +148,11 @@ class InterviewViewModel @Inject constructor(
         }
     }
 
-    fun updateFacialExpression(emotion: String, emotionValue: Float) {
+    fun updateEmotionList(emotion: String, emotionValue: Float) {
         // facialExpressionRecognition
         // emotion -> emotion_s
         // emotion_value -> emotion_v
-        Log.d(TAG, emotion)
+//        Log.d(TAG, emotion)
         viewModelScope.launch {
             if (emotionListUpdatePossible.value) {
                 // _facialExpressionHashMap 초기화가 된 상태에서 진행되어야 함
@@ -194,7 +194,7 @@ class InterviewViewModel @Inject constructor(
         }
     }
 
-    fun saveEachInterviewTurn(
+    private fun saveEachInterviewTurn(
         answer: String,
     ) {
         answerList.add(answer)
@@ -208,17 +208,17 @@ class InterviewViewModel @Inject constructor(
         )
 
         val emotion = Emotion(
-            emotionHashMap["Surprise"]!!,
-            emotionHashMap["Fear"]!!,
-            emotionHashMap["Angry"]!!,
-            emotionHashMap["Neutral"]!!,
-            emotionHashMap["Sad"]!!,
-            emotionHashMap["Disgust"]!!,
-            emotionHashMap["Happy"]!!
+            emotionHashMap[FacialEmotionList.emotions[0]]!!,
+            emotionHashMap[FacialEmotionList.emotions[1]]!!,
+            emotionHashMap[FacialEmotionList.emotions[2]]!!,
+            emotionHashMap[FacialEmotionList.emotions[3]]!!,
+            emotionHashMap[FacialEmotionList.emotions[4]]!!,
+            emotionHashMap[FacialEmotionList.emotions[5]]!!,
+            emotionHashMap[FacialEmotionList.emotions[6]]!!
         )
         emotionList.add(emotion)
 
-        Log.d("InterviewViewModel_Log", "$answerList")
+        Log.d("InterviewViewModel_Log", "$emotionList")
     }
 
     fun realInterviewUiEvent(uiEvent: RealInterviewUiEvent) {
@@ -251,9 +251,7 @@ class InterviewViewModel @Inject constructor(
 
             is RealInterviewUiEvent.NextQuestion -> {
                 Log.d("InterviewViewModel_Log", "$answerList")
-                saveEachInterviewTurn(
-                    answer = uiEvent.answer,
-                )
+                saveEachInterviewTurn(answer = uiEvent.answer)
                 emotionListInitialize()
                 _interviewerTurnState.update {
                     it.copy(

@@ -1,14 +1,8 @@
 package com.capstone.vieweeapp.presentation.view.feedback.graph
 
 import androidx.compose.runtime.Composable
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,25 +13,25 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.capstone.vieweeapp.presentation.view.feedback.graph.TempColor.BlueGraph
-import com.capstone.vieweeapp.presentation.view.feedback.graph.TempColor.UsOrange
+import com.capstone.vieweeapp.presentation.view.feedback.graph.TriangleGraphColor.BlueGraph
+import com.capstone.vieweeapp.presentation.view.feedback.graph.TriangleGraphColor.UsOrange
 import com.capstone.vieweeapp.ui.theme.VieweeColorOrange
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
-object TempColor {
+object TriangleGraphColor {
     val BlueGraph = Color(0xFF1F77B4)
     val UsOrange = VieweeColorOrange
 }
 
 @Composable
-fun GraphView(modifier: Modifier = Modifier) {
-    ExplainTriangleGraph()
+fun TriangleGraphView(modifier: Modifier = Modifier) {
+    // 범례
+//    ExplainTriangleGraph()
 
     Box(
         modifier = modifier.fillMaxSize(),
@@ -191,16 +185,14 @@ fun StandardTriangleGraphDemo() {
 //면접자 그래프 출력 오렌지
 @Composable
 fun IntervieweeTriangleGraph(
-    values: List<Float> =  listOf(50f, 100f, 30f),
     modifier: Modifier = Modifier,
+    values: List<Float> =  listOf(50f, 100f, 30f),
     lineColor: Color = UsOrange,
     fillColor: Color = UsOrange.copy(alpha = 0.5f),
 ) {
     var maxValue by remember { mutableStateOf(100f) }
 
-    Box(
-        modifier = modifier.fillMaxSize()
-    ) {
+    Box(modifier = modifier.fillMaxSize()) {
         Canvas(
             modifier = Modifier
                 .fillMaxSize()
@@ -310,8 +302,8 @@ fun ExplainTriangleGraph() {
     }
 }
 
-@Preview
+@Preview()
 @Composable
 fun GraphViewPreview() {
-    GraphView()
+    TriangleGraphView()
 }
