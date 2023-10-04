@@ -47,7 +47,8 @@ object CircularGraphColor {
 @Composable
 fun CircularGraphView(
     modifier: Modifier = Modifier,
-    emotions: List<Emotion> = emptyList()
+    emotions: List<Emotion> = emptyList(),
+    data: List<Float> = listOf(10f, 15f, 25f, 10f, 15f, 5f, 20f)
 ) {
     val data = listOf(10f, 15f, 25f, 10f, 15f, 5f, 20f) // 각 섹션의 비율
 //    val data = listOf(30f, 0f, 0f, 60f, 10f, 0f, 0f) // 각 섹션의 비율

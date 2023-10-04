@@ -12,6 +12,17 @@ data class Emotion(
     val happy: Int
 )
 
-//fun Emotion.toFeedbackReq(): String {
-//
-//}
+fun Emotion.toPercentages(): List<Float> {
+    val total = surprise + fear + angry + neutral
+    + sad + disgust + happy
+
+    return listOf(
+        (surprise/total*100).toFloat(),
+        (fear/total*100).toFloat(),
+        (angry/total*100).toFloat(),
+        (neutral/total*100).toFloat(),
+        (sad/total*100).toFloat(),
+        (disgust/total*100).toFloat(),
+        (happy/total*100).toFloat(),
+    )
+}

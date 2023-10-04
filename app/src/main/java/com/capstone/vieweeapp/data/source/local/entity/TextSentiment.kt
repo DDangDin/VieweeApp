@@ -10,3 +10,11 @@ data class TextSentiment(
 fun TextSentiment.toFeedbackReq(): String {
     return sentiment
 }
+
+fun TextSentiment.toPercentage(): List<Float> {
+    return listOf(
+        confidence.neutral.toFloat(),
+        confidence.positive.toFloat(),
+        confidence.negative.toFloat()
+    )
+}

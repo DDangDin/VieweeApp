@@ -33,12 +33,14 @@ fun TriangleGraphView(modifier: Modifier = Modifier) {
     // 범례
 //    ExplainTriangleGraph()
 
+    val values = remember { listOf(50f, 50f, 50f) }
+
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        StandardTriangleGraphDemo()
-        IntervieweeTriangleGraphDemo()
+        StandardTriangleGraphDemo(values = values)
+        IntervieweeTriangleGraphDemo(values = listOf(60f, 100f, 30f) )
         StandardCircleTriangleGraph()
     }
 }
@@ -46,8 +48,8 @@ fun TriangleGraphView(modifier: Modifier = Modifier) {
 //평균 그래프 파랑
 @Composable
 fun StandardTriangleGraph(
-    values: List<Float> = listOf(25f, 75f, 50f),
     modifier: Modifier = Modifier,
+    values: List<Float> = listOf(25f, 75f, 50f),
     backgroundColor: Color = Color.White,
     lineColor: Color = BlueGraph,
     fillColor: Color = Color(0xFF1F77B4).copy(alpha = 0.3f)
@@ -164,8 +166,8 @@ fun StandardCircleTriangleGraph(
 
 //평균 그래프 출력 파랑
 @Composable
-fun StandardTriangleGraphDemo() {
-    val values = remember { listOf(50f, 50f, 50f) }
+fun StandardTriangleGraphDemo(values: List<Float>) {
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -234,8 +236,8 @@ fun IntervieweeTriangleGraph(
 
 //면접자 그래프 출력 오렌지
 @Composable
-fun IntervieweeTriangleGraphDemo() {
-    val values = remember { listOf(60f, 100f, 30f) }
+fun IntervieweeTriangleGraphDemo(values: List<Float>) {
+
     Column(
         modifier = Modifier
             .fillMaxSize()

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -32,24 +33,34 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.capstone.vieweeapp.data.source.local.entity.Feedbacks
 import com.capstone.vieweeapp.data.source.local.entity.InterviewResult
 import com.capstone.vieweeapp.presentation.event.FeedbackForHomeUiEvent
 import com.capstone.vieweeapp.presentation.view.feedback.graph.CircularGraphView
 import com.capstone.vieweeapp.presentation.view.feedback.graph.TriangleGraphView
 import com.capstone.vieweeapp.presentation.view.interview.input_profile.CustomTitleText
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
+import com.capstone.vieweeapp.ui.theme.VieweeColorText
 
 @Preview(showBackground = true)
 @Composable
-fun TwoGraphPreview() {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        TriangleGraphView()
-        CircularGraphView()
-    }
+fun FeedbackScreenForHomePreview() {
+    FeedbackScreenForHome(
+        interviewResult = InterviewResult(
+            id = 0,
+            questions = emptyList(),
+            answers = emptyList(),
+            date = "",
+            feedbacks = Feedbacks(emptyList()),
+            feedbackTotal = "",
+            emotions = emptyList(),
+            textSentiment = emptyList(),
+            etc = ""
+        ),
+        onNavigateHome = { /*TODO*/ },
+        uiEvent = { /*TODO*/ },
+        name = "곽상진"
+    )
 }
 
 @Composable
@@ -127,12 +138,30 @@ fun FeedbackScreenForHome(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
+                Column(
+                    modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
                 ) {
+                    Text(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp),
+                        text = "답변 텍스트 감정 분석",
+                        color = Color.Gray,
+                        textAlign = TextAlign.Start
+                    )
                     TriangleGraphView()
+                    Divider(
+                        modifier = Modifier
+                            .height(1.dp)
+                            .padding(horizontal = 10.dp),
+                        color = Color.LightGray
+                    )
+                    Text(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp),
+                        text = "표정 분석",
+                        color = Color.Gray,
+                        textAlign = TextAlign.Start
+                    )
                     CircularGraphView()
                 }
                 CustomTitleText(
