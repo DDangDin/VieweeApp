@@ -3,6 +3,7 @@ package com.capstone.vieweeapp.presentation.view.feedback
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +23,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,14 +47,11 @@ fun FeedbackDetailCardView(
 ) {
     var isExpanded by remember { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
-
+    val scope = rememberCoroutineScope()
 
     val extraPadding by animateDpAsState(
         if (isExpanded) 48.dp else 0.dp,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioMediumBouncy,
-            stiffness = Spring.StiffnessLow
-        )
+        animationSpec = tween()
     )
 
     CompositionLocalProvider(LocalRippleTheme provides CustomRippleEffect.NoRippleTheme) {
@@ -63,7 +62,6 @@ fun FeedbackDetailCardView(
                     interactionSource = interactionSource,
                     onClick = { isExpanded = !isExpanded }
                 ),
-
             ) {
             Column(
                 modifier = Modifier
@@ -71,8 +69,7 @@ fun FeedbackDetailCardView(
                     .padding(bottom = extraPadding.coerceAtLeast(0.dp)),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
-
-                ) {
+            ) {
 
                 Text(
                     text = detailTitle,
@@ -115,8 +112,6 @@ fun FeedbackDetailCardView(
                         color = Color.DarkGray,
                         textAlign = TextAlign.Start
                     )
-                } else {
-                    " "
                 }
             }
         }

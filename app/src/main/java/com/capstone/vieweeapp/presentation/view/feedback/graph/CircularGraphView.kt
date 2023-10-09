@@ -35,8 +35,8 @@ object CircularGraphColor {
     val UsOrange = Color(0xFFFF7F0E)
     val UsGrey = Color(0xFF525965)
 
-    val Surprise= Color(0xB9B899B8)     //0x461F77B4
-    val Fear= Color(0xDA7D93B8)         //0xFF7DA2C9
+    val Surprise = Color(0xB9B899B8)     //0x461F77B4
+    val Fear = Color(0xDA7D93B8)         //0xFF7DA2C9
     val Angry = Color(0xFFF7F0C6)
     val Neutral = Color(0xFCC4D8C0)
     val Sad = Color(0xD85D7599)
@@ -55,7 +55,9 @@ fun CircularGraphView(
     val colors = listOf(Surprise, Fear, Angry, Neutral, Sad, Disgust, Happy) // 각 섹션의 색상
 
     Box(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
         contentAlignment = Alignment.Center
     ) {
         // PieChartWithWhiteCenter를 중앙에 배치
@@ -119,8 +121,10 @@ fun PieChartWithWhiteCenter(
                     currentAngle += sweepAngle
 
                     val textAngle = currentAngle - sweepAngle / 2
-                    val textX = centerX + (radius + 80) * cos(Math.toRadians(textAngle.toDouble())).toFloat()
-                    val textY = centerY + (radius + 80) * sin(Math.toRadians(textAngle.toDouble())).toFloat()
+                    val textX =
+                        centerX + (radius + 80) * cos(Math.toRadians(textAngle.toDouble())).toFloat()
+                    val textY =
+                        centerY + (radius + 80) * sin(Math.toRadians(textAngle.toDouble())).toFloat()
                     drawIntoCanvas {
                         if (percentage.toInt() != 0) {
                             it.nativeCanvas.drawText(

@@ -27,4 +27,8 @@ object CalculateDate {
 
         return "$simpleDate $dayOfWeek"
     }
+
+    fun dateFormatForFeedback(date: String): String {
+        return date.substring(2 until date.length-2).replace(".","")
+    }
 }

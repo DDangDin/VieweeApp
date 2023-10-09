@@ -17,8 +17,6 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedButton
@@ -32,20 +30,47 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.capstone.vieweeapp.R
+import com.capstone.vieweeapp.data.source.local.entity.Feedbacks
 import com.capstone.vieweeapp.presentation.state.FeedbackState
 import com.capstone.vieweeapp.presentation.state.QuestionsState
+import com.capstone.vieweeapp.presentation.view.feedback.graph.CircularGraphView
 import com.capstone.vieweeapp.presentation.view.feedback.graph.TriangleGraphView
 import com.capstone.vieweeapp.presentation.view.interview.input_profile.CustomTitleText
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
+import com.capstone.vieweeapp.utils.CalculateDate
+import com.capstone.vieweeapp.utils.Constants
+
+@Preview
+@Composable
+fun FeedbackScreenPreview() {
+    FeedbackScreen(
+        questionState = QuestionsState(
+            questions = listOf("1", "2", "3"),
+            loading = false
+        ),
+        answerList = listOf("1", "2", "3"),
+        feedbackState = FeedbackState(
+            feedbacks = Feedbacks(listOf("1", "2", "3")),
+            loading = false,
+            resumeForFeedback = Constants.RESUME_DUMMY_DATA
+        ),
+        onNavigateHome = {},
+        saveInterviewResult = {}
+    )
+}
 
 @Composable
 fun FeedbackScreen(
@@ -59,6 +84,7 @@ fun FeedbackScreen(
 
     val scrollState = rememberScrollState()
     var isSaveButtonClick by remember { mutableStateOf(false) }
+    var todayDate by remember { mutableStateOf(CalculateDate.dateFormatForFeedback(CalculateDate.today())) }
 
     Box(modifier = Modifier.fillMaxSize()) {
         if (!feedbackState.loading) {
@@ -82,13 +108,19 @@ fun FeedbackScreen(
                             onClick = { onNavigateHome() }
                         ) {
                             Icon(
-                                Icons.Filled.Home,
-                                "home", modifier = Modifier
+                                imageVector = ImageVector.vectorResource(R.drawable.ic_btn_home),
+                                contentDescription = "home",
+                                tint = VieweeColorMain,
+                                modifier = Modifier
                                     .alpha(.7f)
                                     .padding(vertical = 20.dp, horizontal = 20.dp)
                             )
                         }
                     }
+                    // FeedbackTopBar
+//                     modifier = modifier
+//                        .fillMaxWidth()
+//                        .padding(top = 40.dp, bottom = 60.dp),
                     Text(
                         text = "면접이 종료되었습니다!\n" +
                                 "\n" +
@@ -112,10 +144,21 @@ fun FeedbackScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    TriangleGraphView()
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 30.dp, horizontal = 30.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(30.dp, alignment = Alignment.CenterVertically)
+                    ) {
+                        CustomTitleText(text = "✓ $todayDate 면접의 감정 분석")
+                        TriangleGraphView()
+                        CustomTitleText(text = "✓ $todayDate 면접의 표정 분석")
+                        CircularGraphView()
+                    }
                     CustomTitleText(
                         Modifier.padding(top = 50.dp),
-                        "✓ ${feedbackState.resumeForFeedback!!.name} 님 면접의 총평 피드백"
+                        "✓ $todayDate 면접의 총평 피드백"
                     )
                     Box(
                         modifier = Modifier
@@ -144,7 +187,8 @@ fun FeedbackScreen(
                         .background(Color.White),
                     feedbackState = feedbackState,
                     questionState = questionState,
-                    answerList = answerList
+                    answerList = answerList,
+                    todayDate = todayDate
                 )
             }
 
@@ -195,11 +239,12 @@ fun FeedbackDetailCardGrid(
     modifier: Modifier = Modifier,
     feedbackState: FeedbackState,
     questionState: QuestionsState,
-    answerList: List<String>
+    answerList: List<String>,
+    todayDate: String
 ) {
     CustomTitleText(
         Modifier.padding(top = 20.dp, bottom = 30.dp),
-        "✓ ${feedbackState.resumeForFeedback!!.name} 님 면접의 질문 피드백"
+        "✓ $todayDate 면접의 질문 피드백"
     )
     Column(
         modifier = Modifier

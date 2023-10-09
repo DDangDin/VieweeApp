@@ -27,12 +27,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.capstone.vieweeapp.R
 import com.capstone.vieweeapp.data.source.local.entity.Feedbacks
 import com.capstone.vieweeapp.data.source.local.entity.InterviewResult
 import com.capstone.vieweeapp.presentation.event.FeedbackForHomeUiEvent
@@ -41,6 +44,7 @@ import com.capstone.vieweeapp.presentation.view.feedback.graph.TriangleGraphView
 import com.capstone.vieweeapp.presentation.view.interview.input_profile.CustomTitleText
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
 import com.capstone.vieweeapp.ui.theme.VieweeColorText
+import com.capstone.vieweeapp.utils.CalculateDate
 
 @Preview(showBackground = true)
 @Composable
@@ -50,9 +54,9 @@ fun FeedbackScreenForHomePreview() {
             id = 0,
             questions = emptyList(),
             answers = emptyList(),
-            date = "",
+            date = "2023.10.01 월",
             feedbacks = Feedbacks(emptyList()),
-            feedbackTotal = "",
+            feedbackTotal = "총평피드백 부분",
             emotions = emptyList(),
             textSentiment = emptyList(),
             etc = ""
@@ -94,8 +98,10 @@ fun FeedbackScreenForHome(
                         onClick = { onNavigateHome() }
                     ) {
                         Icon(
-                            Icons.Filled.Home,
-                            "home", modifier = Modifier
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_btn_home),
+                            contentDescription = "home",
+                            tint = VieweeColorMain,
+                            modifier = Modifier
                                 .alpha(.7f)
                                 .padding(vertical = 20.dp, horizontal = 20.dp)
                         )
@@ -108,12 +114,12 @@ fun FeedbackScreenForHome(
                         }
                     ) {
                         Icon(
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_btn_trash),
+                            contentDescription = "delete",
+                            tint = VieweeColorMain,
                             modifier = Modifier
                                 .alpha(.7f)
                                 .padding(vertical = 20.dp, horizontal = 20.dp),
-                            imageVector = Icons.Filled.DeleteForever,
-                            contentDescription = "delete",
-                            tint = Color.Red.copy(alpha = 0.75f)
                         )
                     }
                 }
@@ -139,35 +145,18 @@ fun FeedbackScreenForHome(
                 verticalArrangement = Arrangement.Center
             ) {
                 Column(
-                    modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 30.dp, horizontal = 30.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                    verticalArrangement = Arrangement.spacedBy(30.dp, alignment = Alignment.CenterVertically)
                 ) {
-                    Text(
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp),
-                        text = "답변 텍스트 감정 분석",
-                        color = Color.Gray,
-                        textAlign = TextAlign.Start
-                    )
+                    CustomTitleText(text = "✓ ${CalculateDate.dateFormatForFeedback(interviewResult.date)} 면접의 감정 분석")
                     TriangleGraphView()
-                    Divider(
-                        modifier = Modifier
-                            .height(1.dp)
-                            .padding(horizontal = 10.dp),
-                        color = Color.LightGray
-                    )
-                    Text(
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp),
-                        text = "표정 분석",
-                        color = Color.Gray,
-                        textAlign = TextAlign.Start
-                    )
+                    CustomTitleText(text = "✓ ${CalculateDate.dateFormatForFeedback(interviewResult.date)} 면접의 표정 분석")
                     CircularGraphView()
                 }
-                CustomTitleText(
-                    Modifier.padding(top = 50.dp),
-                    "✓ ${name} 님 면접의 총평 피드백"
-                )
+                CustomTitleText(text = "✓ ${CalculateDate.dateFormatForFeedback(interviewResult.date)} 면접의 총평 피드백")
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -194,7 +183,6 @@ fun FeedbackScreenForHome(
                     .padding(bottom = 30.dp)
                     .background(Color.White),
                 interviewResult = interviewResult,
-                name = name
             )
         }
     }
@@ -206,11 +194,10 @@ fun FeedbackScreenForHome(
 fun FeedbackDetailCardGridForHome(
     modifier: Modifier = Modifier,
     interviewResult: InterviewResult,
-    name: String
 ) {
     CustomTitleText(
         Modifier.padding(top = 20.dp, bottom = 30.dp),
-        "✓ ${name} 님 면접의 질문 피드백"
+        "✓ ${CalculateDate.dateFormatForFeedback(interviewResult.date)} 면접의 질문 피드백"
     )
     Column(
         modifier = Modifier
@@ -230,86 +217,3 @@ fun FeedbackDetailCardGridForHome(
             }
     }
 }
-
-
-//@Composable
-//fun FeedbackDetailCardViewForHome(
-//    modifier: Modifier = Modifier,
-//    DetailTitle: String,
-//    DetailContent: String
-//) {
-//    var isExpanded by remember { mutableStateOf(false) }
-//    val interactionSource = remember { MutableInteractionSource() }
-//
-//
-//    val extraPadding by animateDpAsState(
-//        if (isExpanded) 48.dp else 0.dp,
-//        animationSpec = spring(
-//            dampingRatio = Spring.DampingRatioMediumBouncy,
-//            stiffness = Spring.StiffnessLow
-//        )
-//    )
-//
-//    CompositionLocalProvider(LocalRippleTheme provides CustomRippleEffect.NoRippleTheme) {
-//        Box(
-//            modifier = modifier
-//                .border(1.dp, (VieweeColorMain.copy(alpha = 0.5f)), RoundedCornerShape(10.dp))
-//                .clickableWithoutRipple(
-//                    interactionSource = interactionSource,
-//                    onClick = { isExpanded = !isExpanded }
-//                ),
-//
-//            ) {
-//            Column(
-//                modifier = Modifier
-//                    .padding(5.dp)
-//                    .padding(bottom = extraPadding.coerceAtLeast(0.dp)),
-//                verticalArrangement = Arrangement.Top,
-//                horizontalAlignment = Alignment.CenterHorizontally,
-//
-//                ) {
-//
-//                Text(
-//                    text = DetailTitle,
-//                    modifier = Modifier
-//                        .padding(top = 10.dp),
-//                    textAlign = TextAlign.Center,
-//                    fontWeight = FontWeight.ExtraBold,
-//                    fontSize = 14.sp,
-//                    color = Color.DarkGray.copy(.8f)
-//                )
-//
-//                IconButton(
-//                    onClick = { isExpanded = !isExpanded },
-//
-//                    ) {
-//                    Icon(
-//                        Icons.Filled.ArrowDropDown,
-//                        "Show", modifier = Modifier
-//                            .alpha(.7f)
-//                            .fillMaxWidth()
-//
-//                    )
-//                }
-//                if (isExpanded) Text(
-//                    text = DetailContent,
-//                    modifier = Modifier
-//                        .padding(10.dp),
-//                    textAlign = TextAlign.Left,
-//                    fontSize = 13.sp,
-//                    color = Color.Gray,
-//                ) else " "
-//            }
-//        }
-//    }
-//}
-//
-//private val VerticalScrollConsumer = object : NestedScrollConnection {
-//    override fun onPreScroll(available: Offset, source: NestedScrollSource) = available.copy(x = 0f)
-//    override suspend fun onPreFling(available: Velocity) = available.copy(x = 0f)
-//}
-//
-//private val HorizontalScrollConsumer = object : NestedScrollConnection {
-//    override fun onPreScroll(available: Offset, source: NestedScrollSource) = available.copy(y = 0f)
-//    override suspend fun onPreFling(available: Velocity) = available.copy(y = 0f)
-//}
