@@ -324,7 +324,7 @@ class InterviewViewModel @Inject constructor(
                 InterviewResult(
                     feedbacks = feedbackState.value.feedbacks,
                     textSentiment = emptyList(),
-                    emotions = emptyList(),
+                    emotions = emotionList,
                     questions = questionsState.value.questions,
                     answers = answerList,
                     feedbackTotal = feedbackState.value.feedbacks.feedbacks.last(),

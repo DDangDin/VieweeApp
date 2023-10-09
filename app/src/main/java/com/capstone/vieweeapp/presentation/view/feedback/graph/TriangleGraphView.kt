@@ -3,6 +3,10 @@ package com.capstone.vieweeapp.presentation.view.feedback.graph
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Circle
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -13,6 +17,8 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,8 +36,6 @@ object TriangleGraphColor {
 
 @Composable
 fun TriangleGraphView(modifier: Modifier = Modifier) {
-    // 범례
-//    ExplainTriangleGraph()
 
     val values = remember { listOf(50f, 50f, 50f) }
 
@@ -40,8 +44,52 @@ fun TriangleGraphView(modifier: Modifier = Modifier) {
         contentAlignment = Alignment.Center
     ) {
         StandardTriangleGraphDemo(values = values)
-        IntervieweeTriangleGraphDemo(values = listOf(60f, 100f, 30f) )
+        IntervieweeTriangleGraphDemo(values = listOf(60f, 100f, 30f))
         StandardCircleTriangleGraph()
+    }
+}
+
+@Composable
+fun ExplainTriangleGraph(modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier.offset(120.dp, -20.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = Icons.Filled.Circle,// 사용할 아이콘 선택
+            contentDescription = "trianglegraph_blue",
+            tint = BlueGraph,
+            modifier = Modifier
+                .size(8.dp)
+                .padding(top = 3.dp)
+                .padding(end = 3.dp)
+        )
+        Text(
+            text = "평균",
+            modifier = Modifier
+                .padding(end = 6.dp),
+            color = Color.Gray,
+            fontSize = 12.sp,
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.SemiBold,
+        )
+        Icon(
+            imageVector = Icons.Filled.Circle, // 사용할 아이콘 선택
+            contentDescription = "trianglegraph_orange",
+            tint = UsOrange,
+            modifier = Modifier
+                .size(8.dp)
+                .padding(top = 3.dp)
+                .padding(end = 3.dp)
+        )
+        Text(
+            text = "본인",
+            modifier = Modifier,
+            color = Color.Gray,
+            fontSize = 12.sp,
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.SemiBold,
+        )
     }
 }
 
@@ -188,7 +236,7 @@ fun StandardTriangleGraphDemo(values: List<Float>) {
 @Composable
 fun IntervieweeTriangleGraph(
     modifier: Modifier = Modifier,
-    values: List<Float> =  listOf(50f, 100f, 30f),
+    values: List<Float> = listOf(50f, 100f, 30f),
     lineColor: Color = UsOrange,
     fillColor: Color = UsOrange.copy(alpha = 0.5f),
 ) {
@@ -231,6 +279,8 @@ fun IntervieweeTriangleGraph(
             drawPath(path, color = fillColor)
             drawPath(path, color = lineColor, style = Stroke(2.dp.toPx()))
         }
+
+        ExplainTriangleGraph()
     }
 }
 
@@ -250,57 +300,6 @@ fun IntervieweeTriangleGraphDemo(values: List<Float>) {
             modifier = Modifier.size(200.dp),
             lineColor = UsOrange
         )
-    }
-}
-
-//컬러표식
-@Composable
-fun ExplainTriangleGraph() {
-    Canvas(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-    ) {
-        drawCircle(
-            color = BlueGraph,
-            center = Offset(520f, 740f),
-            radius = 7f
-        )
-        drawIntoCanvas {
-            it.nativeCanvas.drawText(
-                "평균",
-                580f,
-                750f,
-                android.graphics.Paint().apply {
-                    color = Color.Gray.toArgb()
-                    textSize = 12.sp.toPx()
-                    textAlign = android.graphics.Paint.Align.CENTER
-                    isAntiAlias = true
-                    typeface = android.graphics.Typeface.DEFAULT_BOLD
-                }
-            )
-        }
-
-        drawCircle(
-            color = UsOrange,
-            center = Offset(670f, 740f),
-            radius = 7f
-        )
-
-        drawIntoCanvas {
-            it.nativeCanvas.drawText(
-                "본인",
-                730f,
-                750f,
-                android.graphics.Paint().apply {
-                    color = Color.Gray.toArgb()
-                    textSize = 12.sp.toPx()
-                    textAlign = android.graphics.Paint.Align.CENTER
-                    isAntiAlias = true
-                    typeface = android.graphics.Typeface.DEFAULT_BOLD
-                }
-            )
-        }
     }
 }
 

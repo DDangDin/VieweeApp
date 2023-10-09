@@ -1,10 +1,13 @@
 package com.capstone.vieweeapp.presentation.view.feedback
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,10 +20,13 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -50,8 +57,12 @@ import com.capstone.vieweeapp.presentation.view.feedback.graph.CircularGraphView
 import com.capstone.vieweeapp.presentation.view.feedback.graph.TriangleGraphView
 import com.capstone.vieweeapp.presentation.view.interview.input_profile.CustomTitleText
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
+import com.capstone.vieweeapp.ui.theme.VieweeColorMainLight
+import com.capstone.vieweeapp.ui.theme.VieweeColorShadow
+import com.capstone.vieweeapp.ui.theme.noToSansKr
 import com.capstone.vieweeapp.utils.CalculateDate
 import com.capstone.vieweeapp.utils.Constants
+import com.capstone.vieweeapp.utils.CustomRippleEffect
 
 @Preview
 @Composable
@@ -92,7 +103,6 @@ fun FeedbackScreen(
                 modifier = modifier
                     .background(Color.White)
                     .fillMaxSize()
-                    .padding(bottom = 80.dp)
                     .verticalScroll(scrollState),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -149,7 +159,10 @@ fun FeedbackScreen(
                             .fillMaxWidth()
                             .padding(vertical = 30.dp, horizontal = 30.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(30.dp, alignment = Alignment.CenterVertically)
+                        verticalArrangement = Arrangement.spacedBy(
+                            30.dp,
+                            alignment = Alignment.CenterVertically
+                        )
                     ) {
                         CustomTitleText(text = "✓ $todayDate 면접의 감정 분석")
                         TriangleGraphView()
@@ -165,20 +178,20 @@ fun FeedbackScreen(
                             .fillMaxWidth()
                             .padding(vertical = 30.dp, horizontal = 30.dp)
                     ) {
-                            Text(
-                                text = feedbackState.feedbacks.feedbacks.last(),
-                                modifier = Modifier
-                                    .border(
-                                        width = 1.dp,
-                                        color = VieweeColorMain.copy(alpha = .5f),
-                                        shape = RoundedCornerShape(10.dp)
-                                    )
-                                    .padding(30.dp)
-                                    .align(Alignment.Center),
-                                textAlign = TextAlign.Center,
-                                fontSize = 12.sp,
-                                color = Color.Gray
-                            )
+                        Text(
+                            text = feedbackState.feedbacks.feedbacks.last(),
+                            modifier = Modifier
+                                .border(
+                                    width = 1.dp,
+                                    color = VieweeColorMain.copy(alpha = .5f),
+                                    shape = RoundedCornerShape(10.dp)
+                                )
+                                .padding(30.dp)
+                                .align(Alignment.Center),
+                            textAlign = TextAlign.Center,
+                            fontSize = 12.sp,
+                            color = Color.Gray
+                        )
                     }
                 }
                 FeedbackDetailCardGrid(
@@ -190,36 +203,66 @@ fun FeedbackScreen(
                     answerList = answerList,
                     todayDate = todayDate
                 )
-            }
 
-            OutlinedButton(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .fillMaxWidth()
-                    .height(90.dp)
-                    .padding(10.dp)
-                    .border(0.dp, Color.Transparent, RoundedCornerShape(10.dp)),
-                shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isSaveButtonClick) Color.LightGray else VieweeColorMain,
-                    contentColor = Color.White,
-                ),
-                onClick = {
-                    if (!isSaveButtonClick) {
-                        saveInterviewResult()
-                        isSaveButtonClick = true
+                Spacer(Modifier.height(100.dp))
+            }
+            CompositionLocalProvider(LocalRippleTheme provides CustomRippleEffect.NoRippleTheme) {
+                OutlinedButton(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .fillMaxWidth()
+                        .height(80.dp)
+                        .padding(start = 24.dp, end = 24.dp, bottom = 24.dp)
+                        .shadow(
+                            elevation = 5.dp,
+                            spotColor = VieweeColorShadow,
+                            ambientColor = VieweeColorShadow,
+                            shape = RoundedCornerShape(10.dp)
+                        ),
+                    border = BorderStroke(0.dp, Color.Transparent),
+                    shape = RoundedCornerShape(10.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (isSaveButtonClick) Color.LightGray else VieweeColorMain.copy(
+                            alpha = 1f
+                        ),
+                        contentColor = Color.White,
+                    ),
+                    onClick = {
+                        if (!isSaveButtonClick) {
+                            saveInterviewResult()
+                            isSaveButtonClick = true
+                        }
+                    }
+                ) {
+                    Row(
+                        modifier = Modifier,
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(
+                            12.dp,
+                            alignment = Alignment.CenterHorizontally
+                        )
+                    ) {
+                        Text(
+                            text = if (isSaveButtonClick) {
+                                "저장 완료"
+                            } else {
+                                "모의면접 결과 저장"
+                            },
+                            fontFamily = noToSansKr,
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 14.sp,
+                            color = Color.White
+                        )
+                        if (!isSaveButtonClick) {
+                            Icon(
+                                modifier = Modifier.size(17.dp),
+                                imageVector = ImageVector.vectorResource(R.drawable.ic_download),
+                                contentDescription = "download",
+                                tint = Color.White
+                            )
+                        }
                     }
                 }
-            ) {
-                Text(
-                    text = if (isSaveButtonClick) {
-                        "저장 완료"
-                    } else {
-                        "모의면접 결과 저장"
-                    },
-                    fontSize = 18.sp,
-                    color = Color.White
-                )
             }
         } else {
             CircularProgressIndicator(
@@ -253,14 +296,15 @@ fun FeedbackDetailCardGrid(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        feedbackState.feedbacks.feedbacks.subList(0,feedbackState.feedbacks.feedbacks.size-1).forEachIndexed { index, feedback ->
-            FeedbackDetailCardView(
-                modifier = Modifier.padding(bottom = 10.dp),
-                detailTitle = questionState.questions[index],
-                detailContent = answerList[index],
-                feedbackContent = feedback
-            )
-        }
+        feedbackState.feedbacks.feedbacks.subList(0, feedbackState.feedbacks.feedbacks.size - 1)
+            .forEachIndexed { index, feedback ->
+                FeedbackDetailCardView(
+                    modifier = Modifier.padding(bottom = 10.dp),
+                    detailTitle = questionState.questions[index],
+                    detailContent = answerList[index],
+                    feedbackContent = feedback
+                )
+            }
     }
 //    LazyColumn(
 //        contentPadding = PaddingValues(horizontal = 30.dp),

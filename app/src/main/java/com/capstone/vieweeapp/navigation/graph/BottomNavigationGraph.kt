@@ -1,5 +1,9 @@
 package com.capstone.vieweeapp.navigation.graph
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -7,8 +11,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -27,6 +33,7 @@ import com.capstone.vieweeapp.presentation.viewmodel.FeedbackForHomeViewModel
 import com.capstone.vieweeapp.presentation.viewmodel.HomeViewModel
 import com.capstone.vieweeapp.presentation.viewmodel.InterviewViewModel
 import com.capstone.vieweeapp.presentation.viewmodel.ProfileViewModel
+import com.capstone.vieweeapp.ui.theme.VieweeColorMain
 import com.capstone.vieweeapp.utils.Constants
 import com.capstone.vieweeapp.utils.CustomSharedPreference
 
@@ -83,12 +90,26 @@ fun BottomNavigationGraph(
             val interviewResultState = homeViewModel.interviewResultsState.collectAsState()
             val interviewResultIndex = backStackEntry.arguments?.getInt("index") ?: 0
 
-            FeedbackScreenForHome(
-                interviewResult = interviewResultState.value.interviewResults[interviewResultIndex],
-                onNavigateHome = { navController.popBackStack() },
-                name = homeViewModel.username.value,
-                uiEvent = feedbackForHomeViewModel::uiEvent,
-            )
+            // 만약 피드백 데이터 삭제 시, DB 작업 딜레이가 있으므로 인덱스 값이 어긋남
+            // 이 오류는 마지막 피드백 데이터만 해당되고 그 외에는 인덱스 허용범위이므로 오류 발생하지 않음
+            if (interviewResultState.value.interviewResults.size > interviewResultIndex) {
+                FeedbackScreenForHome(
+                    interviewResult = interviewResultState.value.interviewResults[interviewResultIndex],
+                    onNavigateHome = { navController.popBackStack() },
+                    name = homeViewModel.username.value,
+                    uiEvent = feedbackForHomeViewModel::uiEvent,
+                )
+            } else {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .size(50.dp),
+                        strokeWidth = 2.dp,
+                        color = VieweeColorMain
+                    )
+                }
+            }
         }
 
         composable(route = Screen.Interview.route) {
