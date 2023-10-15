@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.Text
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -15,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -84,6 +86,12 @@ fun InputProfileScreen1(
                     onTextChanged = inputProfileViewModel::inputBirthdateChanged,
                     keyboardType = KeyboardType.Number,
                     isEmptyValue = isEmptyValue_2,
+                    placeholder = {
+                        Text(
+                            text = stringResource(id = R.string.input_profile_screen_1_birth_placeholder),
+                            color = Color.Gray.copy(.5f)
+                        )
+                    }
                 )
                 DataInputCard(
                     dataName = stringResource(id = R.string.input_profile_screen_1_education),
@@ -98,6 +106,12 @@ fun InputProfileScreen1(
                     onTextChanged = inputProfileViewModel::inputCareerChanged,
                     keyboardType = KeyboardType.Text,
                     isEmptyValue = isEmptyValue_4,
+                    placeholder = {
+                        Text(
+                            text = stringResource(id = R.string.input_profile_screen_1_career_placeholder),
+                            color = Color.Gray.copy(.5f)
+                        )
+                    }
                 )
             }
             NextButton(

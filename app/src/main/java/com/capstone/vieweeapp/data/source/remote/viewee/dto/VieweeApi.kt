@@ -2,6 +2,7 @@ package com.capstone.vieweeapp.data.source.remote.viewee.dto
 
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.request.CreateQuestionReqDto
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.request.FeedbackReqDto
+import com.capstone.vieweeapp.data.source.remote.viewee.dto.request.ReFeedbackReqDto
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.response.CreateQuestionResDto
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.response.FeedbackResDto
 import retrofit2.Call
@@ -24,5 +25,10 @@ interface VieweeApi {
     @POST("gpt/overrall_feedback")
     fun getAllAnswersFeedback(
         @Body feedbackReq: FeedbackReqDto
+    ): Call<FeedbackResDto>
+
+    @POST("gpt/re_answer_feedback_1")
+    fun getReAnswerFeedback1(
+        @Body feedbackReq: ReFeedbackReqDto
     ): Call<FeedbackResDto>
 }

@@ -3,6 +3,7 @@ package com.capstone.vieweeapp.data.repository
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.VieweeApi
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.request.CreateQuestionReqDto
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.request.FeedbackReqDto
+import com.capstone.vieweeapp.data.source.remote.viewee.dto.request.ReFeedbackReqDto
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.response.CreateQuestionResDto
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.response.FeedbackResDto
 import com.capstone.vieweeapp.domain.repository.VieweeRepository
@@ -50,6 +51,20 @@ class VieweeRepositoryImpl(
 
         try {
             val call = api.getAllAnswersFeedback(feedbackReqDto)
+            val response = call.await()
+            emit(Resource.Success(response))
+        } catch (e: IOException) {
+            emit(Resource.Error(message = "error: ${e.localizedMessage ?: "internet connection error"}"))
+        } catch (e: HttpException) {
+            emit(Resource.Error(message = "error: ${e.localizedMessage ?: "unexpected error"}"))
+        }
+    }
+
+    override suspend fun getReAnswerFeedback1(feedbackReqDto: ReFeedbackReqDto): Flow<Resource<FeedbackResDto>> = flow {
+        emit(Resource.Loading())
+
+        try {
+            val call = api.getReAnswerFeedback1(feedbackReqDto)
             val response = call.await()
             emit(Resource.Success(response))
         } catch (e: IOException) {

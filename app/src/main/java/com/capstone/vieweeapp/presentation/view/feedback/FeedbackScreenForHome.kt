@@ -1,9 +1,12 @@
 package com.capstone.vieweeapp.presentation.view.feedback
 
+import android.util.Log
+import androidx.camera.video.VideoRecordEvent.Start
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,11 +20,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowRightAlt
 import androidx.compose.material.icons.filled.DeleteForever
@@ -31,14 +37,22 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -49,9 +63,13 @@ import androidx.compose.ui.unit.sp
 import com.capstone.vieweeapp.R
 import com.capstone.vieweeapp.data.source.local.entity.Feedbacks
 import com.capstone.vieweeapp.data.source.local.entity.InterviewResult
+import com.capstone.vieweeapp.data.source.local.entity.toPercentage
+import com.capstone.vieweeapp.data.source.local.entity.toPercentages
 import com.capstone.vieweeapp.presentation.event.FeedbackForHomeUiEvent
+import com.capstone.vieweeapp.presentation.state.ReInterviewState
 import com.capstone.vieweeapp.presentation.view.feedback.graph.CircularGraphView
 import com.capstone.vieweeapp.presentation.view.feedback.graph.TriangleGraphView
+import com.capstone.vieweeapp.presentation.view.home.CustomTextField
 import com.capstone.vieweeapp.presentation.view.interview.input_profile.CustomTitleText
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
 import com.capstone.vieweeapp.ui.theme.VieweeColorShadow
@@ -60,6 +78,7 @@ import com.capstone.vieweeapp.ui.theme.noToSansKr
 import com.capstone.vieweeapp.utils.CalculateDate
 import com.capstone.vieweeapp.utils.Constants
 import com.capstone.vieweeapp.utils.CustomRippleEffect
+import com.capstone.vieweeapp.utils.CustomRippleEffect.clickableWithoutRipple
 
 @Preview(showBackground = true)
 @Composable
@@ -78,7 +97,8 @@ fun FeedbackScreenForHomePreview() {
         ),
         onNavigateHome = { /*TODO*/ },
         uiEvent = { /*TODO*/ },
-        name = "곽상진"
+        name = "곽상진",
+        reInterviewState = ReInterviewState()
     )
 }
 
@@ -89,12 +109,13 @@ fun FeedbackScreenForHome(
     onNavigateHome: () -> Unit,
     uiEvent: (FeedbackForHomeUiEvent) -> Unit,
     name: String,
+    reInterviewState: ReInterviewState
 ) {
 
     val scrollState = rememberScrollState()
 
     Box(modifier = Modifier.fillMaxSize()) {
-        if ((interviewResult.answers.size+1) == interviewResult.feedbacks.feedbacks.size) {
+        if ((interviewResult.answers.size + 1) == interviewResult.feedbacks.feedbacks.size) {
             Column(
                 modifier = modifier
                     .background(Color.White)
@@ -116,7 +137,7 @@ fun FeedbackScreenForHome(
                             Icon(
                                 imageVector = ImageVector.vectorResource(R.drawable.ic_btn_home),
                                 contentDescription = "home",
-                                tint = VieweeColorMain,
+                                tint = VieweeColorMain.copy(alpha = 0.8f),
                                 modifier = Modifier
                                     .alpha(.7f)
                                     .padding(vertical = 20.dp, horizontal = 20.dp)
@@ -132,7 +153,7 @@ fun FeedbackScreenForHome(
                             Icon(
                                 imageVector = ImageVector.vectorResource(R.drawable.ic_btn_trash),
                                 contentDescription = "delete",
-                                tint = VieweeColorMain,
+                                tint = VieweeColorMain.copy(alpha = 0.8f),
                                 modifier = Modifier
                                     .alpha(.7f)
                                     .padding(vertical = 20.dp, horizontal = 20.dp),
@@ -178,7 +199,9 @@ fun FeedbackScreenForHome(
                                 )
                             } 면접의 감정 분석"
                         )
-                        TriangleGraphView()
+                        if (interviewResult.textSentiment.isNotEmpty()) {
+                            TriangleGraphView(intervieweeValues = interviewResult.textSentiment.toPercentage())
+                        }
                         CustomTitleText(
                             text = "✓ ${
                                 CalculateDate.dateFormatForFeedback(
@@ -186,7 +209,9 @@ fun FeedbackScreenForHome(
                                 )
                             } 면접의 표정 분석"
                         )
-                        CircularGraphView()
+                        if (interviewResult.emotions.isNotEmpty()) {
+                            CircularGraphView(emotions = interviewResult.emotions.toPercentages())
+                        }
                     }
                     CustomTitleText(
                         text = "✓ ${
@@ -198,7 +223,7 @@ fun FeedbackScreenForHome(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 30.dp, horizontal = 30.dp)
+                            .padding(vertical = 27.dp, horizontal = 20.dp)
                     ) {
                         Text(
                             text = interviewResult.feedbackTotal,
@@ -210,8 +235,10 @@ fun FeedbackScreenForHome(
                                 )
                                 .padding(30.dp)
                                 .align(Alignment.Center),
-                            textAlign = TextAlign.Center,
+                            fontFamily = noToSansKr,
+                            fontWeight = FontWeight.Normal,
                             fontSize = 12.sp,
+                            textAlign = TextAlign.Start,
                             color = Color.Gray
                         )
                     }
@@ -221,6 +248,8 @@ fun FeedbackScreenForHome(
                         .padding(bottom = 30.dp)
                         .background(Color.White),
                     interviewResult = interviewResult,
+                    onSubmit = { index, maxIndex, inputAnswer -> uiEvent(FeedbackForHomeUiEvent.EachReInterview(index, maxIndex, inputAnswer)) },
+                    reInterviewState = reInterviewState
                 )
 
                 Spacer(Modifier.height(100.dp))
@@ -321,6 +350,8 @@ fun FeedbackScreenForHome(
 fun FeedbackDetailCardGridForHome(
     modifier: Modifier = Modifier,
     interviewResult: InterviewResult,
+    onSubmit: (Int, Int, String) -> Unit,
+    reInterviewState: ReInterviewState
 ) {
     CustomTitleText(
         Modifier.padding(top = 20.dp, bottom = 30.dp),
@@ -330,17 +361,48 @@ fun FeedbackDetailCardGridForHome(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 30.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         interviewResult.answers
             .forEachIndexed { index, answer ->
-                FeedbackDetailCardView(
+
+                var reInterviewClick by remember { mutableStateOf(false) }
+
+                Column(
                     modifier = Modifier.padding(bottom = 10.dp),
-                    detailTitle = interviewResult.questions[index],
-                    detailContent = answer,
-                    feedbackContent = interviewResult.feedbacks.feedbacks[index]
-                )
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(
+                        10.dp,
+                        alignment = Alignment.CenterVertically
+                    )
+                ) {
+                    // 피드백 카드 뷰(질문, 답변, 피드백)
+                    FeedbackDetailCardView(
+                        modifier = Modifier,
+                        detailTitle = interviewResult.questions[index],
+                        detailContent = answer,
+                        feedbackContent = interviewResult.feedbacks.feedbacks[index]
+                    )
+                    EachReInterviewSection(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                            .background(
+                                color = VieweeColorMain.copy(alpha = 0.15f),
+                                shape = RoundedCornerShape(10.dp)
+                            )
+                            .clickableWithoutRipple(
+                                interactionSource = MutableInteractionSource(),
+                                onClick = { reInterviewClick = true }
+                            ),
+                        reInterviewClick = reInterviewClick,
+                        reInterviewState = reInterviewState,
+                        index = index,
+                        onSubmit = { inputAnswer -> onSubmit(index, interviewResult.answers.size, inputAnswer) },
+                        onClose = { reInterviewClick = false }
+                    )
+                }
             }
     }
 }

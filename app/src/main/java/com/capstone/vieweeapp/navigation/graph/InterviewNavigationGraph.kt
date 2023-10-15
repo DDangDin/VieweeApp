@@ -158,11 +158,15 @@ fun InterviewNavigationGraph(
                 val feedbackState = interviewViewModel.feedbackState.collectAsState()
                 val questionsState = interviewViewModel.questionsState.collectAsState()
                 val answerList = interviewViewModel.answerList
+                val emotionList = interviewViewModel.emotionList
+                val textSentimentList = interviewViewModel.textSentimentList
 
                 FeedbackScreen(
                     questionState = questionsState.value,
                     answerList = answerList,
                     feedbackState = feedbackState.value,
+                    emotionList = emotionList,
+                    textSentimentList = textSentimentList,
                     onNavigateHome = onFinish,
                     saveInterviewResult = { interviewViewModel.saveInterviewResult() },
                 )

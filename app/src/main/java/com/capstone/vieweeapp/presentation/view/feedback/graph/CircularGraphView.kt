@@ -47,10 +47,8 @@ object CircularGraphColor {
 @Composable
 fun CircularGraphView(
     modifier: Modifier = Modifier,
-    emotions: List<Emotion> = emptyList(),
-    data: List<Float> = listOf(10f, 15f, 25f, 10f, 15f, 5f, 20f)
+    emotions: List<Float> = listOf(10f, 15f, 25f, 10f, 15f, 5f, 20f),
 ) {
-    val data = listOf(10f, 15f, 25f, 10f, 15f, 5f, 20f) // 각 섹션의 비율
 //    val data = listOf(30f, 0f, 0f, 60f, 10f, 0f, 0f) // 각 섹션의 비율
     val colors = listOf(Surprise, Fear, Angry, Neutral, Sad, Disgust, Happy) // 각 섹션의 색상
 
@@ -65,7 +63,7 @@ fun CircularGraphView(
             modifier = Modifier
                 .align(Alignment.Center)
                 .size(200.dp), // 크기 조절 가능
-            data = data,
+            data = emotions,
             colors = colors,
             colorNames = FacialEmotionList.emotionNames
         )
@@ -213,14 +211,19 @@ fun ExplainCircleGraphPreview() {
 @Composable
 fun PieChartWithWhiteCenterPreview() {
 
-    val data = listOf(10f, 15f, 25f, 10f, 15f, 5f, 10f) // 각 섹션의 비율
+    val emotions = listOf(10f, 15f, 25f, 10f, 15f, 5f, 10f) // 각 섹션의 비율
     val colors = listOf(Surprise, Fear, Angry, Neutral, Sad, Disgust, Happy) // 각 섹션의 색상
 
-    PieChartWithWhiteCenter(
-        data = data,
-        colors = colors,
-        colorNames = FacialEmotionList.emotionNames
-    )
+    Box(modifier = Modifier.fillMaxSize()) {
+        PieChartWithWhiteCenter(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .size(200.dp), // 크기 조절 가능
+            data = emotions,
+            colors = colors,
+            colorNames = FacialEmotionList.emotionNames
+        )
+    }
 }
 
 @Preview(showBackground = true)

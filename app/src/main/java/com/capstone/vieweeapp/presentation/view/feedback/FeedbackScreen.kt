@@ -50,7 +50,11 @@ import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.capstone.vieweeapp.R
+import com.capstone.vieweeapp.data.source.local.entity.Emotion
 import com.capstone.vieweeapp.data.source.local.entity.Feedbacks
+import com.capstone.vieweeapp.data.source.local.entity.TextSentiment
+import com.capstone.vieweeapp.data.source.local.entity.toPercentage
+import com.capstone.vieweeapp.data.source.local.entity.toPercentages
 import com.capstone.vieweeapp.presentation.state.FeedbackState
 import com.capstone.vieweeapp.presentation.state.QuestionsState
 import com.capstone.vieweeapp.presentation.view.feedback.graph.CircularGraphView
@@ -79,7 +83,9 @@ fun FeedbackScreenPreview() {
             resumeForFeedback = Constants.RESUME_DUMMY_DATA
         ),
         onNavigateHome = {},
-        saveInterviewResult = {}
+        saveInterviewResult = {},
+        emotionList = emptyList(),
+        textSentimentList = emptyList()
     )
 }
 
@@ -89,6 +95,8 @@ fun FeedbackScreen(
     questionState: QuestionsState,
     answerList: List<String>,
     feedbackState: FeedbackState,
+    emotionList: List<Emotion>,
+    textSentimentList: List<TextSentiment>,
     onNavigateHome: () -> Unit,
     saveInterviewResult: () -> Unit,
 ) {
@@ -120,7 +128,7 @@ fun FeedbackScreen(
                             Icon(
                                 imageVector = ImageVector.vectorResource(R.drawable.ic_btn_home),
                                 contentDescription = "home",
-                                tint = VieweeColorMain,
+                                tint = VieweeColorMain.copy(alpha = 0.8f),
                                 modifier = Modifier
                                     .alpha(.7f)
                                     .padding(vertical = 20.dp, horizontal = 20.dp)
@@ -165,9 +173,11 @@ fun FeedbackScreen(
                         )
                     ) {
                         CustomTitleText(text = "✓ $todayDate 면접의 감정 분석")
-                        TriangleGraphView()
+                        TriangleGraphView(intervieweeValues = textSentimentList.toPercentage())
                         CustomTitleText(text = "✓ $todayDate 면접의 표정 분석")
-                        CircularGraphView()
+                        if (emotionList.isNotEmpty()) {
+                            CircularGraphView(emotions = emotionList.toPercentages())
+                        }
                     }
                     CustomTitleText(
                         Modifier.padding(top = 50.dp),
@@ -176,7 +186,7 @@ fun FeedbackScreen(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 30.dp, horizontal = 30.dp)
+                            .padding(vertical = 27.dp, horizontal = 20.dp)
                     ) {
                         Text(
                             text = feedbackState.feedbacks.feedbacks.last(),
@@ -188,8 +198,10 @@ fun FeedbackScreen(
                                 )
                                 .padding(30.dp)
                                 .align(Alignment.Center),
-                            textAlign = TextAlign.Center,
+                            fontFamily = noToSansKr,
+                            fontWeight = FontWeight.Normal,
                             fontSize = 12.sp,
+                            textAlign = TextAlign.Start,
                             color = Color.Gray
                         )
                     }
@@ -286,7 +298,7 @@ fun FeedbackDetailCardGrid(
     todayDate: String
 ) {
     CustomTitleText(
-        Modifier.padding(top = 20.dp, bottom = 30.dp),
+        modifier.padding(top = 20.dp, bottom = 30.dp),
         "✓ $todayDate 면접의 질문 피드백"
     )
     Column(

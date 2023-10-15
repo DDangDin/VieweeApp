@@ -2,6 +2,7 @@ package com.capstone.vieweeapp.domain.repository
 
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.request.CreateQuestionReqDto
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.request.FeedbackReqDto
+import com.capstone.vieweeapp.data.source.remote.viewee.dto.request.ReFeedbackReqDto
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.response.CreateQuestionResDto
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.response.FeedbackResDto
 import com.capstone.vieweeapp.utils.Resource
@@ -14,4 +15,6 @@ interface VieweeRepository {
     suspend fun getAnswerFeedback(feedbackReqDto: FeedbackReqDto): Flow<Resource<FeedbackResDto>>
 
     suspend fun getAllAnswersFeedback(feedbackReqDto: FeedbackReqDto): Flow<Resource<FeedbackResDto>>
+
+    suspend fun getReAnswerFeedback1(feedbackReqDto: ReFeedbackReqDto): Flow<Resource<FeedbackResDto>>
 }

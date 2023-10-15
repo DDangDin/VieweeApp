@@ -57,14 +57,16 @@ fun FeedbackDetailCardView(
     CompositionLocalProvider(LocalRippleTheme provides CustomRippleEffect.NoRippleTheme) {
         Box(
             modifier = modifier
+                .fillMaxWidth()
                 .border(1.dp, (VieweeColorMain.copy(alpha = 0.5f)), RoundedCornerShape(10.dp))
                 .clickableWithoutRipple(
                     interactionSource = interactionSource,
                     onClick = { isExpanded = !isExpanded }
                 ),
-            ) {
+        ) {
             Column(
                 modifier = Modifier
+                    .align(Alignment.Center)
                     .padding(5.dp)
                     .padding(bottom = extraPadding.coerceAtLeast(0.dp)),
                 verticalArrangement = Arrangement.Top,
@@ -80,17 +82,16 @@ fun FeedbackDetailCardView(
                     fontSize = 14.sp,
                     color = Color.DarkGray.copy(.8f)
                 )
-
                 IconButton(
                     onClick = { isExpanded = !isExpanded },
-
-                    ) {
+                ) {
                     Icon(
-                        Icons.Filled.ArrowDropDown,
-                        "Show", modifier = Modifier
+                        imageVector = Icons.Filled.ArrowDropDown,
+                        contentDescription = "Show",
+                        tint = Color(0xCC92979F),
+                        modifier = Modifier
                             .alpha(.7f)
                             .fillMaxWidth()
-
                     )
                 }
                 if (isExpanded) {

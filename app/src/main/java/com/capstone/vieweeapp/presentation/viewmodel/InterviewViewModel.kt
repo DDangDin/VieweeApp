@@ -6,12 +6,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.capstone.viewee.data.source.network.clova_api.dto.Confidence
+import com.capstone.viewee.data.source.network.clova_api.dto.toTextSentiment
 import com.capstone.vieweeapp.data.source.local.entity.Emotion
 import com.capstone.vieweeapp.data.source.local.entity.Feedbacks
 import com.capstone.vieweeapp.data.source.local.entity.InterviewResult
 import com.capstone.vieweeapp.data.source.local.entity.TextSentiment
 import com.capstone.vieweeapp.data.source.local.entity.toCreateQuestionReqDto
+import com.capstone.vieweeapp.data.source.remote.clova.dto.TextSentimentReqDto
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.request.FeedbackReqDto
+import com.capstone.vieweeapp.data.source.remote.viewee.dto.request.ReFeedbackReqDto
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.response.makeQuestionList
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.response.toFeedbacks
 import com.capstone.vieweeapp.domain.repository.ClovaSentimentRepository
@@ -23,6 +26,7 @@ import com.capstone.vieweeapp.presentation.event.SelectResumeUiEvent
 import com.capstone.vieweeapp.presentation.state.FeedbackState
 import com.capstone.vieweeapp.presentation.state.InterviewTurnState
 import com.capstone.vieweeapp.presentation.state.QuestionsState
+import com.capstone.vieweeapp.presentation.state.ReInterviewState
 import com.capstone.vieweeapp.presentation.state.ResumeState
 import com.capstone.vieweeapp.utils.CalculateDate
 import com.capstone.vieweeapp.utils.Constants
@@ -48,6 +52,7 @@ class InterviewViewModel @Inject constructor(
 ) : ViewModel() {
     private val TAG = "InterviewViewModel_Log"
 
+
     // resume 선택 시 아래 변수에 할당 됨
     private var selectedResume = Constants.RESUME_DUMMY_DATA
 
@@ -70,9 +75,9 @@ class InterviewViewModel @Inject constructor(
 
     // Data
     private val _emotionListUpdatePossible = MutableStateFlow(false)
-    val emotionListUpdatePossible = _emotionListUpdatePossible.asStateFlow()
-    var emotionHashMap = hashMapOf<String, Int>()
-        private set
+    private val emotionListUpdatePossible = _emotionListUpdatePossible.asStateFlow()
+    private var emotionHashMap = hashMapOf<String, Int>()
+
     var answerList = arrayListOf<String>()
         private set
     var emotionList = arrayListOf<Emotion>()
@@ -197,24 +202,48 @@ class InterviewViewModel @Inject constructor(
     private fun saveEachInterviewTurn(
         answer: String,
     ) {
+        // 텍스트 감정 분석 저장
+        // 임시 (API 요청 필요)
+//        textSentimentList.add(
+//            TextSentiment(
+//                sentiment = "Neutral",
+//                confidence = Confidence(0.0, 0.0, 0.0)
+//            )
+//        )
+        val emptyOrErrorTextSentiment = TextSentiment(
+            sentiment = "Neutral",
+            confidence = Confidence(0.0, 0.0, 0.0)
+        )
+        viewModelScope.launch {
+            clovaSentimentRepository.getClovaSentimentResult(TextSentimentReqDto(answer))
+                .onEach { result ->
+                    when (result) {
+                        is Resource.Success -> {
+                            textSentimentList.add(
+                                result.data?.toTextSentiment() ?: emptyOrErrorTextSentiment
+                            )
+                        }
+
+                        is Resource.Loading -> {}
+                        is Resource.Error -> {
+                            textSentimentList.add(emptyOrErrorTextSentiment)
+                        }
+                    }
+                }.launchIn(viewModelScope)
+        }
+
+        // 답변 저장
         answerList.add(answer)
 
-        // 임시 (API 요청 필요)
-        textSentimentList.add(
-            TextSentiment(
-                sentiment = "Neutral",
-                confidence = Confidence(0.0, 0.0, 0.0)
-            )
-        )
-
+        // 얼굴 표정 분석 저장
         val emotion = Emotion(
-            emotionHashMap[FacialEmotionList.emotions[0]]!!,
-            emotionHashMap[FacialEmotionList.emotions[1]]!!,
-            emotionHashMap[FacialEmotionList.emotions[2]]!!,
-            emotionHashMap[FacialEmotionList.emotions[3]]!!,
-            emotionHashMap[FacialEmotionList.emotions[4]]!!,
-            emotionHashMap[FacialEmotionList.emotions[5]]!!,
-            emotionHashMap[FacialEmotionList.emotions[6]]!!
+            surprise = emotionHashMap[FacialEmotionList.emotions[0]]!!,
+            fear = emotionHashMap[FacialEmotionList.emotions[1]]!!,
+            angry = emotionHashMap[FacialEmotionList.emotions[2]]!!,
+            neutral = emotionHashMap[FacialEmotionList.emotions[3]]!!,
+            sad = emotionHashMap[FacialEmotionList.emotions[4]]!!,
+            disgust = emotionHashMap[FacialEmotionList.emotions[5]]!!,
+            happy = emotionHashMap[FacialEmotionList.emotions[6]]!!
         )
         emotionList.add(emotion)
 
@@ -323,7 +352,7 @@ class InterviewViewModel @Inject constructor(
             interviewResultRepository.insertInterviewResult(
                 InterviewResult(
                     feedbacks = feedbackState.value.feedbacks,
-                    textSentiment = emptyList(),
+                    textSentiment = textSentimentList,
                     emotions = emotionList,
                     questions = questionsState.value.questions,
                     answers = answerList,
