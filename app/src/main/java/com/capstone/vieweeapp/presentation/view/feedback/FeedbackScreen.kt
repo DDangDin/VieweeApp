@@ -191,11 +191,7 @@ fun FeedbackScreen(
                         Text(
                             text = feedbackState.feedbacks.feedbacks.last(),
                             modifier = Modifier
-                                .border(
-                                    width = 1.dp,
-                                    color = VieweeColorMain.copy(alpha = .5f),
-                                    shape = RoundedCornerShape(10.dp)
-                                )
+                                .border(1.3.dp, (VieweeColorMain.copy(alpha = 0.5f)), RoundedCornerShape(10.dp))
                                 .padding(30.dp)
                                 .align(Alignment.Center),
                             fontFamily = noToSansKr,
@@ -304,7 +300,7 @@ fun FeedbackDetailCardGrid(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 30.dp),
+            .padding(horizontal = 20.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

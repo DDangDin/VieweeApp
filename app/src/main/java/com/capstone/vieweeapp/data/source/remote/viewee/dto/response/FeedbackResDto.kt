@@ -14,6 +14,7 @@ fun FeedbackResDto.toFeedbacks(): Feedbacks {
         feedbacks = feedbacks
             .split(Constants.FEEDBACK_SEPARATOR)
             .filter { it.isNotEmpty() }
+            .map { it.substring(2) }
 //            .map { it.replace("\n", "") }
     )
 }

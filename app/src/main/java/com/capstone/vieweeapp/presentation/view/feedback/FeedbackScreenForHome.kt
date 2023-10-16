@@ -228,11 +228,7 @@ fun FeedbackScreenForHome(
                         Text(
                             text = interviewResult.feedbackTotal,
                             modifier = Modifier
-                                .border(
-                                    width = 1.dp,
-                                    color = VieweeColorMain.copy(alpha = .5f),
-                                    shape = RoundedCornerShape(10.dp)
-                                )
+                                .border(1.3.dp, (VieweeColorMain.copy(alpha = 0.5f)), RoundedCornerShape(10.dp))
                                 .padding(30.dp)
                                 .align(Alignment.Center),
                             fontFamily = noToSansKr,
@@ -360,8 +356,8 @@ fun FeedbackDetailCardGridForHome(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 30.dp),
-        verticalArrangement = Arrangement.spacedBy(20.dp),
+            .padding(horizontal = 20.dp),
+        verticalArrangement = Arrangement.spacedBy(30.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         interviewResult.answers
@@ -389,7 +385,7 @@ fun FeedbackDetailCardGridForHome(
                             .fillMaxWidth()
                             .wrapContentHeight()
                             .background(
-                                color = VieweeColorMain.copy(alpha = 0.15f),
+                                color = if (reInterviewClick) VieweeColorMain.copy(alpha = 0.07f) else VieweeColorMain.copy(alpha = 0.5f),
                                 shape = RoundedCornerShape(10.dp)
                             )
                             .clickableWithoutRipple(

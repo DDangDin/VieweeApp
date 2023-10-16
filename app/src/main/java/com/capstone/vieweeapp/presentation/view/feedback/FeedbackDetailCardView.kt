@@ -10,7 +10,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -29,12 +32,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.capstone.vieweeapp.R
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
+import com.capstone.vieweeapp.ui.theme.noToSansKr
 import com.capstone.vieweeapp.utils.CustomRippleEffect
 import com.capstone.vieweeapp.utils.CustomRippleEffect.clickableWithoutRipple
 
@@ -58,7 +67,7 @@ fun FeedbackDetailCardView(
         Box(
             modifier = modifier
                 .fillMaxWidth()
-                .border(1.dp, (VieweeColorMain.copy(alpha = 0.5f)), RoundedCornerShape(10.dp))
+                .border(1.3.dp, (VieweeColorMain.copy(alpha = 0.5f)), RoundedCornerShape(10.dp))
                 .clickableWithoutRipple(
                     interactionSource = interactionSource,
                     onClick = { isExpanded = !isExpanded }
@@ -67,51 +76,67 @@ fun FeedbackDetailCardView(
             Column(
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .padding(5.dp)
-                    .padding(bottom = extraPadding.coerceAtLeast(0.dp)),
-                verticalArrangement = Arrangement.Top,
+                    .padding(15.dp),
+                verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-
                 Text(
-                    text = detailTitle,
-                    modifier = Modifier
-                        .padding(top = 10.dp),
+                    text = "질문: $detailTitle",
                     textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.ExtraBold,
+                    fontFamily = noToSansKr,
+                    fontWeight = FontWeight.SemiBold,
                     fontSize = 14.sp,
-                    color = Color.DarkGray.copy(.8f)
-                )
-                IconButton(
-                    onClick = { isExpanded = !isExpanded },
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowDropDown,
-                        contentDescription = "Show",
-                        tint = Color(0xCC92979F),
-                        modifier = Modifier
-                            .alpha(.7f)
-                            .fillMaxWidth()
+                    color = Color.DarkGray.copy(.8f),
+                    style = TextStyle(
+                        platformStyle = PlatformTextStyle(
+                            includeFontPadding = false
+                        )
                     )
-                }
+                )
+                Icon(
+                    modifier = Modifier
+                        .size(16.dp)
+                        .padding(top = 11.dp)
+                        .clickableWithoutRipple(
+                            interactionSource = MutableInteractionSource(),
+                            onClick = { isExpanded = !isExpanded }
+                        ),
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_drop_down),
+                    contentDescription = "Show",
+                    tint = Color(0xCC92979F),
+                )
                 if (isExpanded) {
                     Text(
-                        text = detailContent,
                         modifier = Modifier
-                            .padding(10.dp),
-                        textAlign = TextAlign.Left,
-                        fontSize = 13.sp,
-                        color = Color.Gray,
+                            .fillMaxWidth()
+                            .padding(top = 20.dp),
+                        text = "답변: $detailContent",
+                        textAlign = TextAlign.Start,
+                        fontFamily = noToSansKr,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 14.sp,
+                        color = Color.DarkGray.copy(.8f),
+                        style = TextStyle(
+                            platformStyle = PlatformTextStyle(
+                                includeFontPadding = false
+                            )
+                        )
                     )
                     Text(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(10.dp),
-                        text = "-> $feedbackContent",
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.DarkGray,
-                        textAlign = TextAlign.Start
+                            .padding(top = 20.dp),
+                        text = "피드백: $feedbackContent",
+                        textAlign = TextAlign.Start,
+                        fontFamily = noToSansKr,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 14.sp,
+                        color = VieweeColorMain.copy(alpha = 0.8f),
+                        style = TextStyle(
+                            platformStyle = PlatformTextStyle(
+                                includeFontPadding = false
+                            )
+                        )
                     )
                 }
             }
@@ -123,8 +148,8 @@ fun FeedbackDetailCardView(
 @Composable
 fun FeedFeedbackDetailCardViewPreview() {
     FeedbackDetailCardView(
-        detailContent = "DetailContent",
-        detailTitle = "DetailTitle",
-        feedbackContent = "피드백 들어갈 부분"
+        detailTitle = "팀에 갈등이 생길경우 어떻게 해결하나요?",
+        detailContent = "DetailContentDetailContentDetailContentDetailContentDetailContentDetailContentDetailContentDetailContentDetailContentDetailContentDetailContent",
+        feedbackContent = "피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분"
     )
 }

@@ -1,5 +1,6 @@
 package com.capstone.vieweeapp.presentation.view.interview.input_profile
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -9,11 +10,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
+import androidx.compose.material3.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,19 +45,27 @@ fun NextButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
-    Button(
+    OutlinedButton(
         modifier = modifier
             .fillMaxWidth()
-            .height(54.dp)
-            .clip(RoundedCornerShape(10.dp)),
+            .height(54.dp),
         onClick = onClick,
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = VieweeColorMain
-        )
+        colors = androidx.compose.material3.ButtonDefaults.outlinedButtonColors(
+            containerColor = VieweeColorMain
+        ),
+        border = BorderStroke(
+            width = 0.dp,
+            color = Color.Transparent,
+        ),
+        shape = RoundedCornerShape(10.dp)
+//        colors = ButtonDefaults.buttonColors(
+//            backgroundColor = VieweeColorMain
+//        )
     ) {
-        Image(
+        Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_nextbtn_text),
-            contentDescription = "next"
+            contentDescription = "next",
+            tint = Color.White
         )
     }
 }
@@ -145,4 +156,12 @@ fun CustomTitleText(
 @Composable
 fun CustomTitleTextPreview() {
     CustomTitleText()
+}
+
+@Preview
+@Composable
+fun NextButtonPreview() {
+    NextButton {
+
+    }
 }

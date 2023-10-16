@@ -32,16 +32,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.capstone.vieweeapp.R
 import com.capstone.vieweeapp.presentation.state.ReInterviewState
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
 import com.capstone.vieweeapp.ui.theme.VieweeColorText
 import com.capstone.vieweeapp.ui.theme.noToSansKr
+import com.capstone.vieweeapp.utils.CalculateDate
 import com.capstone.vieweeapp.utils.CustomRippleEffect.clickableWithoutRipple
 
 @Preview(showBackground = true)
@@ -92,7 +98,7 @@ fun EachReInterviewSection(
                 fontFamily = noToSansKr,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Medium,
-                color = VieweeColorMain.copy(alpha = 0.8f),
+                color = Color.White,
                 textAlign = TextAlign.Center
             )
         } else {
@@ -157,7 +163,7 @@ fun EachReInterviewSection(
                     border = BorderStroke(0.dp, Color.Transparent),
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = VieweeColorMain.copy(alpha = 1f),
+                        containerColor = VieweeColorMain.copy(alpha = 0.15f),
                         contentColor = Color.Transparent,
                     ),
                     onClick = {
@@ -166,16 +172,39 @@ fun EachReInterviewSection(
                     }
                 ) {
                     Text(
-                        text = "제출",
+                        text = "답변 수정 후 간단 피드백 받기",
                         fontFamily = noToSansKr,
                         fontWeight = FontWeight.Medium,
-                        fontSize = 14.sp,
-                        color = Color.White
+                        fontSize = 12.sp,
+                        color = VieweeColorMain.copy(alpha = 0.8f)
                     )
                 }
 
                 if (!reInterviewState.loading && reInterviewState.reFeedback != null) {
-                    Text(text = reInterviewState.reFeedback[index].feedbacks)
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 18.dp),
+//                        text = "수정답변에 대한 피드백: \n${reInterviewState.reFeedback[index].feedbacks}",
+                        text = buildAnnotatedString {
+                            append("수정답변에 대한 피드백:")
+                            append("\n")
+                            append("\n")
+                            append(
+                                AnnotatedString(
+                                    text = reInterviewState.reFeedback[index].feedbacks,
+                                    spanStyle = SpanStyle(
+                                        fontWeight = FontWeight.Medium,
+                                    ),
+                                )
+                            )
+                        },
+                        fontFamily = noToSansKr,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color(0xFF5179BC),
+                        textAlign = TextAlign.Start
+                    )
                 }
 
                 if (reInterviewState.loading) {
