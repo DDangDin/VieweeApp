@@ -12,7 +12,7 @@ val Pink40 = Color(0xFF7D5260)
 
 
 // Custom Colors
-val VieweeColorMain = Color(0xE62558AB)
+val VieweeColorMain = Color(0xFF2558AB)
 val VieweeColorMainLight = Color(0xFFE9F8FF)
 val VieweeColorShadow = Color(0x80000000)
 val VieweeColorGray = Color(0xFFB4B4B4)

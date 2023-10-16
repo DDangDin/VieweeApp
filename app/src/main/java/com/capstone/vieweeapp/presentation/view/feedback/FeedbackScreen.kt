@@ -286,7 +286,7 @@ fun FeedbackScreen(
 
 
 @Composable
-fun FeedbackDetailCardGrid(
+private fun FeedbackDetailCardGrid(
     modifier: Modifier = Modifier,
     feedbackState: FeedbackState,
     questionState: QuestionsState,

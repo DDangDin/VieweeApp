@@ -8,6 +8,7 @@ import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
+import android.speech.tts.Voice
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -22,6 +23,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.util.Locale
 import javax.inject.Inject
+
 
 @HiltViewModel
 class TextVoiceSpeechViewModel @Inject constructor(
@@ -209,9 +211,19 @@ class TextVoiceSpeechViewModel @Inject constructor(
     }
 
     fun ttsInit() {
+//        val a: MutableSet<String> = HashSet()
+//        a.add("male") //here you can give male if you want to select male voice.
+//        val voice = Voice("ko-kr-x-sfg#male_2-local", Locale("ko", "KR"), 400, 200, true, a)
+
         // tts
-        tts = TextToSpeech(application, this)
-        tts.setSpeechRate(1.4f)
+        // com.google.android.tts -> 구글 TTS 엔진
+        // com.samsung.SMT -> 삼성 TTS 엔진 (이게 기본 값)
+        tts = TextToSpeech(application, this, )
+        tts.setSpeechRate(1f)
+//        val voices = tts.voices
+//        val voiceList: List<Voice> = ArrayList(voices)
+//        Log.d("voice_log", "voiceList: ${voiceList ?: "null"}")
+        Log.d("voice_log", "tts_info: ${tts.voices}, tts_info: ${tts.engines}")
     }
 
     override fun onCleared() {

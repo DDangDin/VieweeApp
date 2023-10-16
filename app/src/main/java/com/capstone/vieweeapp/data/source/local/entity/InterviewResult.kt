@@ -15,3 +15,4 @@ data class InterviewResult(
     val date: String,
     val etc: String = "",
 )
+

@@ -1,8 +1,10 @@
 package com.capstone.vieweeapp
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,18 +19,20 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
-import com.capstone.vieweeapp.utils.opencv.FacialExpressionRecognition
 import com.capstone.vieweeapp.navigation.graph.InterviewNavigationGraph
 import com.capstone.vieweeapp.presentation.viewmodel.InputProfileViewModel
 import com.capstone.vieweeapp.presentation.viewmodel.InterviewViewModel
+import com.capstone.vieweeapp.presentation.viewmodel.TextVoiceSpeechViewModel
 import com.capstone.vieweeapp.ui.theme.VieweeAppTheme
 import com.capstone.vieweeapp.utils.VieweePermissions
+import com.capstone.vieweeapp.utils.opencv.FacialExpressionRecognition
 import dagger.hilt.android.AndroidEntryPoint
 import org.opencv.android.BaseLoaderCallback
 import org.opencv.android.LoaderCallbackInterface
 import org.opencv.android.OpenCVLoader
 import org.opencv.core.Core
 import java.io.IOException
+
 
 @AndroidEntryPoint
 class InterviewActivity : ComponentActivity() {
@@ -133,6 +137,11 @@ class InterviewActivity : ComponentActivity() {
         // Load in HomeActivity
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME)
         // --- for OpenCV Settings (finish) ---
+
+        // For TTS
+//        val installIntent = Intent()
+//        installIntent.action = TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA
+//        startActivity(installIntent)
 
         setContent {
 

@@ -97,7 +97,6 @@ fun FeedbackScreenForHomePreview() {
         ),
         onNavigateHome = { /*TODO*/ },
         uiEvent = { /*TODO*/ },
-        name = "곽상진",
         reInterviewState = ReInterviewState()
     )
 }
@@ -108,7 +107,6 @@ fun FeedbackScreenForHome(
     interviewResult: InterviewResult,
     onNavigateHome: () -> Unit,
     uiEvent: (FeedbackForHomeUiEvent) -> Unit,
-    name: String,
     reInterviewState: ReInterviewState
 ) {
 
@@ -343,7 +341,7 @@ fun FeedbackScreenForHome(
 
 
 @Composable
-fun FeedbackDetailCardGridForHome(
+private fun FeedbackDetailCardGridForHome(
     modifier: Modifier = Modifier,
     interviewResult: InterviewResult,
     onSubmit: (Int, Int, String) -> Unit,

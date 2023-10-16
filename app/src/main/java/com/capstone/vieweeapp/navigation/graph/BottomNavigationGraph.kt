@@ -98,7 +98,6 @@ fun BottomNavigationGraph(
                 FeedbackScreenForHome(
                     interviewResult = interviewResultState.value.interviewResults[interviewResultIndex],
                     onNavigateHome = { navController.popBackStack() },
-                    name = homeViewModel.username.value,
                     uiEvent = feedbackForHomeViewModel::uiEvent,
                     reInterviewState = reInterviewState.value
                 )

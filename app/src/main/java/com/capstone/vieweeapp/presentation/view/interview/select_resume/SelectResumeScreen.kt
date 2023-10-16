@@ -60,6 +60,7 @@ import com.capstone.vieweeapp.presentation.state.ResumeState
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
 import com.capstone.vieweeapp.ui.theme.VieweeColorOrange
 import com.capstone.vieweeapp.ui.theme.VieweeColorText
+import com.capstone.vieweeapp.utils.Constants
 
 @Composable
 fun SelectResumeScreen(
@@ -134,16 +135,16 @@ fun SelectResumeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 items(resumes.size) { idx ->
-                    val borderColor = if ((idx == selectedIndex)) VieweeColorOrange else VieweeColorMain
+                    val borderColor = if ((idx == selectedIndex)) VieweeColorOrange.copy(alpha = 0.8f) else VieweeColorMain.copy(0.8f)
                     val backgroundColor = if (isLongClick && idx == longClickSelectedIndex) Color.Gray else Color.Transparent
 
                     ResumeCardView(
                         modifier = Modifier
-                            .border(1.dp, borderColor, RoundedCornerShape(10.dp))
+                            .border(1.3.dp, borderColor, RoundedCornerShape(10.dp))
                             .background(backgroundColor, RoundedCornerShape(10.dp)),
                         resume = resumes[idx],
                         onClick = {
-                            if (borderColor == VieweeColorOrange || isLongClick) {
+                            if (selectedIndex == idx || isLongClick) {
                                 selectedIndex = -1
                             } else {
                                 selectedIndex = idx
@@ -340,7 +341,9 @@ fun ShowDeleteButton(
 @Composable
 fun SelectResumeScreenPreview() {
     SelectResumeScreen(
-        resumeState = ResumeState(),
+        resumeState = ResumeState(
+            resumes = listOf(Constants.RESUME_DUMMY_DATA)
+        ),
         onFinish = { /*TODO*/ },
         onAddResume = { /*TODO*/ },
         selectResumeUiEvent = {},
