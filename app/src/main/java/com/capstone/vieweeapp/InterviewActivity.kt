@@ -1,10 +1,8 @@
 package com.capstone.vieweeapp
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.speech.tts.TextToSpeech
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,8 +20,8 @@ import androidx.navigation.compose.rememberNavController
 import com.capstone.vieweeapp.navigation.graph.InterviewNavigationGraph
 import com.capstone.vieweeapp.presentation.viewmodel.InputProfileViewModel
 import com.capstone.vieweeapp.presentation.viewmodel.InterviewViewModel
-import com.capstone.vieweeapp.presentation.viewmodel.TextVoiceSpeechViewModel
 import com.capstone.vieweeapp.ui.theme.VieweeAppTheme
+import com.capstone.vieweeapp.utils.Constants
 import com.capstone.vieweeapp.utils.VieweePermissions
 import com.capstone.vieweeapp.utils.opencv.FacialExpressionRecognition
 import dagger.hilt.android.AndroidEntryPoint
@@ -178,7 +176,15 @@ class InterviewActivity : ComponentActivity() {
                         interviewViewModel = interviewViewModel,
                         inputProfileViewModel = inputProfileViewModel,
                         requestPermissions = { requestPermissions() },
-                        facialExpressionRecognition = facialExpressionRecognition
+                        facialExpressionRecognition = facialExpressionRecognition,
+                        isReInterview = intent.getBooleanExtra(
+                            Constants.PUT_EXTRA_IS_RE_INTERVIEW,
+                            false
+                        ),
+                        previousInterviewResultId = intent.getIntExtra(
+                            Constants.PUT_EXTRA_PREVIOUS_INTERVIEW_RESULT_INDEX,
+                            0
+                        )
                     )
                 }
             }

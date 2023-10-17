@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.request.ReFeedbackReqDto
+import com.capstone.vieweeapp.data.source.remote.viewee.dto.request.TempRequest
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.response.FeedbackResDto
 import com.capstone.vieweeapp.domain.repository.InterviewResultRepository
 import com.capstone.vieweeapp.domain.repository.VieweeRepository
@@ -78,11 +79,24 @@ class FeedbackForHomeViewModel @Inject constructor(
                                 }
                             }
 
-                            is Resource.Error -> TODO()
+                            is Resource.Error -> {
+                                _reInterviewState.update {
+                                    it.copy(
+                                        loading = false,
+                                        error = result.message ?: Constants.COMMON_ERROR_MESSAGE
+                                    )
+                                }
+                            }
                         }
                     }.launchIn(viewModelScope)
                 }
             }
+        }
+    }
+
+    fun requestServerForReInterview() {
+        viewModelScope.launch {
+            vieweeRepository.requestServerForReInterview(TempRequest(""))
         }
     }
 }

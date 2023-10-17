@@ -1,6 +1,7 @@
 package com.capstone.vieweeapp.navigation.graph
 
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -32,7 +33,9 @@ fun InterviewNavigationGraph(
     interviewViewModel: InterviewViewModel,
     inputProfileViewModel: InputProfileViewModel,
     requestPermissions: () -> Unit,
-    facialExpressionRecognition: FacialExpressionRecognition
+    facialExpressionRecognition: FacialExpressionRecognition,
+    isReInterview: Boolean,
+    previousInterviewResultId: Int
 ) {
 
     NavHost(
@@ -40,6 +43,12 @@ fun InterviewNavigationGraph(
         startDestination = Screen.SelectResume.route
     ) {
         composable(route = Screen.SelectResume.route) {
+
+            LaunchedEffect(key1 = Unit) {
+                if (isReInterview) {
+                    navController.navigate(Screen.RealInterviewNavigation.route)
+                }
+            }
 
             LaunchedEffect(key1 = Unit) {
                 interviewViewModel.getResumes()
@@ -66,15 +75,29 @@ fun InterviewNavigationGraph(
                     requestPermissions()
                 }
 
+                BackHandler(
+                    onBack = {
+                        onFinish()
+                    }
+                )
+
                 InterviewPrepareScreen(
                     onPopUp = {
-                        navController.popBackStack(
-                            route = Screen.RealInterviewNavigation.route,
-                            inclusive = true
-                        )
+                        if (isReInterview) {
+                            onFinish()
+                        } else {
+                            navController.popBackStack(
+                                route = Screen.RealInterviewNavigation.route,
+                                inclusive = true
+                            )
+                        }
                     },
                     startReadyToInterview = {
-                        interviewViewModel.createQuestions()
+                        if (isReInterview) {
+                            interviewViewModel.createLocalQuestions(previousInterviewResultId)
+                        } else {
+                            interviewViewModel.createQuestions()
+                        }
                         navController.navigate(Screen.InterviewLoading.route) {
                             popUpTo(Screen.InterviewPrepare.route) {
                                 inclusive = true
@@ -119,7 +142,10 @@ fun InterviewNavigationGraph(
                 val interviewFinishState = interviewViewModel.finishState.collectAsState()
 
                 LaunchedEffect(key1 = Unit) {
-                    Log.d("RealInterview_Log", "${interviewViewModel.questionsState.value.questions}")
+                    Log.d(
+                        "RealInterview_Log",
+                        "${interviewViewModel.questionsState.value.questions}"
+                    )
                 }
 
 
@@ -144,6 +170,15 @@ fun InterviewNavigationGraph(
                                 inclusive = true
                             }
                         }
+                    },
+                    startFeedback = {
+                        Log.d("reInterview_Log", "isReInterview: $isReInterview")
+                        interviewViewModel.realInterviewUiEvent(
+                            RealInterviewUiEvent.StartFeedback(
+                                isReInterview = isReInterview,
+                                previousInterviewResultId = previousInterviewResultId
+                            )
+                        )
                     }
                 )
             }
@@ -154,6 +189,12 @@ fun InterviewNavigationGraph(
             startDestination = Screen.Feedback.route
         ) {
             composable(route = Screen.Feedback.route) {
+
+                BackHandler(
+                    onBack = {
+                        onFinish()
+                    }
+                )
 
                 val feedbackState = interviewViewModel.feedbackState.collectAsState()
                 val questionsState = interviewViewModel.questionsState.collectAsState()
@@ -168,7 +209,18 @@ fun InterviewNavigationGraph(
                     emotionList = emotionList,
                     textSentimentList = textSentimentList,
                     onNavigateHome = onFinish,
-                    saveInterviewResult = { interviewViewModel.saveInterviewResult() },
+                    saveInterviewResult = {
+                        if (isReInterview) {
+                            feedbackState.value.previousInterviewResult?.let { it1 ->
+                                interviewViewModel.saveReInterviewResult(
+                                    it1
+                                )
+                            }
+                        } else {
+                            interviewViewModel.saveInterviewResult()
+                        }
+                    },
+                    isReInterview = isReInterview
                 )
             }
         }

@@ -1,8 +1,5 @@
 package com.capstone.vieweeapp.presentation.event
 
-import com.capstone.vieweeapp.data.source.local.entity.Emotion
-import com.capstone.vieweeapp.data.source.local.entity.TextSentiment
-
 sealed class RealInterviewUiEvent {
     object StartInterview: RealInterviewUiEvent()
     object FinishInterview: RealInterviewUiEvent()
@@ -11,5 +8,5 @@ sealed class RealInterviewUiEvent {
         val answer: String,
     ): RealInterviewUiEvent()
 
-    object StartFeedback: RealInterviewUiEvent()
+    data class StartFeedback(val isReInterview: Boolean, val previousInterviewResultId: Int): RealInterviewUiEvent()
 }

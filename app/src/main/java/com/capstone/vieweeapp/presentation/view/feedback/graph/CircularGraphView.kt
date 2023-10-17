@@ -1,7 +1,13 @@
 package com.capstone.vieweeapp.presentation.view.feedback.graph
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -9,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
@@ -23,7 +30,9 @@ import com.capstone.vieweeapp.presentation.view.feedback.graph.CircularGraphColo
 import com.capstone.vieweeapp.presentation.view.feedback.graph.CircularGraphColor.Sad
 import com.capstone.vieweeapp.presentation.view.feedback.graph.CircularGraphColor.Surprise
 import com.capstone.vieweeapp.presentation.view.feedback.graph.CircularGraphColor.Disgust
+import com.capstone.vieweeapp.utils.CustomRippleEffect.clickableWithoutRipple
 import com.capstone.vieweeapp.utils.FacialEmotionList
+import kotlinx.coroutines.launch
 import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.sin
@@ -88,8 +97,36 @@ fun PieChartWithWhiteCenter(
     startAngle: Float = 0f
 ) {
     var currentAngle = startAngle
+    val total = data.sum()
+    var animatePercentages = mutableListOf<Float>()
+    var radiusForAnimation = 0f
 
-    Box(modifier = modifier.fillMaxSize()) {
+    val animateRadius = remember { Animatable(0f) }
+    LaunchedEffect(animateRadius) {
+        animateRadius.animateTo(
+            targetValue = radiusForAnimation / 2f,
+            animationSpec = tween(durationMillis = 2500, easing = LinearOutSlowInEasing)
+        )
+    }
+
+    data.forEachIndexed { i, value ->
+        val animatePercentage = remember { Animatable(0f) }
+
+        animatePercentages.add(animatePercentage.value)
+
+        LaunchedEffect(animatePercentage) {
+            animatePercentage.animateTo(
+                targetValue = (value / total) * 100,
+                animationSpec = tween(durationMillis = 2500, easing = LinearOutSlowInEasing)
+            )
+        }
+    }
+
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+    ) {
+
         Canvas(
             modifier = Modifier
                 .fillMaxSize()
@@ -98,12 +135,15 @@ fun PieChartWithWhiteCenter(
                 val centerX = size.width / 2f
                 val centerY = size.height / 2f
                 val radius = size.width / 3f
+                radiusForAnimation = radius
+
 //            val centerX = size.width / 5f
 //            val centerY = size.height / 5f
 //            val radius = min(size.width, size.height) / 5f
                 val total = data.sum()
 
                 data.forEachIndexed { i, value ->
+
                     val sweepAngle = 360f * (value / total)
                     val percentage = (value / total) * 100
 
@@ -124,9 +164,10 @@ fun PieChartWithWhiteCenter(
                     val textY =
                         centerY + (radius + 80) * sin(Math.toRadians(textAngle.toDouble())).toFloat()
                     drawIntoCanvas {
+
                         if (percentage.toInt() != 0) {
                             it.nativeCanvas.drawText(
-                                colorNames[i] + " " + "${percentage.toInt()}%",
+                                colorNames[i] + " " + "${animatePercentages[i].toInt()}%",
                                 textX,
                                 textY,
                                 android.graphics.Paint().apply {
@@ -144,7 +185,8 @@ fun PieChartWithWhiteCenter(
                 drawCircle(
                     color = Color.White,
                     center = Offset(centerX, centerY),
-                    radius = radius / 2f
+//                    radius = radius / 2f
+                    radius = animateRadius.value
                 )
             }
         )
@@ -230,4 +272,32 @@ fun PieChartWithWhiteCenterPreview() {
 @Composable
 fun CircularGraphViewPreview() {
     CircularGraphView()
+}
+
+@Preview(showBackground = true)
+@Composable
+fun GraphAnimationTestPreview() {
+    val radius = 200f
+    val animateFloat = remember { Animatable(0f) }
+    LaunchedEffect(animateFloat) {
+        animateFloat.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(durationMillis = 3000, easing = LinearEasing)
+        )
+    }
+
+    Canvas(modifier = Modifier.fillMaxSize()) {
+        drawArc(
+            color = Color.Black,
+            startAngle = 0f,
+            sweepAngle = 360f * animateFloat.value,
+            useCenter = false,
+            topLeft = Offset(size.width / 4, size.height / 4),
+            size = Size(
+                radius * 2,
+                radius * 2
+            ),
+            style = Stroke(2.0f)
+        )
+    }
 }

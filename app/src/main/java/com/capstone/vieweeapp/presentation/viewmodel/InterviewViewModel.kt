@@ -26,7 +26,6 @@ import com.capstone.vieweeapp.presentation.event.SelectResumeUiEvent
 import com.capstone.vieweeapp.presentation.state.FeedbackState
 import com.capstone.vieweeapp.presentation.state.InterviewTurnState
 import com.capstone.vieweeapp.presentation.state.QuestionsState
-import com.capstone.vieweeapp.presentation.state.ReInterviewState
 import com.capstone.vieweeapp.presentation.state.ResumeState
 import com.capstone.vieweeapp.utils.CalculateDate
 import com.capstone.vieweeapp.utils.Constants
@@ -168,6 +167,18 @@ class InterviewViewModel @Inject constructor(
         }
     }
 
+    fun createLocalQuestions(id: Int) {
+        viewModelScope.launch {
+            _questionsState.update { it.copy(loading = true) }
+            _questionsState.update {
+                it.copy(
+                    questions = interviewResultRepository.getInterviewResultOnce(id).questions,
+                    loading = false
+                )
+            }
+        }
+    }
+
     fun createQuestions() {
         viewModelScope.launch {
             vieweeRepository.getQuestions(selectedResume.toCreateQuestionReqDto())
@@ -274,7 +285,6 @@ class InterviewViewModel @Inject constructor(
                 // 카운트 종료
                 startCount(false)
                 // 모든 답변 분석 (서버요청)
-                interviewAnalyze()
                 _finishState.update { true }
             }
 
@@ -290,7 +300,7 @@ class InterviewViewModel @Inject constructor(
                 }
             }
 
-            RealInterviewUiEvent.StartFeedback -> {
+            is RealInterviewUiEvent.StartFeedback -> {
                 viewModelScope.launch {
                     var answerRequest = ""
 
@@ -303,43 +313,110 @@ class InterviewViewModel @Inject constructor(
 //                                "\n"
                     }
 
-                    vieweeRepository.getAnswerFeedback(
-                        FeedbackReqDto(
-                            facialExpressionAnalysisData = "",
-                            textSentimentAnalysisData = "",
-                            allAnswersFeedback = "",
-                            answerFeedback = answerRequest
-                        )
-                    ).onEach { result ->
-                        when (result) {
-                            is Resource.Success -> {
-                                _feedbackState.update {
-                                    it.copy(
-                                        feedbacks = result.data?.toFeedbacks() ?: Feedbacks(
-                                            emptyList()
-                                        ),
-                                        loading = false,
-                                        resumeForFeedback = selectedResume
-                                    )
+                    Log.d("reInterview_Log", "" +
+                            "isReInterview: ${uiEvent.isReInterview}\n" +
+                            "previousData: ${uiEvent.previousInterviewResultId}")
+
+                    if (uiEvent.isReInterview) {
+                        vieweeRepository.getReInterviewFeedback(
+                            ReFeedbackReqDto(
+                                facialExpressionAnalysisData = "",
+                                textSentimentAnalysisData = "",
+                                allAnswersFeedback = "",
+                                answerFeedback = "",
+                                reAnswer = answerRequest
+                            )
+                        ).onEach { result ->
+                            when (result) {
+                                is Resource.Success -> {
+                                    _feedbackState.update {
+                                        it.copy(
+                                            previousInterviewResult = interviewResultRepository.getInterviewResultOnce(
+                                                uiEvent.previousInterviewResultId
+                                            ),
+                                            feedbacks = result.data?.toFeedbacks() ?: Feedbacks(
+                                                emptyList()
+                                            ),
+                                            loading = false,
+                                            resumeForFeedback = selectedResume
+                                        )
+                                    }
+                                }
+
+                                is Resource.Loading -> {
+                                    _feedbackState.update { it.copy(loading = true) }
+                                }
+
+                                is Resource.Error -> {
+                                    _feedbackState.update { it.copy(loading = false) }
                                 }
                             }
+                        }.launchIn(viewModelScope)
+                    } else {
+                        vieweeRepository.getAnswerFeedback(
+                            FeedbackReqDto(
+                                facialExpressionAnalysisData = "",
+                                textSentimentAnalysisData = "",
+                                allAnswersFeedback = "",
+                                answerFeedback = answerRequest
+                            )
+                        ).onEach { result ->
+                            when (result) {
+                                is Resource.Success -> {
 
-                            is Resource.Loading -> {
-                                _feedbackState.update { it.copy(loading = true) }
-                            }
+                                    _feedbackState.update {
+                                        it.copy(
+                                            feedbacks = result.data?.toFeedbacks() ?: Feedbacks(
+                                                emptyList()
+                                            ),
+                                            loading = false,
+                                            resumeForFeedback = selectedResume
+                                        )
+                                    }
+                                }
 
-                            is Resource.Error -> {
-                                _feedbackState.update { it.copy(loading = false) }
+                                is Resource.Loading -> {
+                                    _feedbackState.update { it.copy(loading = true) }
+                                }
+
+                                is Resource.Error -> {
+                                    _feedbackState.update { it.copy(loading = false) }
+                                }
                             }
-                        }
-                    }.launchIn(viewModelScope)
+                        }.launchIn(viewModelScope)
+                    }
                 }
             }
         }
     }
 
-    fun interviewAnalyze() {
+    fun saveReInterviewResult(interviewResult: InterviewResult) {
+        viewModelScope.launch {
 
+            val textSentiments = interviewResult.textSentiment.toTypedArray()
+            val editTextSentiments = textSentiments.toCollection(ArrayList())
+            editTextSentiments.addAll(textSentimentList)
+
+            val emotions = interviewResult.emotions.toTypedArray()
+            val editEmotions = emotions.toCollection(ArrayList())
+            editEmotions.addAll(emotionList)
+
+            val answers = interviewResult.answers.toTypedArray()
+            val editAnswers = answers.toCollection(ArrayList())
+            editAnswers.addAll(answerList)
+
+            val reInterviewResult = interviewResult
+                .copy(
+                    feedbacks = feedbackState.value.feedbacks,
+                    textSentiment = editTextSentiments,
+                    emotions = editEmotions,
+                    answers = editAnswers,
+                    feedbackTotal = feedbackState.value.feedbacks.feedbacks.last(),
+                    etc = "2"
+                )
+
+            interviewResultRepository.updateForReInterviewResult(reInterviewResult)
+        }
     }
 
     fun saveInterviewResult() {

@@ -7,10 +7,8 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -22,8 +20,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.capstone.vieweeapp.data.source.local.entity.InterviewResult
 import com.capstone.vieweeapp.navigation.Screen
-import com.capstone.vieweeapp.presentation.event.HomeUiEvent
 import com.capstone.vieweeapp.presentation.view.calendar.CalendarScreen
 import com.capstone.vieweeapp.presentation.view.feedback.FeedbackScreenForHome
 import com.capstone.vieweeapp.presentation.view.home.HomeScreen
@@ -31,7 +29,6 @@ import com.capstone.vieweeapp.presentation.view.interview.InterviewScreen
 import com.capstone.vieweeapp.presentation.view.profile.ProfileScreen
 import com.capstone.vieweeapp.presentation.viewmodel.FeedbackForHomeViewModel
 import com.capstone.vieweeapp.presentation.viewmodel.HomeViewModel
-import com.capstone.vieweeapp.presentation.viewmodel.InterviewViewModel
 import com.capstone.vieweeapp.presentation.viewmodel.ProfileViewModel
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
 import com.capstone.vieweeapp.utils.Constants
@@ -41,7 +38,8 @@ import com.capstone.vieweeapp.utils.CustomSharedPreference
 fun BottomNavigationGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    startSelectResume: () -> Unit
+    startSelectResume: () -> Unit,
+    onStartReInterview: (Int) -> Unit
 ) {
 
     val context = LocalContext.current
@@ -99,7 +97,13 @@ fun BottomNavigationGraph(
                     interviewResult = interviewResultState.value.interviewResults[interviewResultIndex],
                     onNavigateHome = { navController.popBackStack() },
                     uiEvent = feedbackForHomeViewModel::uiEvent,
-                    reInterviewState = reInterviewState.value
+                    eachReInterviewState = reInterviewState.value,
+                    isReInterview = interviewResultState.value.interviewResults[interviewResultIndex].etc == "2",
+                    onStartReInterview = { id ->
+//                        feedbackForHomeViewModel.requestServerForReInterview()
+                        onStartReInterview(id)
+                        navController.popBackStack()
+                    }
                 )
             } else {
                 Box(modifier = Modifier.fillMaxSize()) {

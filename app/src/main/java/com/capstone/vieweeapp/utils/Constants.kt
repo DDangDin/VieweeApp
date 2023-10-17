@@ -36,6 +36,10 @@ object Constants {
     // InputProfileScreen - ResumeText 글자 수 제한
     const val RESUME_TEXT_MAX_LENGTH = 600
 
+    // PutExtra Name
+    const val PUT_EXTRA_PREVIOUS_INTERVIEW_RESULT_INDEX = "previousInterviewResultIndex"
+    const val PUT_EXTRA_IS_RE_INTERVIEW = "isReInterview"
+
     // DummyData
     val INTERVIEW_RESULT_EMPTY_DATA = InterviewResult(
         id = 0,

@@ -15,4 +15,10 @@ interface InterviewResultRepository {
     suspend fun deleteInterviewResult(interviewResult: InterviewResult)
 
     suspend fun deleteAllInterviewResult()
+
+
+    // 재면접
+    suspend fun updateForReInterviewResult(interviewResult: InterviewResult)
+
+    suspend fun getInterviewResultOnce(id: Int): InterviewResult
 }

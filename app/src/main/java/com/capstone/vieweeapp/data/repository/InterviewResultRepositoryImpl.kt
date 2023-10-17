@@ -23,4 +23,13 @@ class InterviewResultRepositoryImpl(
     override suspend fun deleteAllInterviewResult() {
         dao.deleteAllInterviewResult()
     }
+
+    // 재면접
+    override suspend fun updateForReInterviewResult(interviewResult: InterviewResult) {
+        dao.updateForReInterviewResult(interviewResult)
+    }
+
+    override suspend fun getInterviewResultOnce(id: Int): InterviewResult {
+        return dao.getInterviewResultOnce(id)
+    }
 }

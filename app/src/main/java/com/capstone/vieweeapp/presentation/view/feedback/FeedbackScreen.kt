@@ -20,7 +20,6 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -61,7 +60,6 @@ import com.capstone.vieweeapp.presentation.view.feedback.graph.CircularGraphView
 import com.capstone.vieweeapp.presentation.view.feedback.graph.TriangleGraphView
 import com.capstone.vieweeapp.presentation.view.interview.input_profile.CustomTitleText
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
-import com.capstone.vieweeapp.ui.theme.VieweeColorMainLight
 import com.capstone.vieweeapp.ui.theme.VieweeColorShadow
 import com.capstone.vieweeapp.ui.theme.noToSansKr
 import com.capstone.vieweeapp.utils.CalculateDate
@@ -73,19 +71,19 @@ import com.capstone.vieweeapp.utils.CustomRippleEffect
 fun FeedbackScreenPreview() {
     FeedbackScreen(
         questionState = QuestionsState(
-            questions = listOf("1", "2", "3"),
+            questions = listOf("1", "2"),
             loading = false
         ),
-        answerList = listOf("1", "2", "3"),
+        answerList = listOf("1", "2"),
         feedbackState = FeedbackState(
-            feedbacks = Feedbacks(listOf("1", "2", "3")),
+            feedbacks = Feedbacks(listOf("1", "2")),
             loading = false,
             resumeForFeedback = Constants.RESUME_DUMMY_DATA
         ),
         onNavigateHome = {},
         saveInterviewResult = {},
         emotionList = emptyList(),
-        textSentimentList = emptyList()
+        textSentimentList = emptyList(),
     )
 }
 
@@ -99,6 +97,7 @@ fun FeedbackScreen(
     textSentimentList: List<TextSentiment>,
     onNavigateHome: () -> Unit,
     saveInterviewResult: () -> Unit,
+    isReInterview: Boolean = false,
 ) {
 
     val scrollState = rememberScrollState()
@@ -209,7 +208,8 @@ fun FeedbackScreen(
                     feedbackState = feedbackState,
                     questionState = questionState,
                     answerList = answerList,
-                    todayDate = todayDate
+                    todayDate = todayDate,
+                    isReInterview = isReInterview,
                 )
 
                 Spacer(Modifier.height(100.dp))
@@ -291,7 +291,8 @@ private fun FeedbackDetailCardGrid(
     feedbackState: FeedbackState,
     questionState: QuestionsState,
     answerList: List<String>,
-    todayDate: String
+    todayDate: String,
+    isReInterview: Boolean,
 ) {
     CustomTitleText(
         modifier.padding(top = 20.dp, bottom = 30.dp),
@@ -309,8 +310,14 @@ private fun FeedbackDetailCardGrid(
                 FeedbackDetailCardView(
                     modifier = Modifier.padding(bottom = 10.dp),
                     detailTitle = questionState.questions[index],
-                    detailContent = answerList[index],
-                    feedbackContent = feedback
+                    detailContent = if (isReInterview) {
+                        feedbackState.previousInterviewResult?.answers?.get(index) ?: ""
+                    } else answerList[index],
+                    feedbackContent = feedback,
+                    isReInterview = isReInterview,
+                    detailContent2 = if (isReInterview) {
+                        answerList[index]
+                    } else ""
                 )
             }
     }

@@ -54,7 +54,8 @@ fun RealInterviewScreen(
     uiEvent: (RealInterviewUiEvent) -> Unit,
     recognizeImage: (Mat, Mat, Int) -> Unit,
     textVoiceSpeechViewModel: TextVoiceSpeechViewModel,
-    onNavigateFeedbackScreen: () -> Unit
+    onNavigateFeedbackScreen: () -> Unit,
+    startFeedback: () -> Unit
 ) {
     // 답변 차례일 때 다음 질문으로 넘어가기 위한 조건
     // 1. tts 상태가 아니여야 함 즉, 말하고 있는 상태가 아니여야 함
@@ -202,7 +203,7 @@ fun RealInterviewScreen(
             },
             interviewFinishState = interviewFinishState,
             startFeedback = {
-                uiEvent(RealInterviewUiEvent.StartFeedback)
+                startFeedback()
                 onNavigateFeedbackScreen()
             }
         )

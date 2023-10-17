@@ -4,6 +4,7 @@ import com.capstone.vieweeapp.data.source.remote.viewee.dto.VieweeApi
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.request.CreateQuestionReqDto
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.request.FeedbackReqDto
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.request.ReFeedbackReqDto
+import com.capstone.vieweeapp.data.source.remote.viewee.dto.request.TempRequest
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.response.CreateQuestionResDto
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.response.FeedbackResDto
 import com.capstone.vieweeapp.domain.repository.VieweeRepository
@@ -72,5 +73,23 @@ class VieweeRepositoryImpl(
         } catch (e: HttpException) {
             emit(Resource.Error(message = "error: ${e.localizedMessage ?: "unexpected error"}"))
         }
+    }
+
+    override suspend fun getReInterviewFeedback(feedbackReqDto: ReFeedbackReqDto): Flow<Resource<FeedbackResDto>> = flow {
+        emit(Resource.Loading())
+
+        try {
+            val call = api.getReInterviewFeedback(feedbackReqDto)
+            val response = call.await()
+            emit(Resource.Success(response))
+        } catch (e: IOException) {
+            emit(Resource.Error(message = "error: ${e.localizedMessage ?: "internet connection error"}"))
+        } catch (e: HttpException) {
+            emit(Resource.Error(message = "error: ${e.localizedMessage ?: "unexpected error"}"))
+        }
+    }
+
+    override suspend fun requestServerForReInterview(tempRequest: TempRequest) {
+        api.requestServerForReInterview(tempRequest)
     }
 }

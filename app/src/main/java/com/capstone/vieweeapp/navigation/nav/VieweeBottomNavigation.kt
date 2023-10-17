@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.capstone.vieweeapp.data.source.local.entity.InterviewResult
 import com.capstone.vieweeapp.navigation.bottomNavItems
 import com.capstone.vieweeapp.navigation.graph.BottomNavigationGraph
 import com.capstone.vieweeapp.ui.theme.VieweeColorGray
@@ -46,7 +47,8 @@ import com.capstone.vieweeapp.utils.CustomRippleEffect
 @Composable
 fun VieweeBottomNavigation(
     navController: NavHostController,
-    startSelectResume: () -> Unit
+    startSelectResume: () -> Unit,
+    onStartReInterview: (Int) -> Unit
 ) {
 
     val context = LocalContext.current
@@ -74,7 +76,8 @@ fun VieweeBottomNavigation(
         BottomNavigationGraph(
             modifier = Modifier.padding(it),
             navController = navController,
-            startSelectResume = startSelectResume
+            startSelectResume = startSelectResume,
+            onStartReInterview = { id -> onStartReInterview(id) }
         )
     }
 }
@@ -152,6 +155,7 @@ fun MyBottomBar(
 fun BottomNavigationPreview() {
     VieweeBottomNavigation(
         navController = rememberNavController(),
-        startSelectResume = {}
+        startSelectResume = {},
+        onStartReInterview = {}
     )
 }

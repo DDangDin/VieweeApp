@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -34,8 +35,11 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.capstone.vieweeapp.R
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
+import com.capstone.vieweeapp.ui.theme.VieweeColorText
 import com.capstone.vieweeapp.ui.theme.noToSansKr
 import com.capstone.vieweeapp.utils.CustomRippleEffect
 import com.capstone.vieweeapp.utils.CustomRippleEffect.clickableWithoutRipple
@@ -53,6 +58,8 @@ fun FeedbackDetailCardView(
     detailTitle: String,
     detailContent: String,
     feedbackContent: String,
+    isReInterview: Boolean = false,
+    detailContent2: String = "",
 ) {
     var isExpanded by remember { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
@@ -76,7 +83,8 @@ fun FeedbackDetailCardView(
             Column(
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .padding(15.dp),
+                    .padding(15.dp)
+                    .padding(bottom = extraPadding.coerceAtLeast(0.dp)),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -93,35 +101,109 @@ fun FeedbackDetailCardView(
                         )
                     )
                 )
-                Icon(
-                    modifier = Modifier
-                        .size(16.dp)
-                        .padding(top = 11.dp)
-                        .clickableWithoutRipple(
-                            interactionSource = MutableInteractionSource(),
-                            onClick = { isExpanded = !isExpanded }
-                        ),
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_drop_down),
-                    contentDescription = "Show",
-                    tint = Color(0xCC92979F),
-                )
-                if (isExpanded) {
+                if (!isExpanded) {
+                    Icon(
+                        modifier = Modifier
+                            .size(16.dp)
+                            .padding(top = 11.dp)
+                            .clickableWithoutRipple(
+                                interactionSource = MutableInteractionSource(),
+                                onClick = { isExpanded = !isExpanded }
+                            ),
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_drop_down),
+                        contentDescription = "Show",
+                        tint = Color(0xCC92979F),
+                    )
+                } else {
                     Text(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 20.dp),
-                        text = "답변: $detailContent",
+                            .padding(vertical = 20.dp),
+                        text = buildAnnotatedString {
+                            append(
+                                AnnotatedString(
+                                    text = if (isReInterview) "1회차 답변: " else "답변: ",
+                                    spanStyle = SpanStyle(
+                                        color = VieweeColorText.copy(alpha = 0.5f),
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                )
+                            )
+                            append("\n")
+                            append("\n")
+                            append(
+                                AnnotatedString(
+                                    text = detailContent,
+                                    spanStyle = SpanStyle(
+                                        color = VieweeColorText.copy(alpha = 0.5f)
+                                    ),
+                                )
+                            )
+                        },
                         textAlign = TextAlign.Start,
                         fontFamily = noToSansKr,
                         fontWeight = FontWeight.Normal,
                         fontSize = 14.sp,
-                        color = Color.DarkGray.copy(.8f),
+                        color = VieweeColorText,
                         style = TextStyle(
                             platformStyle = PlatformTextStyle(
                                 includeFontPadding = false
                             )
                         )
                     )
+                    if (isReInterview) {
+                        Icon(
+                            modifier = Modifier
+                                .size(66.dp, 20.dp),
+//                                .padding(vertical = 15.dp),
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_drop_down),
+                            contentDescription = "arrowDropDown",
+                            tint = Color(0xCC92979F),
+                        )
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 20.dp),
+                            text = buildAnnotatedString {
+                                append(
+                                    AnnotatedString(
+                                        text = "2회차 답변: ",
+                                        spanStyle = SpanStyle(
+                                            color = VieweeColorText.copy(alpha = 0.8f),
+                                            fontWeight = FontWeight.SemiBold
+                                        )
+                                    )
+                                )
+                                append("\n")
+                                append("\n")
+                                append(
+                                    AnnotatedString(
+                                        text = detailContent2,
+                                        spanStyle = SpanStyle(
+                                            color = VieweeColorText.copy(alpha = 0.8f)
+                                        ),
+                                    )
+                                )
+                            },
+                            textAlign = TextAlign.Start,
+                            fontFamily = noToSansKr,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 14.sp,
+                            color = VieweeColorText,
+                            style = TextStyle(
+                                platformStyle = PlatformTextStyle(
+                                    includeFontPadding = false
+                                )
+                            )
+                        )
+                        Divider(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 4.dp),
+                            thickness = 1.dp,
+                            color = VieweeColorText.copy(alpha = 0.2f)
+                        )
+                    }
                     Text(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -150,6 +232,8 @@ fun FeedFeedbackDetailCardViewPreview() {
     FeedbackDetailCardView(
         detailTitle = "팀에 갈등이 생길경우 어떻게 해결하나요?",
         detailContent = "DetailContentDetailContentDetailContentDetailContentDetailContentDetailContentDetailContentDetailContentDetailContentDetailContentDetailContent",
-        feedbackContent = "피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분"
+        feedbackContent = "피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분",
+        isReInterview = true,
+        detailContent2 = "답변(2회차)"
     )
 }

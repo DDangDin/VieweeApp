@@ -13,6 +13,6 @@ data class InterviewResult(
     val feedbacks: Feedbacks,
     val feedbackTotal: String,
     val date: String,
-    val etc: String = "",
+    val etc: String = "", // 재면접 표시
 )
 

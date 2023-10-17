@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Upsert
 import com.capstone.vieweeapp.data.source.local.entity.InterviewResult
 
 @Dao
@@ -21,4 +22,11 @@ interface InterviewResultDao {
 
     @Query("DELETE FROM interview_result_db")
     suspend fun deleteAllInterviewResult()
+
+    // 재면접
+    @Upsert
+    suspend fun updateForReInterviewResult(interviewResult: InterviewResult)
+
+    @Query("SELECT * FROM interview_result_db WHERE id = :id")
+    suspend fun getInterviewResultOnce(id: Int): InterviewResult
 }

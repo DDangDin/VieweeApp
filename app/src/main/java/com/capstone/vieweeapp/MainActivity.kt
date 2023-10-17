@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.capstone.vieweeapp.navigation.nav.VieweeBottomNavigation
 import com.capstone.vieweeapp.ui.theme.VieweeAppTheme
+import com.capstone.vieweeapp.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import org.opencv.android.OpenCVLoader
 
@@ -39,6 +40,12 @@ class MainActivity : ComponentActivity() {
                     VieweeBottomNavigation(
                         navController = navController,
                         startSelectResume = {
+                            interviewActivityIntent.putExtra(Constants.PUT_EXTRA_IS_RE_INTERVIEW, false)
+                            startActivity(interviewActivityIntent)
+                        },
+                        onStartReInterview = { id ->
+                            interviewActivityIntent.putExtra(Constants.PUT_EXTRA_IS_RE_INTERVIEW, true)
+                            interviewActivityIntent.putExtra(Constants.PUT_EXTRA_PREVIOUS_INTERVIEW_RESULT_INDEX, id)
                             startActivity(interviewActivityIntent)
                         }
                     )
