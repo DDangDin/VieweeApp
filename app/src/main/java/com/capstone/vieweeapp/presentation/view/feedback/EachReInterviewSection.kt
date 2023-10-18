@@ -31,9 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -42,12 +39,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.capstone.vieweeapp.R
 import com.capstone.vieweeapp.presentation.state.ReInterviewState
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
 import com.capstone.vieweeapp.ui.theme.VieweeColorText
 import com.capstone.vieweeapp.ui.theme.noToSansKr
-import com.capstone.vieweeapp.utils.CalculateDate
 import com.capstone.vieweeapp.utils.CustomRippleEffect.clickableWithoutRipple
 
 @Preview(showBackground = true)
@@ -180,7 +175,7 @@ fun EachReInterviewSection(
                     )
                 }
 
-                if (!reInterviewState.loading && reInterviewState.reFeedback != null) {
+                if (!reInterviewState.loadings && reInterviewState.reFeedbacks[index].feedbacks.isNotEmpty()) {
                     Text(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -192,7 +187,7 @@ fun EachReInterviewSection(
                             append("\n")
                             append(
                                 AnnotatedString(
-                                    text = reInterviewState.reFeedback[index].feedbacks,
+                                    text = reInterviewState.reFeedbacks[index].feedbacks,
                                     spanStyle = SpanStyle(
                                         fontWeight = FontWeight.Medium,
                                     ),
@@ -207,7 +202,7 @@ fun EachReInterviewSection(
                     )
                 }
 
-                if (reInterviewState.loading) {
+                if (reInterviewState.loadings) {
                     CircularProgressIndicator(
                         modifier = Modifier.size(25.dp),
                         strokeWidth = 2.dp,

@@ -38,17 +38,17 @@ fun InterviewNavigationGraph(
     previousInterviewResultId: Int
 ) {
 
+    LaunchedEffect(key1 = Unit) {
+        if (isReInterview) {
+            navController.navigate(Screen.RealInterviewNavigation.route)
+        }
+    }
+
     NavHost(
         navController = navController,
         startDestination = Screen.SelectResume.route
     ) {
         composable(route = Screen.SelectResume.route) {
-
-            LaunchedEffect(key1 = Unit) {
-                if (isReInterview) {
-                    navController.navigate(Screen.RealInterviewNavigation.route)
-                }
-            }
 
             LaunchedEffect(key1 = Unit) {
                 interviewViewModel.getResumes()

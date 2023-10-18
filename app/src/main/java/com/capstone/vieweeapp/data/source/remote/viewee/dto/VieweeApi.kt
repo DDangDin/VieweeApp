@@ -42,7 +42,7 @@ interface VieweeApi {
     ): Call<FeedbackResDto>
 
     // 재면접 진행 및 세팅
-    @GET("gpt/re_Interview")
+    @POST("gpt/re_Interview")
     fun requestServerForReInterview(
         @Body tempRequest: TempRequest
     ): Call<Unit>

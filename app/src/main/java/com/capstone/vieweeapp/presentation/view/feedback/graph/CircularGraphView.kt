@@ -117,7 +117,7 @@ fun PieChartWithWhiteCenter(
         LaunchedEffect(animatePercentage) {
             animatePercentage.animateTo(
                 targetValue = (value / total) * 100,
-                animationSpec = tween(durationMillis = 2500, easing = LinearOutSlowInEasing)
+                animationSpec = tween(durationMillis = 3000, easing = LinearOutSlowInEasing)
             )
         }
     }

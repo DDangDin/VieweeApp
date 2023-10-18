@@ -32,7 +32,23 @@ class FeedbackForHomeViewModel @Inject constructor(
     private val _reInterviewState = MutableStateFlow(ReInterviewState())
     val reInterviewState: StateFlow<ReInterviewState> = _reInterviewState.asStateFlow()
 
-    private val tempReFeedbacks = arrayListOf<FeedbackResDto>()
+    private val tempReFeedbacks = arrayListOf<FeedbackResDto>(
+        FeedbackResDto(""),
+        FeedbackResDto(""),
+        FeedbackResDto(""),
+        FeedbackResDto(""),
+        FeedbackResDto(""),
+    )
+
+    init {
+        if (_reInterviewState.value.reFeedbacks.isEmpty()) {
+            _reInterviewState.update {
+                it.copy(
+                    reFeedbacks = tempReFeedbacks
+                )
+            }
+        }
+    }
 
     fun uiEvent(uiEvent: FeedbackForHomeUiEvent) {
         when (uiEvent) {
@@ -56,17 +72,12 @@ class FeedbackForHomeViewModel @Inject constructor(
                         when (result) {
                             is Resource.Success -> {
                                 Log.d("reInterview_Answer_Log", "수정된 답변: ${uiEvent.answer}")
-                                if (tempReFeedbacks.isEmpty()) {
-                                    repeat(uiEvent.maxIndex) {
-                                        tempReFeedbacks.add(FeedbackResDto(""))
-                                    }
-                                }
                                 tempReFeedbacks[uiEvent.index] = result.data ?: FeedbackResDto(Constants.COMMON_ERROR_MESSAGE)
                                 Log.d("reInterview_Answer_Log", "상태 값: $tempReFeedbacks")
                                 _reInterviewState.update {
                                     it.copy(
-                                        reFeedback = tempReFeedbacks,
-                                        loading = false
+                                        reFeedbacks = tempReFeedbacks,
+                                        loadings = false
                                     )
                                 }
                             }
@@ -74,7 +85,7 @@ class FeedbackForHomeViewModel @Inject constructor(
                             is Resource.Loading -> {
                                 _reInterviewState.update {
                                     it.copy(
-                                        loading = true
+                                        loadings = true
                                     )
                                 }
                             }
@@ -82,8 +93,8 @@ class FeedbackForHomeViewModel @Inject constructor(
                             is Resource.Error -> {
                                 _reInterviewState.update {
                                     it.copy(
-                                        loading = false,
-                                        error = result.message ?: Constants.COMMON_ERROR_MESSAGE
+                                        loadings = false,
+                                        errors = result.message ?: Constants.COMMON_ERROR_MESSAGE
                                     )
                                 }
                             }

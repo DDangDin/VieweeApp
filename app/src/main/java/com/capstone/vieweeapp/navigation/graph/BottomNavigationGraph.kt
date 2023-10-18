@@ -9,6 +9,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -33,6 +34,8 @@ import com.capstone.vieweeapp.presentation.viewmodel.ProfileViewModel
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
 import com.capstone.vieweeapp.utils.Constants
 import com.capstone.vieweeapp.utils.CustomSharedPreference
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun BottomNavigationGraph(
@@ -44,6 +47,7 @@ fun BottomNavigationGraph(
 
     val context = LocalContext.current
     val homeViewModel: HomeViewModel = hiltViewModel()
+    val scope = rememberCoroutineScope()
 
     NavHost(
         navController = navController,
@@ -102,7 +106,10 @@ fun BottomNavigationGraph(
                     onStartReInterview = { id ->
 //                        feedbackForHomeViewModel.requestServerForReInterview()
                         onStartReInterview(id)
-                        navController.popBackStack()
+                        scope.launch {
+                            delay(1500) // 바로 창이 사라 지는 부자연스러움을 위한 딜레이
+                            navController.popBackStack()
+                        }
                     }
                 )
             } else {

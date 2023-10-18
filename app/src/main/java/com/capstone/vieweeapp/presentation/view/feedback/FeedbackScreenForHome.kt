@@ -397,7 +397,7 @@ private fun FeedbackDetailCardGridForHome(
                     detailContent = interviewResult.answers[index],
                     feedbackContent = interviewResult.feedbacks.feedbacks[index],
                     isReInterview = isReInterview,
-                    detailContent2 = if (isReInterview) interviewResult.answers[index + (interviewResult.answers.size/2 -1)] else ""
+                    detailContent2 = if (isReInterview) interviewResult.answers[index + (interviewResult.answers.size/2)] else ""
                 )
                 if (!isReInterview) {
                     EachReInterviewSection(
