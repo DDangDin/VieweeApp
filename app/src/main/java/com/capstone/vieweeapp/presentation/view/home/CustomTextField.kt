@@ -13,6 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.capstone.vieweeapp.ui.theme.VieweeColorHomeSearchBarBackground
@@ -26,7 +28,7 @@ fun CustomTextField(
     textColor: Color,
     fontSize: TextUnit,
     leadingIcon: (@Composable () -> Unit)? = null,
-    placeholderText: String
+    placeholderText: AnnotatedString
 ) {
     BasicTextField(
         modifier = modifier
@@ -54,7 +56,9 @@ fun CustomTextField(
                         style = LocalTextStyle.current.copy(
                             color = VieweeColorText.copy(alpha = 0.7f),
                             fontSize = fontSize
-                        )
+                        ),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.align(Alignment.CenterStart)
                     )
                     innerTextField()
                 }

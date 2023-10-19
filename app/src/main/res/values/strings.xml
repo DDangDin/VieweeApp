@@ -12,6 +12,7 @@
     <string name="home_text_interview_result_1">면접 결과</string>
     <string name="home_text_interview_result_2">면접 결과가 없습니다</string>
     <string name="home_text_interview_result_card_1">일자\n면접 결과</string>
+    <string name="home_text_searchbar_placeholder">면접 날짜 입력</string>
 
     <!-- Interview Screen -->
     <string name="interview_text_start">오늘의 면접 시작하기</string>

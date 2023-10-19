@@ -7,6 +7,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -39,6 +40,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.capstone.vieweeapp.data.source.remote.viewee.dto.response.FeedbackResDto
 import com.capstone.vieweeapp.presentation.state.ReInterviewState
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
 import com.capstone.vieweeapp.ui.theme.VieweeColorText
@@ -49,7 +51,7 @@ import com.capstone.vieweeapp.utils.CustomRippleEffect.clickableWithoutRipple
 @Composable
 fun EachReInterviewSectionPreview() {
 
-    var reInterviewClick by remember { mutableStateOf(false) }
+    var reInterviewClick by remember { mutableStateOf(true) }
 
     EachReInterviewSection(
         modifier = Modifier
@@ -63,8 +65,10 @@ fun EachReInterviewSectionPreview() {
                 interactionSource = MutableInteractionSource(),
                 onClick = { reInterviewClick = true }
             ),
-        reInterviewClick = true,
-        reInterviewState = ReInterviewState(),
+        reInterviewClick = reInterviewClick,
+        reInterviewState = ReInterviewState(
+            reFeedbacks = listOf(FeedbackResDto("feedback section"))
+        ),
         index = 0,
         onSubmit = {},
         onClose = {}
@@ -88,7 +92,7 @@ fun EachReInterviewSection(
             Text(
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .padding(vertical = 12.dp),
+                    .padding(vertical = 13.dp),
                 text = "질문${index + 1} 답변 수정 후 간단 피드백받기",
                 fontFamily = noToSansKr,
                 fontSize = 12.sp,
@@ -164,7 +168,8 @@ fun EachReInterviewSection(
                     onClick = {
                         // 연속 요청 할건지 고민
                         onSubmit(text)
-                    }
+                    },
+                    contentPadding = PaddingValues(vertical = 13.dp)
                 ) {
                     Text(
                         text = "답변 수정 후 간단 피드백 받기",

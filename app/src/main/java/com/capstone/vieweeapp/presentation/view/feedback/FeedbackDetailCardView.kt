@@ -83,12 +83,13 @@ fun FeedbackDetailCardView(
             Column(
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .padding(15.dp)
+                    .padding(start = 10.dp, end = 10.dp, top = 20.dp, bottom = 11.dp)
                     .padding(bottom = extraPadding.coerceAtLeast(0.dp)),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
+                    modifier = Modifier.padding(bottom = 11.dp),
                     text = "질문: $detailTitle",
                     textAlign = TextAlign.Center,
                     fontFamily = noToSansKr,
@@ -105,7 +106,6 @@ fun FeedbackDetailCardView(
                     Icon(
                         modifier = Modifier
                             .size(16.dp)
-                            .padding(top = 11.dp)
                             .clickableWithoutRipple(
                                 interactionSource = MutableInteractionSource(),
                                 onClick = { isExpanded = !isExpanded }

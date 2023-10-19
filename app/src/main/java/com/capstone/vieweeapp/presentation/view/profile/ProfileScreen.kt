@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -74,7 +75,7 @@ fun ProfileScreen(
                 onTextChanged = { onTextChanged(it) },
                 textColor = VieweeColorText.copy(alpha = 0.7f),
                 fontSize = 17.sp,
-                placeholderText = "",
+                placeholderText = AnnotatedString(""),
                 leadingIcon = {
                     Icon(
                         modifier = Modifier.padding(start = 10.dp),

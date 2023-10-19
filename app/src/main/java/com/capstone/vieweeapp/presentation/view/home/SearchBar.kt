@@ -16,7 +16,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -55,8 +60,18 @@ fun SearchBar(
         text = text,
         onTextChanged = { onTextChanged(it) },
         textColor = VieweeColorText.copy(alpha = 0.7f),
-        fontSize = 17.sp,
-        placeholderText = "",
+        fontSize = 15.sp,
+        placeholderText = buildAnnotatedString {
+            append(
+                AnnotatedString(
+                    text = stringResource(id = R.string.home_text_searchbar_placeholder),
+                    spanStyle = SpanStyle(
+                        fontSize = 12.sp,
+                        color = VieweeColorText.copy(alpha = 0.5f)
+                    ),
+                )
+            )
+        },
         leadingIcon = {
             Icon(
                 modifier = Modifier.padding(start = 10.dp),

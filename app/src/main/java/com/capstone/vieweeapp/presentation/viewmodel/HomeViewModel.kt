@@ -34,6 +34,8 @@ class HomeViewModel @Inject constructor(
 
     fun onSearchTextChanged(value: String) {
         _searchText.value = value
+        // 검색 쿼리 여기다가 작성 (Job 이용)
+        // Composable 에서는 스크롤 & 포커싱 관리해줘야 함
     }
 
     fun getInterviewResults() {
