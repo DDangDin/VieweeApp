@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -28,7 +30,9 @@ fun CustomTextField(
     textColor: Color,
     fontSize: TextUnit,
     leadingIcon: (@Composable () -> Unit)? = null,
-    placeholderText: AnnotatedString
+    placeholderText: AnnotatedString,
+    keyboardOptions: KeyboardOptions = KeyboardOptions(),
+    keyboardActions: KeyboardActions = KeyboardActions(),
 ) {
     BasicTextField(
         modifier = modifier
@@ -63,6 +67,8 @@ fun CustomTextField(
                     innerTextField()
                 }
             }
-        }
+        },
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions
     )
 }

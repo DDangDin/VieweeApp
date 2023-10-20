@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,6 +42,7 @@ import com.capstone.vieweeapp.presentation.state.InterviewResultsState
 import com.capstone.vieweeapp.ui.theme.VieweeColorText
 import com.capstone.vieweeapp.ui.theme.noToSansKr
 import com.capstone.vieweeapp.utils.Constants
+import com.capstone.vieweeapp.utils.CustomTouchEvent.addFocusCleaner
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -57,10 +59,13 @@ fun HomeScreen(
     val scrollState = rememberScrollState()
     val interviewResults = interviewResultsState.interviewResults
 
+    val focusManager = LocalFocusManager.current
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(bottom = Constants.BOTTOM_NAV_BAR_PADDING.dp),
+            .padding(bottom = Constants.BOTTOM_NAV_BAR_PADDING.dp)
+            .addFocusCleaner(focusManager),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top,
     ) {
@@ -101,7 +106,8 @@ fun HomeScreen(
                     modifier = Modifier
                         .fillMaxWidth(),
                     text = searchText,
-                    onTextChanged = { onSearchTextChanged(it) }
+                    onTextChanged = { onSearchTextChanged(it) },
+                    focusManager = focusManager
                 )
                 Divider(
                     modifier = Modifier.fillMaxWidth(),
