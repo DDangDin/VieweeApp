@@ -1,13 +1,11 @@
 package com.capstone.vieweeapp.presentation.view.feedback.graph
 
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationVector
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,7 +20,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.capstone.vieweeapp.data.source.local.entity.Emotion
 import com.capstone.vieweeapp.presentation.view.feedback.graph.CircularGraphColor.Angry
 import com.capstone.vieweeapp.presentation.view.feedback.graph.CircularGraphColor.Fear
 import com.capstone.vieweeapp.presentation.view.feedback.graph.CircularGraphColor.Happy
@@ -30,11 +27,8 @@ import com.capstone.vieweeapp.presentation.view.feedback.graph.CircularGraphColo
 import com.capstone.vieweeapp.presentation.view.feedback.graph.CircularGraphColor.Sad
 import com.capstone.vieweeapp.presentation.view.feedback.graph.CircularGraphColor.Surprise
 import com.capstone.vieweeapp.presentation.view.feedback.graph.CircularGraphColor.Disgust
-import com.capstone.vieweeapp.utils.CustomRippleEffect.clickableWithoutRipple
-import com.capstone.vieweeapp.utils.FacialEmotionList
-import kotlinx.coroutines.launch
+import com.capstone.vieweeapp.utils.FacialEmotionNames
 import kotlin.math.cos
-import kotlin.math.min
 import kotlin.math.sin
 
 
@@ -51,6 +45,16 @@ object CircularGraphColor {
     val Sad = Color(0xD85D7599)
     val Disgust = Color(0xB9EBD5EB)     //0xFFCACEB7
     val Happy = Color(0xFCB3CCAF)       //0xFCCCB7AF 0xFF7DA2C9
+
+    val colorsMap = mapOf(
+        FacialEmotionNames.en[0] to Surprise,
+        FacialEmotionNames.en[1] to Fear,
+        FacialEmotionNames.en[2] to Angry,
+        FacialEmotionNames.en[3] to Neutral,
+        FacialEmotionNames.en[4] to Sad,
+        FacialEmotionNames.en[5] to Disgust,
+        FacialEmotionNames.en[6] to Happy,
+    )
 }
 
 @Composable
@@ -74,7 +78,7 @@ fun CircularGraphView(
                 .size(200.dp), // 크기 조절 가능
             data = emotions,
             colors = colors,
-            colorNames = FacialEmotionList.emotionNames
+            colorNames = FacialEmotionNames.ko
         )
         // ExplainCircleGraph를 위에 겹쳐서 배치
 //        ExplainCircleGraph(
@@ -263,7 +267,7 @@ fun PieChartWithWhiteCenterPreview() {
                 .size(200.dp), // 크기 조절 가능
             data = emotions,
             colors = colors,
-            colorNames = FacialEmotionList.emotionNames
+            colorNames = FacialEmotionNames.ko
         )
     }
 }

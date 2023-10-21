@@ -1,5 +1,6 @@
 package com.capstone.vieweeapp.presentation.view.feedback.graph
 
+import android.graphics.Typeface
 import android.util.Log
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearOutSlowInEasing
@@ -22,6 +23,8 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -29,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import com.capstone.vieweeapp.presentation.view.feedback.graph.TriangleGraphColor.BlueGraph
 import com.capstone.vieweeapp.presentation.view.feedback.graph.TriangleGraphColor.UsOrange
 import com.capstone.vieweeapp.ui.theme.VieweeColorText
+import com.capstone.vieweeapp.ui.theme.noToSansKr
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -64,21 +68,21 @@ fun TriangleGraphView(
 fun ExplainTriangleGraph(modifier: Modifier = Modifier) {
     Row(
         modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(6.dp, alignment = Alignment.CenterHorizontally)
     ) {
         Icon(
             imageVector = Icons.Filled.Circle,// 사용할 아이콘 선택
             contentDescription = "trianglegraph_blue",
             tint = BlueGraph.copy(.7f),
             modifier = Modifier
-                .size(8.dp)
+                .size(9.dp)
         )
         Text(
             text = "평균",
-            modifier = Modifier
-                .padding(start = 6.dp, end = 13.dp),
+            modifier = Modifier.padding(end = 3.dp),
             color = VieweeColorText.copy(alpha = 0.5f),
-            fontSize = 10.sp,
+            fontSize = 11.sp,
             textAlign = TextAlign.Center,
         )
         Icon(
@@ -86,15 +90,13 @@ fun ExplainTriangleGraph(modifier: Modifier = Modifier) {
             contentDescription = "trianglegraph_orange",
             tint = UsOrange.copy(.7f),
             modifier = Modifier
-                .size(8.dp)
-                .offset(x = -6.dp)
+                .size(9.dp)
         )
         Text(
             text = "본인",
-            modifier = Modifier
-                .padding(end = 13.dp),
+            modifier = Modifier,
             color = VieweeColorText.copy(alpha = 0.5f),
-            fontSize = 10.sp,
+            fontSize = 11.sp,
             textAlign = TextAlign.Center,
         )
     }
@@ -162,10 +164,10 @@ fun StandardTriangleGraph(
                         y + textOffsetY,
                         android.graphics.Paint().apply {
                             color = Color.DarkGray.toArgb()
-                            textSize = 11.sp.toPx()
+                            textSize = 9.sp.toPx()
                             textAlign = android.graphics.Paint.Align.CENTER
                             isAntiAlias = true
-
+//                            typeface = ???
                         }
                     )
                 }
@@ -187,11 +189,6 @@ fun StandardTriangleGraph(
                 )
             }
         }
-
-        ExplainTriangleGraph(
-            Modifier
-                .align(Alignment.TopEnd)
-                .offset(10.dp, (-10).dp))
     }
 }
 
@@ -335,6 +332,6 @@ fun IntervieweeTriangleGraphDemo(values: List<Float>) {
 @Composable
 fun GraphViewPreview() {
     TriangleGraphView(
-        intervieweeValues = listOf(30f, 60f, 90f)
+        intervieweeValues = listOf(30f, 99f, 56f)
     )
 }

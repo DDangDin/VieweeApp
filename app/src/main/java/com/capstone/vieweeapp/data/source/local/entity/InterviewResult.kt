@@ -8,7 +8,7 @@ data class InterviewResult(
     @PrimaryKey(autoGenerate = true) val id: Int? = null,
     val questions: List<String>,
     val answers: List<String>,
-    val textSentiment: List<TextSentiment>,
+    val textSentiments: List<TextSentiment>,
     val emotions: List<Emotion>,
     val feedbacks: Feedbacks,
     val feedbackTotal: String,

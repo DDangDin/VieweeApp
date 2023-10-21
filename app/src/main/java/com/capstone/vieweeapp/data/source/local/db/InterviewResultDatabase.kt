@@ -11,7 +11,7 @@ import com.capstone.vieweeapp.data.source.local.entity.InterviewResult
 
 @Database(
     entities = [InterviewResult::class],
-    version = 1
+    version = 2
 )
 @TypeConverters(
     value = [

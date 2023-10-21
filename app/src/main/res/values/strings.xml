@@ -52,4 +52,17 @@
     <string name="interview_loading_error">다시 시도해주세요</string>
     <string name="interview_loading_main_text">면접관 입장중</string>
     <string name="interview_loading_exit_text">종료하기</string>
+
+    <!-- Feedback Screen -->
+
+
+    <!-- FeedbackForHome Screen -->
+
+
+    <!-- FeedbackDetailCardView Screen -->
+    <string name="feedback_detail_card_facial_graph">표정 분석 TOP 3</string>
+    <string name="feedback_detailcard_facialgraph_1st_text">1st</string>
+    <string name="feedback_detailcard_facialgraph_2nd_text">2nd</string>
+    <string name="feedback_detailcard_facialgraph_3rd_text">3rd</string>
+    <string name="feedback_detail_card_triangle_graph">텍스트 감정 분석 그래프</string>
 </resources>

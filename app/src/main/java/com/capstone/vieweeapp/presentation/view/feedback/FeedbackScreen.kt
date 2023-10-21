@@ -2,7 +2,6 @@ package com.capstone.vieweeapp.presentation.view.feedback
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -52,11 +51,12 @@ import com.capstone.vieweeapp.R
 import com.capstone.vieweeapp.data.source.local.entity.Emotion
 import com.capstone.vieweeapp.data.source.local.entity.Feedbacks
 import com.capstone.vieweeapp.data.source.local.entity.TextSentiment
-import com.capstone.vieweeapp.data.source.local.entity.toPercentage
+import com.capstone.vieweeapp.data.source.local.entity.average
 import com.capstone.vieweeapp.data.source.local.entity.toPercentages
 import com.capstone.vieweeapp.presentation.state.FeedbackState
 import com.capstone.vieweeapp.presentation.state.QuestionsState
 import com.capstone.vieweeapp.presentation.view.feedback.graph.CircularGraphView
+import com.capstone.vieweeapp.presentation.view.feedback.graph.ExplainTriangleGraph
 import com.capstone.vieweeapp.presentation.view.feedback.graph.TriangleGraphView
 import com.capstone.vieweeapp.presentation.view.interview.input_profile.CustomTitleText
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
@@ -82,7 +82,11 @@ fun FeedbackScreenPreview() {
         ),
         onNavigateHome = {},
         saveInterviewResult = {},
-        emotionList = emptyList(),
+        emotionList = listOf(
+            Emotion(1,1,1,1,1,1,1),
+            Emotion(1,1,1,1,1,1,1),
+            Emotion(1,1,1,1,1,1,1),
+        ),
         textSentimentList = emptyList(),
     )
 }
@@ -171,26 +175,36 @@ fun FeedbackScreen(
                             alignment = Alignment.CenterVertically
                         )
                     ) {
-                        CustomTitleText(text = "✓ $todayDate 면접의 감정 분석")
-                        TriangleGraphView(intervieweeValues = textSentimentList.toPercentage())
-                        CustomTitleText(text = "✓ $todayDate 면접의 표정 분석")
+                        CustomTitleText(text = "$todayDate 면접의 감정 분석")
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            ExplainTriangleGraph(Modifier.align(Alignment.End).padding(end = 28.dp))
+                            TriangleGraphView(intervieweeValues = textSentimentList.average(isReInterview))
+                        }
+                        CustomTitleText(text = "$todayDate 면접의 표정 분석")
                         if (emotionList.isNotEmpty()) {
-                            CircularGraphView(emotions = emotionList.toPercentages())
+                            CircularGraphView(emotions = emotionList.toPercentages().map { it.second })
                         }
                     }
                     CustomTitleText(
                         Modifier.padding(top = 50.dp),
-                        "✓ $todayDate 면접의 총평 피드백"
+                        "$todayDate 면접의 총평 피드백"
                     )
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 27.dp, horizontal = 20.dp)
+                            .background(
+                                VieweeColorMain.copy(alpha = 0.08f),
+                                RoundedCornerShape(10.dp)
+                            )
                     ) {
                         Text(
                             text = feedbackState.feedbacks.feedbacks.last(),
                             modifier = Modifier
-                                .border(1.3.dp, (VieweeColorMain.copy(alpha = 0.5f)), RoundedCornerShape(10.dp))
                                 .padding(30.dp)
                                 .align(Alignment.Center),
                             fontFamily = noToSansKr,
@@ -210,6 +224,8 @@ fun FeedbackScreen(
                     answerList = answerList,
                     todayDate = todayDate,
                     isReInterview = isReInterview,
+                    emotionList = emotionList,
+                    textSentimentList = textSentimentList
                 )
 
                 Spacer(Modifier.height(100.dp))
@@ -293,10 +309,12 @@ private fun FeedbackDetailCardGrid(
     answerList: List<String>,
     todayDate: String,
     isReInterview: Boolean,
+    emotionList: List<Emotion>,
+    textSentimentList: List<TextSentiment>
 ) {
     CustomTitleText(
         modifier.padding(top = 20.dp, bottom = 30.dp),
-        "✓ $todayDate 면접의 질문 피드백"
+        "$todayDate 면접의 질문 피드백"
     )
     Column(
         modifier = Modifier
@@ -317,7 +335,9 @@ private fun FeedbackDetailCardGrid(
                     isReInterview = isReInterview,
                     detailContent2 = if (isReInterview) {
                         answerList[index]
-                    } else ""
+                    } else "",
+                    emotion = emotionList[index],
+                    textSentiment = textSentimentList[index]
                 )
             }
     }

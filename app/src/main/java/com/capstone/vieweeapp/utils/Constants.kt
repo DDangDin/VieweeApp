@@ -1,6 +1,5 @@
 package com.capstone.vieweeapp.utils
 
-import androidx.compose.ui.unit.dp
 import com.capstone.vieweeapp.data.source.local.entity.Feedbacks
 import com.capstone.vieweeapp.data.source.local.entity.InterviewResult
 import com.capstone.vieweeapp.data.source.local.entity.Resume
@@ -40,6 +39,7 @@ object Constants {
     const val PUT_EXTRA_PREVIOUS_INTERVIEW_RESULT_INDEX = "previousInterviewResultIndex"
     const val PUT_EXTRA_IS_RE_INTERVIEW = "isReInterview"
 
+
     // DummyData
     val INTERVIEW_RESULT_EMPTY_DATA = InterviewResult(
         id = 0,
@@ -47,7 +47,7 @@ object Constants {
         questions = emptyList(),
         answers = emptyList(),
         emotions = emptyList(),
-        textSentiment = emptyList(),
+        textSentiments = emptyList(),
         feedbackTotal = "",
         date = "2023.09.18"
     )

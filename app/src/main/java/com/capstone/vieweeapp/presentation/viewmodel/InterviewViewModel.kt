@@ -29,7 +29,7 @@ import com.capstone.vieweeapp.presentation.state.QuestionsState
 import com.capstone.vieweeapp.presentation.state.ResumeState
 import com.capstone.vieweeapp.utils.CalculateDate
 import com.capstone.vieweeapp.utils.Constants
-import com.capstone.vieweeapp.utils.FacialEmotionList
+import com.capstone.vieweeapp.utils.FacialEmotionNames
 import com.capstone.vieweeapp.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -145,7 +145,7 @@ class InterviewViewModel @Inject constructor(
     private fun emotionListInitialize() {
         viewModelScope.launch {
             _emotionListUpdatePossible.emit(false)
-            FacialEmotionList.emotions.forEach { emotion ->
+            FacialEmotionNames.en.forEach { emotion ->
                 emotionHashMap[emotion] = 0
             }
             _emotionListUpdatePossible.emit(true)
@@ -248,13 +248,13 @@ class InterviewViewModel @Inject constructor(
 
         // 얼굴 표정 분석 저장
         val emotion = Emotion(
-            surprise = emotionHashMap[FacialEmotionList.emotions[0]]!!,
-            fear = emotionHashMap[FacialEmotionList.emotions[1]]!!,
-            angry = emotionHashMap[FacialEmotionList.emotions[2]]!!,
-            neutral = emotionHashMap[FacialEmotionList.emotions[3]]!!,
-            sad = emotionHashMap[FacialEmotionList.emotions[4]]!!,
-            disgust = emotionHashMap[FacialEmotionList.emotions[5]]!!,
-            happy = emotionHashMap[FacialEmotionList.emotions[6]]!!
+            surprise = emotionHashMap[FacialEmotionNames.en[0]]!!,
+            fear = emotionHashMap[FacialEmotionNames.en[1]]!!,
+            angry = emotionHashMap[FacialEmotionNames.en[2]]!!,
+            neutral = emotionHashMap[FacialEmotionNames.en[3]]!!,
+            sad = emotionHashMap[FacialEmotionNames.en[4]]!!,
+            disgust = emotionHashMap[FacialEmotionNames.en[5]]!!,
+            happy = emotionHashMap[FacialEmotionNames.en[6]]!!
         )
         emotionList.add(emotion)
 
@@ -393,7 +393,7 @@ class InterviewViewModel @Inject constructor(
     fun saveReInterviewResult(interviewResult: InterviewResult) {
         viewModelScope.launch {
 
-            val textSentiments = interviewResult.textSentiment.toTypedArray()
+            val textSentiments = interviewResult.textSentiments.toTypedArray()
             val editTextSentiments = textSentiments.toCollection(ArrayList())
             editTextSentiments.addAll(textSentimentList)
 
@@ -408,7 +408,7 @@ class InterviewViewModel @Inject constructor(
             val reInterviewResult = interviewResult
                 .copy(
                     feedbacks = feedbackState.value.feedbacks,
-                    textSentiment = editTextSentiments,
+                    textSentiments = editTextSentiments,
                     emotions = editEmotions,
                     answers = editAnswers,
                     feedbackTotal = feedbackState.value.feedbacks.feedbacks.last(),
@@ -429,7 +429,7 @@ class InterviewViewModel @Inject constructor(
             interviewResultRepository.insertInterviewResult(
                 InterviewResult(
                     feedbacks = feedbackState.value.feedbacks,
-                    textSentiment = textSentimentList,
+                    textSentiments = textSentimentList,
                     emotions = emotionList,
                     questions = questionsState.value.questions,
                     answers = answerList,

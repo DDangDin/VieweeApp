@@ -1,9 +1,7 @@
 package com.capstone.vieweeapp.presentation.view.feedback
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -34,7 +33,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,14 +49,18 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.capstone.viewee.data.source.network.clova_api.dto.Confidence
 import com.capstone.vieweeapp.R
+import com.capstone.vieweeapp.data.source.local.entity.Emotion
 import com.capstone.vieweeapp.data.source.local.entity.Feedbacks
 import com.capstone.vieweeapp.data.source.local.entity.InterviewResult
-import com.capstone.vieweeapp.data.source.local.entity.toPercentage
+import com.capstone.vieweeapp.data.source.local.entity.TextSentiment
+import com.capstone.vieweeapp.data.source.local.entity.average
 import com.capstone.vieweeapp.data.source.local.entity.toPercentages
 import com.capstone.vieweeapp.presentation.event.FeedbackForHomeUiEvent
 import com.capstone.vieweeapp.presentation.state.ReInterviewState
 import com.capstone.vieweeapp.presentation.view.feedback.graph.CircularGraphView
+import com.capstone.vieweeapp.presentation.view.feedback.graph.ExplainTriangleGraph
 import com.capstone.vieweeapp.presentation.view.feedback.graph.TriangleGraphView
 import com.capstone.vieweeapp.presentation.view.interview.input_profile.CustomTitleText
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
@@ -81,8 +83,16 @@ fun FeedbackScreenForHomePreview() {
             date = "2023.10.01 월",
             feedbacks = Feedbacks(listOf("1", "2", "총평피드백")),
             feedbackTotal = "총평피드백 부분",
-            emotions = emptyList(),
-            textSentiment = emptyList(),
+            emotions = listOf(
+                Emotion(1,1,1,1,1,1,1),
+                Emotion(1,1,1,1,1,1,1),
+                Emotion(1,1,1,1,1,1,1),
+            ),
+            textSentiments = listOf(
+                TextSentiment("", Confidence(0.0,0.0,0.0)),
+                TextSentiment("", Confidence(0.0,0.0,0.0)),
+                TextSentiment("", Confidence(0.0,0.0,0.0)),
+            ),
             etc = ""
         ),
         onNavigateHome = { /*TODO*/ },
@@ -195,28 +205,35 @@ fun FeedbackScreenForHome(
                         )
                     ) {
                         CustomTitleText(
-                            text = "✓ ${
+                            text = "${
                                 CalculateDate.dateFormatForFeedback(
                                     interviewResult.date
                                 )
                             } 면접의 감정 분석"
                         )
-                        if (interviewResult.textSentiment.isNotEmpty()) {
-                            TriangleGraphView(intervieweeValues = interviewResult.textSentiment.toPercentage())
+                        if (interviewResult.textSentiments.isNotEmpty()) {
+                            Column(
+                                modifier = Modifier,
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                ExplainTriangleGraph(Modifier.align(Alignment.End).padding(end = 28.dp))
+                                TriangleGraphView(intervieweeValues = interviewResult.textSentiments.average(isReInterview))
+                            }
                         }
                         CustomTitleText(
-                            text = "✓ ${
+                            text = "${
                                 CalculateDate.dateFormatForFeedback(
                                     interviewResult.date
                                 )
                             } 면접의 표정 분석"
                         )
                         if (interviewResult.emotions.isNotEmpty()) {
-                            CircularGraphView(emotions = interviewResult.emotions.toPercentages())
+                            CircularGraphView(emotions = interviewResult.emotions.toPercentages().map { it.second })
                         }
                     }
                     CustomTitleText(
-                        text = "✓ ${
+                        text = "${
                             CalculateDate.dateFormatForFeedback(
                                 interviewResult.date
                             )
@@ -226,15 +243,14 @@ fun FeedbackScreenForHome(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 27.dp, horizontal = 20.dp)
+                            .background(
+                                VieweeColorMain.copy(alpha = 0.08f),
+                                RoundedCornerShape(10.dp)
+                            )
                     ) {
                         Text(
                             text = interviewResult.feedbackTotal,
                             modifier = Modifier
-                                .border(
-                                    1.3.dp,
-                                    (VieweeColorMain.copy(alpha = 0.5f)),
-                                    RoundedCornerShape(10.dp)
-                                )
                                 .padding(30.dp)
                                 .align(Alignment.Center),
                             fontFamily = noToSansKr,
@@ -378,7 +394,7 @@ private fun FeedbackDetailCardGridForHome(
 
     CustomTitleText(
         Modifier.padding(top = 20.dp, bottom = 30.dp),
-        "✓ ${CalculateDate.dateFormatForFeedback(interviewResult.date)} 면접의 질문 피드백"
+        "${CalculateDate.dateFormatForFeedback(interviewResult.date)} 면접의 질문 피드백"
     )
     Column(
         modifier = Modifier
@@ -406,7 +422,9 @@ private fun FeedbackDetailCardGridForHome(
                     detailContent = interviewResult.answers[index],
                     feedbackContent = interviewResult.feedbacks.feedbacks[index],
                     isReInterview = isReInterview,
-                    detailContent2 = if (isReInterview) interviewResult.answers[index + (interviewResult.answers.size / 2)] else ""
+                    detailContent2 = if (isReInterview) interviewResult.answers[index + (interviewResult.answers.size / 2)] else "",
+                    emotion = interviewResult.emotions[index],
+                    textSentiment = interviewResult.textSentiments[index]
                 )
                 if (!isReInterview) {
                     EachReInterviewSection(
