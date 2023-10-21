@@ -1,5 +1,9 @@
 package com.capstone.vieweeapp.presentation.view.feedback.graph
 
+import android.util.Log
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
@@ -105,7 +109,7 @@ fun StandardTriangleGraph(
     lineColor: Color = BlueGraph,
     fillColor: Color = Color(0xFF1F77B4).copy(alpha = 0.25f)
 ) {
-    var maxValue by remember { mutableStateOf(100f) }
+    val maxValue by remember { mutableFloatStateOf(100f) }
 
     Box(
         modifier = modifier.fillMaxSize()
@@ -184,7 +188,10 @@ fun StandardTriangleGraph(
             }
         }
 
-        ExplainTriangleGraph(Modifier.align(Alignment.TopEnd).offset(10.dp, (-10).dp))
+        ExplainTriangleGraph(
+            Modifier
+                .align(Alignment.TopEnd)
+                .offset(10.dp, (-10).dp))
     }
 }
 
@@ -247,7 +254,14 @@ fun IntervieweeTriangleGraph(
     lineColor: Color = UsOrange,
     fillColor: Color = UsOrange.copy(alpha = 0.25f),
 ) {
-    var maxValue by remember { mutableStateOf(100f) }
+    val maxValue = remember { Animatable(2000f) }
+
+    LaunchedEffect(maxValue) {
+        maxValue.animateTo(
+            targetValue = 100f,
+            animationSpec = tween(durationMillis = 3000, easing = LinearOutSlowInEasing)
+        )
+    }
 
     Box(modifier = modifier.fillMaxSize()) {
         Canvas(
@@ -265,9 +279,16 @@ fun IntervieweeTriangleGraph(
             val path = Path()
 
             values.forEachIndexed { index, value ->
+
+                val value2 = if (value < 10f) {
+                    value + 10f
+                } else {
+                    value
+                }
+
                 val angle = (index * step).toFloat() - (PI / 2).toFloat()
-                val x = centerX + radius * cos(angle) * (value / maxValue)
-                val y = centerY + radius * sin(angle) * (value / maxValue)
+                val x = centerX + radius * cos(angle) * (value2 / maxValue.value)
+                val y = centerY + radius * sin(angle) * (value2 / maxValue.value)
 
                 if (index == 0) {
                     path.moveTo(x, y)

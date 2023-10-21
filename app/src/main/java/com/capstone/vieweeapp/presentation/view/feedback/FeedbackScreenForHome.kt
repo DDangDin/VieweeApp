@@ -43,6 +43,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -155,7 +156,15 @@ fun FeedbackScreenForHome(
                     }
                     // FeedbackTopBar
                     Text(
-                        text = "면접 결과",
+                        text = AnnotatedString(
+                            buildString {
+                                append("${CalculateDate.dateFormatForFeedback(interviewResult.date)} 일자의")
+                                append("\n")
+                                append("${
+                                    interviewResult.etc.ifEmpty { "1" }
+                                }번째 면접 결과")
+                            }
+                        ),
                         modifier = modifier
                             .fillMaxWidth()
                             .padding(top = 20.dp, bottom = 30.dp),
@@ -397,7 +406,7 @@ private fun FeedbackDetailCardGridForHome(
                     detailContent = interviewResult.answers[index],
                     feedbackContent = interviewResult.feedbacks.feedbacks[index],
                     isReInterview = isReInterview,
-                    detailContent2 = if (isReInterview) interviewResult.answers[index + (interviewResult.answers.size/2)] else ""
+                    detailContent2 = if (isReInterview) interviewResult.answers[index + (interviewResult.answers.size / 2)] else ""
                 )
                 if (!isReInterview) {
                     EachReInterviewSection(
