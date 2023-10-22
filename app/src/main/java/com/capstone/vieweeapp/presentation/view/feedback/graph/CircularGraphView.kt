@@ -167,6 +167,7 @@ fun PieChartWithWhiteCenter(
                         centerX + (radius + 80) * cos(Math.toRadians(textAngle.toDouble())).toFloat()
                     val textY =
                         centerY + (radius + 80) * sin(Math.toRadians(textAngle.toDouble())).toFloat()
+
                     drawIntoCanvas {
 
                         if (percentage.toInt() != 0) {
@@ -257,7 +258,7 @@ fun ExplainCircleGraphPreview() {
 @Composable
 fun PieChartWithWhiteCenterPreview() {
 
-    val emotions = listOf(10f, 15f, 25f, 10f, 15f, 5f, 10f) // 각 섹션의 비율
+    val emotions = listOf(60f, 10f, 10f, 5f, 5f, 5f, 5f) // 각 섹션의 비율
     val colors = listOf(Surprise, Fear, Angry, Neutral, Sad, Disgust, Happy) // 각 섹션의 색상
 
     Box(modifier = Modifier.fillMaxSize()) {

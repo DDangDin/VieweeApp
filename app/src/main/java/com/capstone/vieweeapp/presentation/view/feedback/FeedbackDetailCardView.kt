@@ -1,5 +1,7 @@
 package com.capstone.vieweeapp.presentation.view.feedback
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -10,16 +12,21 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,6 +34,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -127,7 +135,7 @@ fun FeedbackDetailCardView(
                     Text(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 25.dp),
+                            .padding(vertical = 14.dp),
                         text = buildAnnotatedString {
                             append(
                                 AnnotatedString(
@@ -239,15 +247,24 @@ fun FeedbackDetailCardView(
                             alignment = Alignment.CenterVertically
                         )
                     ) {
-                        CustomTitleText(text = stringResource(id = R.string.feedback_detail_card_facial_graph))
+                        CustomTitleText(
+                            text = stringResource(id = R.string.feedback_detail_card_facial_graph),
+                            fontSize = 17.sp
+                        )
                         FacialAnalyzedGraph(
                             modifier = Modifier
                                 .fillMaxWidth(),
-                            emotion = emotion
+                            emotionTopThree = emotion
+                                .toPairList()
+                                .sortedBy { it.second }
+                                .reversed()
+                                .subList(0, 3)
+                                .map { it.first }
                         )
                         CustomTitleText(
                             modifier = Modifier.padding(top = 15.dp),
-                            text = stringResource(id = R.string.feedback_detail_card_triangle_graph)
+                            text = stringResource(id = R.string.feedback_detail_card_triangle_graph),
+                            fontSize = 17.sp
                         )
                         Column(
                             modifier = Modifier.fillMaxWidth(),
@@ -260,7 +277,7 @@ fun FeedbackDetailCardView(
                                     .padding(end = 28.dp)
                             )
                             TriangleGraphView(
-                                modifier = Modifier.padding(top = 30.dp),
+                                modifier = Modifier,
                                 intervieweeValues = textSentiment.toFloatList()
                             )
                         }
@@ -274,19 +291,14 @@ fun FeedbackDetailCardView(
 @Composable
 private fun FacialAnalyzedGraph(
     modifier: Modifier = Modifier,
-    emotion: Emotion, // 상위 3개만
+    emotionTopThree: List<String>, // 상위 3개만
 ) {
-
-    val emotionTopThree = emotion
-        .toPairList()
-        .sortedBy { it.second }
-        .reversed()
-        .subList(0, 3)
-        .map { it.first }
 
     // Top3 만
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .height(110.dp),
         verticalAlignment = Alignment.Bottom,
         horizontalArrangement = Arrangement.spacedBy(
             10.dp,
@@ -318,36 +330,45 @@ private fun FacialCircleShape(
     rankText: String,
     emotion: String
 ) {
+    val scope = rememberCoroutineScope()
 
     // 순위 별 글씨 크기 / 도형 크기
     // 1st -> 10.sp / 70.dp
     // 2nd -> 7.sp / 50.dp
     // 3rd -> 7.sp / 35.dp
+    val rank1 = stringResource(id = R.string.feedback_detailcard_facialgraph_1st_text)
+    val rank2 = stringResource(id = R.string.feedback_detailcard_facialgraph_2nd_text)
+    val rank3 = stringResource(id = R.string.feedback_detailcard_facialgraph_3rd_text)
 
     val fontSize = when (rankText) {
-        stringResource(id = R.string.feedback_detailcard_facialgraph_1st_text) -> 15.sp
-        stringResource(id = R.string.feedback_detailcard_facialgraph_2nd_text) -> 12.sp
-        stringResource(id = R.string.feedback_detailcard_facialgraph_3rd_text) -> 12.sp
+        rank1 -> 15.sp
+        rank2 -> 12.sp
+        rank3 -> 12.sp
         else -> 7.sp
     }
-    val shapeSize = when (rankText) {
-        stringResource(id = R.string.feedback_detailcard_facialgraph_1st_text) -> 80.dp
-        stringResource(id = R.string.feedback_detailcard_facialgraph_2nd_text) -> 60.dp
-        stringResource(id = R.string.feedback_detailcard_facialgraph_3rd_text) -> 45.dp
-        else -> 50.dp
+
+    var shapeSize by remember { mutableStateOf(0.dp) }
+    LaunchedEffect(key1 = Unit) {
+        shapeSize = when (rankText) {
+            rank1 -> 80.dp
+            rank2 -> 60.dp
+            rank3 -> 45.dp
+            else -> 50.dp
+        }
     }
+
     val paddingValue = when (rankText) {
-        stringResource(id = R.string.feedback_detailcard_facialgraph_1st_text) -> PaddingValues(
+        rank1 -> PaddingValues(
             bottom = 15.dp,
             end = 10.dp
         )
 
-        stringResource(id = R.string.feedback_detailcard_facialgraph_2nd_text) -> PaddingValues(
+        rank2 -> PaddingValues(
             bottom = 11.dp,
             end = 8.dp
         )
 
-        stringResource(id = R.string.feedback_detailcard_facialgraph_3rd_text) -> PaddingValues(
+        rank3 -> PaddingValues(
             bottom = 8.dp,
             end = 5.dp
         )
@@ -356,20 +377,29 @@ private fun FacialCircleShape(
     }
 
 
-
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically)
     ) {
         Box(
-            modifier = Modifier
-                .size(shapeSize)
-                .background(
-                    color = CircularGraphColor.colorsMap[emotion] ?: Color.LightGray,
-                    shape = CircleShape
-                )
+            modifier = Modifier.wrapContentSize()
         ) {
+            Icon(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .clip(CircleShape)
+                    .animateContentSize(
+                        animationSpec = tween(
+                            durationMillis = 1500,
+                            easing = LinearOutSlowInEasing
+                        )
+                    )
+                    .size(shapeSize),
+                imageVector = Icons.Default.Circle,
+                contentDescription = "circle",
+                tint = CircularGraphColor.colorsMap[emotion] ?: Color.LightGray,
+            )
             Text(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
@@ -398,9 +428,13 @@ private fun FacialCircleShape(
 fun FacialAnalyzeGraphPreview() {
 
     val emotion = Emotion(1, 5, 2, 10, 1, 1, 1)
-
+        .toPairList()
+        .sortedBy { it.second }
+        .reversed()
+        .subList(0, 3)
+        .map { it.first }
     FacialAnalyzedGraph(
-        emotion = emotion
+        emotionTopThree = emotion
     )
 }
 

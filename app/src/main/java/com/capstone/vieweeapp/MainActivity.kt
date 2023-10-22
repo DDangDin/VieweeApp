@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -13,6 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import com.capstone.vieweeapp.navigation.nav.VieweeBottomNavigation
 import com.capstone.vieweeapp.ui.theme.VieweeAppTheme
 import com.capstone.vieweeapp.utils.Constants
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.opencv.android.OpenCVLoader
 
@@ -21,6 +23,7 @@ class MainActivity : ComponentActivity() {
 
     private val TAG = "MainActivity(LOG)"
 
+    @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -36,7 +39,8 @@ class MainActivity : ComponentActivity() {
                 ) {
 //                    Text(text = "Hello!")
 
-                    val navController = rememberNavController()
+//                    val navController = rememberNavController()
+                    val navController = rememberAnimatedNavController()
                     VieweeBottomNavigation(
                         navController = navController,
                         startSelectResume = {

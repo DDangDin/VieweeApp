@@ -31,6 +31,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.widget.Placeholder
@@ -140,13 +141,14 @@ fun DataInputCard(
 fun CustomTitleText(
     modifier: Modifier = Modifier,
     text: String = "자신의 정보를 입력해주세요.",
+    fontSize: TextUnit = 20.sp
 ) {
     Text(
         modifier = modifier.fillMaxWidth(),
         text = text,
         textAlign = TextAlign.Center,
         fontStyle = FontStyle.Normal,
-        fontSize = 20.sp,
+        fontSize = fontSize,
         fontWeight = FontWeight.Bold,
         color = VieweeColorMain
     )

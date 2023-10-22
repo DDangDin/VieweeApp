@@ -3,6 +3,7 @@ package com.capstone.vieweeapp.presentation.view.feedback.graph
 import android.graphics.Typeface
 import android.util.Log
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
@@ -23,6 +24,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -112,6 +114,7 @@ fun StandardTriangleGraph(
     fillColor: Color = Color(0xFF1F77B4).copy(alpha = 0.25f)
 ) {
     val maxValue by remember { mutableFloatStateOf(100f) }
+    val context = LocalContext.current
 
     Box(
         modifier = modifier.fillMaxSize()
@@ -167,7 +170,7 @@ fun StandardTriangleGraph(
                             textSize = 9.sp.toPx()
                             textAlign = android.graphics.Paint.Align.CENTER
                             isAntiAlias = true
-//                            typeface = ???
+                            typeface = Typeface.createFromAsset(context.assets, "noto_sans_kr_semi_bold.ttf")
                         }
                     )
                 }

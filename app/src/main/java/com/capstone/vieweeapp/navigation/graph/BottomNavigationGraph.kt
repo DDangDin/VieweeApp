@@ -1,5 +1,15 @@
 package com.capstone.vieweeapp.navigation.graph
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.EaseIn
+import androidx.compose.animation.core.EaseOut
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -34,9 +44,12 @@ import com.capstone.vieweeapp.presentation.viewmodel.ProfileViewModel
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
 import com.capstone.vieweeapp.utils.Constants
 import com.capstone.vieweeapp.utils.CustomSharedPreference
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun BottomNavigationGraph(
     modifier: Modifier = Modifier,
@@ -49,17 +62,24 @@ fun BottomNavigationGraph(
     val homeViewModel: HomeViewModel = hiltViewModel()
     val scope = rememberCoroutineScope()
 
-    NavHost(
+    AnimatedNavHost(
         navController = navController,
-        startDestination = Screen.Home.route
+        startDestination = Screen.Home.route,
+        enterTransition = { EnterTransition.None },
+        exitTransition = { ExitTransition.None }
     ) {
-        composable(route = Screen.Home.route) {
+        composable(
+            route = Screen.Home.route,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None }
+        ) {
             val interviewResultsState = homeViewModel.interviewResultsState.collectAsState()
 
             LaunchedEffect(Unit) {
                 homeViewModel.getInterviewResults()
                 if (CustomSharedPreference(context).isContain(Constants.USER_SHARED_PREFERENCE)) {
-                    val username = CustomSharedPreference(context).getUserPrefs(Constants.USER_SHARED_PREFERENCE)
+                    val username =
+                        CustomSharedPreference(context).getUserPrefs(Constants.USER_SHARED_PREFERENCE)
                     homeViewModel.updateUsername(username)
                 }
             }
@@ -81,7 +101,27 @@ fun BottomNavigationGraph(
                 navArgument("index") {
                     type = NavType.IntType
                 }
-            )
+            ),
+            enterTransition = {
+                fadeIn(
+                    animationSpec = tween(
+                        300, easing = LinearEasing
+                    )
+                ) + slideIntoContainer(
+                    animationSpec = tween(300, easing = EaseIn),
+                    towards = AnimatedContentTransitionScope.SlideDirection.Up
+                )
+            },
+            exitTransition = {
+                fadeOut(
+                    animationSpec = tween(
+                        300, easing = LinearEasing
+                    )
+                ) + slideOutOfContainer(
+                    animationSpec = tween(300, easing = EaseOut),
+                    towards = AnimatedContentTransitionScope.SlideDirection.Down
+                )
+            }
         ) { backStackEntry ->
             val parentEntry = remember(backStackEntry) {
                 navController.getBackStackEntry(Screen.Home.route)
@@ -125,17 +165,29 @@ fun BottomNavigationGraph(
             }
         }
 
-        composable(route = Screen.Interview.route) {
+        composable(
+            route = Screen.Interview.route,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None }
+        ) {
             InterviewScreen(
                 startSelectResume = startSelectResume
             )
         }
 
-        composable(route = Screen.Calendar.route) {
+        composable(
+            route = Screen.Calendar.route,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None }
+            ) {
             CalendarScreen()
         }
 
-        composable(route = Screen.Profile.route) {
+        composable(
+            route = Screen.Profile.route,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None }
+        ) {
 
             val profileViewModel: ProfileViewModel = viewModel()
 
@@ -146,7 +198,10 @@ fun BottomNavigationGraph(
                 onTextChanged = onTextChanged,
                 saveName = {
                     val username = text.trim()
-                    CustomSharedPreference(context).setUserPrefs(Constants.USER_SHARED_PREFERENCE, username)
+                    CustomSharedPreference(context).setUserPrefs(
+                        Constants.USER_SHARED_PREFERENCE,
+                        username
+                    )
                     homeViewModel.updateUsername(username)
                     text = ""
                 }

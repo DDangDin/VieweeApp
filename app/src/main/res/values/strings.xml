@@ -60,9 +60,9 @@
 
 
     <!-- FeedbackDetailCardView Screen -->
-    <string name="feedback_detail_card_facial_graph">표정 분석 TOP 3</string>
+    <string name="feedback_detail_card_facial_graph">해당 질문 시 표정 분석 TOP 3</string>
     <string name="feedback_detailcard_facialgraph_1st_text">1st</string>
     <string name="feedback_detailcard_facialgraph_2nd_text">2nd</string>
     <string name="feedback_detailcard_facialgraph_3rd_text">3rd</string>
-    <string name="feedback_detail_card_triangle_graph">텍스트 감정 분석 그래프</string>
+    <string name="feedback_detail_card_triangle_graph">해당 질문 시 텍스트 감정 분석 그래프</string>
 </resources>
