@@ -17,7 +17,7 @@ fun List<TextSentiment>.average(isReInterview: Boolean): List<Float> {
     val positive = this.fold(0.0) { acc, sentiment -> acc + (sentiment.confidence.positive)}.toFloat()
     val neutral = this.fold(0.0) { acc, sentiment -> acc + (sentiment.confidence.neutral)}.toFloat()
     val negative = this.fold(0.0) { acc, sentiment -> acc + (sentiment.confidence.negative)}.toFloat()
-    Log.d("textSentimentToPercentage", "${positive/5}, ${neutral/5}, ${negative/5}")
+
     return if (isReInterview) {
         listOf(positive/10, neutral/10, negative/10)
     } else {

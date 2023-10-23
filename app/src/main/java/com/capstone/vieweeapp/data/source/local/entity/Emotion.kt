@@ -25,8 +25,6 @@ fun List<Emotion>.toPercentages(): List<Pair<String, Float>> {
 
     val total = surprise + fear + angry + neutral + sad + disgust + happy
 
-    Log.d("emotionToPercentages", "total: $total, surprise: $surprise, calc: ${(surprise/total*100.0)}")
-
     return listOf(
         Pair(FacialEmotionNames.en[0], (surprise/total*100)),
         Pair(FacialEmotionNames.en[1], (fear/total*100)),

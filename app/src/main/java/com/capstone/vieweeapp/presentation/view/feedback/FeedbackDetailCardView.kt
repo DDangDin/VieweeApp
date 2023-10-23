@@ -1,6 +1,7 @@
 package com.capstone.vieweeapp.presentation.view.feedback
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -68,6 +69,7 @@ import com.capstone.vieweeapp.ui.theme.noToSansKr
 import com.capstone.vieweeapp.utils.CustomRippleEffect
 import com.capstone.vieweeapp.utils.CustomRippleEffect.clickableWithoutRipple
 import com.capstone.vieweeapp.utils.FacialEmotionNames
+import kotlinx.coroutines.delay
 
 @Composable
 fun FeedbackDetailCardView(
@@ -83,11 +85,11 @@ fun FeedbackDetailCardView(
 ) {
     var isExpanded by remember { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
-    val scope = rememberCoroutineScope()
 
     val extraPadding by animateDpAsState(
         if (isExpanded) 48.dp else 0.dp,
-        animationSpec = tween()
+        animationSpec = tween(),
+        label = "extraPadding"
     )
 
     CompositionLocalProvider(LocalRippleTheme provides CustomRippleEffect.NoRippleTheme) {
@@ -280,34 +282,39 @@ fun FeedbackDetailCardView(
                                     .align(Alignment.End)
                                     .padding(end = 28.dp)
                             )
-                            if (isReInterview) {
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(25.dp, alignment = Alignment.CenterHorizontally)
-                                ) {
-                                    TriangleGraphView(
-                                        modifier = Modifier.size(60.dp),
-                                        intervieweeValues = textSentiment.toFloatList()
-                                    )
-                                    Icon(
-                                        modifier = Modifier
-                                            .size(33.dp, 16.dp),
-                                        imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_right),
-                                        contentDescription = "arrowRight",
-                                        tint = Color(0x1A92979F),
-                                    )
-                                    TriangleGraphView(
-                                        modifier = Modifier.size(60.dp),
-                                        intervieweeValues = textSentiment2.toFloatList()
-                                    )
-                                }
-                            } else {
-                                TriangleGraphView(
-                                    modifier = Modifier,
-                                    intervieweeValues = textSentiment.toFloatList()
-                                )
-                            }
+                            TriangleGraphView(
+                                modifier = Modifier,
+                                intervieweeValues = textSentiment.toFloatList()
+                            )
+
+//                            if (isReInterview) {
+//                                Row(
+//                                    modifier = Modifier.fillMaxWidth(),
+//                                    verticalAlignment = Alignment.CenterVertically,
+//                                    horizontalArrangement = Arrangement.spacedBy(25.dp, alignment = Alignment.CenterHorizontally)
+//                                ) {
+//                                    TriangleGraphView(
+//                                        modifier = Modifier.size(60.dp),
+//                                        intervieweeValues = textSentiment.toFloatList()
+//                                    )
+//                                    Icon(
+//                                        modifier = Modifier
+//                                            .size(33.dp, 16.dp),
+//                                        imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_right),
+//                                        contentDescription = "arrowRight",
+//                                        tint = Color(0x1A92979F),
+//                                    )
+//                                    TriangleGraphView(
+//                                        modifier = Modifier.size(60.dp),
+//                                        intervieweeValues = textSentiment2.toFloatList()
+//                                    )
+//                                }
+//                            } else {
+//                                TriangleGraphView(
+//                                    modifier = Modifier,
+//                                    intervieweeValues = textSentiment.toFloatList()
+//                                )
+//                            }
                         }
                     }
                 }
@@ -358,7 +365,6 @@ private fun FacialCircleShape(
     rankText: String,
     emotion: String
 ) {
-    val scope = rememberCoroutineScope()
 
     // 순위 별 글씨 크기 / 도형 크기
     // 1st -> 10.sp / 70.dp
@@ -377,6 +383,7 @@ private fun FacialCircleShape(
 
     var shapeSize by remember { mutableStateOf(0.dp) }
     LaunchedEffect(key1 = Unit) {
+        delay(300)
         shapeSize = when (rankText) {
             rank1 -> 80.dp
             rank2 -> 60.dp

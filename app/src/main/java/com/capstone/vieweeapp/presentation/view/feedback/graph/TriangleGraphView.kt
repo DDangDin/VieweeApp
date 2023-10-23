@@ -35,6 +35,7 @@ import com.capstone.vieweeapp.presentation.view.feedback.graph.TriangleGraphColo
 import com.capstone.vieweeapp.presentation.view.feedback.graph.TriangleGraphColor.UsOrange
 import com.capstone.vieweeapp.ui.theme.VieweeColorText
 import com.capstone.vieweeapp.ui.theme.noToSansKr
+import kotlinx.coroutines.delay
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin

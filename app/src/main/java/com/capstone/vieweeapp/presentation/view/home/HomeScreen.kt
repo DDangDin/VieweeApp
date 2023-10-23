@@ -62,7 +62,7 @@ fun HomeScreen(
     val focusManager = LocalFocusManager.current
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(bottom = Constants.BOTTOM_NAV_BAR_PADDING.dp)
             .addFocusCleaner(focusManager),

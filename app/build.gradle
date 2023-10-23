@@ -87,6 +87,9 @@ android {
 dependencies {
     implementation project(path: ':opencv')
 
+    // Log
+    implementation 'com.jakewharton.timber:timber:5.0.1'
+
     // Material3
     implementation("androidx.compose.material3:material3:1.0.1")
     implementation("androidx.compose.material3:material3-window-size-class:1.0.1")
