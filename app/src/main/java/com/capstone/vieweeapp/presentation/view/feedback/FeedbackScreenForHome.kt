@@ -382,16 +382,6 @@ private fun FeedbackDetailCardGridForHome(
     isReInterview: Boolean
 ) {
 
-//    val answerList by rememberSaveable {
-//        mutableStateOf(
-//            if (isReInterview) {
-//                interviewResult.answers.chunked(interviewResult.answers.size / 2)[0]
-//            } else {
-//                interviewResult.answers
-//            }
-//        )
-//    }
-
     CustomTitleText(
         Modifier.padding(top = 20.dp, bottom = 30.dp),
         "${CalculateDate.dateFormatForFeedback(interviewResult.date)} 면접의 질문 피드백"
@@ -424,7 +414,9 @@ private fun FeedbackDetailCardGridForHome(
                     isReInterview = isReInterview,
                     detailContent2 = if (isReInterview) interviewResult.answers[index + (interviewResult.answers.size / 2)] else "",
                     emotion = interviewResult.emotions[index],
-                    textSentiment = interviewResult.textSentiments[index]
+                    textSentiment = interviewResult.textSentiments[index],
+                    textSentiment2 = if (isReInterview) interviewResult.textSentiments[index + (interviewResult.textSentiments.size / 2)]
+                    else TextSentiment("", Confidence(0.0,0.0,0.0))
                 )
                 if (!isReInterview) {
                     EachReInterviewSection(

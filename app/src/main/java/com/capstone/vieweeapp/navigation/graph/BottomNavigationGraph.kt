@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -129,10 +130,10 @@ fun BottomNavigationGraph(
 
             val feedbackForHomeViewModel: FeedbackForHomeViewModel = hiltViewModel()
 
-            val interviewResultState = homeViewModel.interviewResultsState.collectAsState()
+            val interviewResultState = homeViewModel.interviewResultsState.collectAsStateWithLifecycle()
             val interviewResultIndex = backStackEntry.arguments?.getInt("index") ?: 0
 
-            val reInterviewState = feedbackForHomeViewModel.reInterviewState.collectAsState()
+            val reInterviewState = feedbackForHomeViewModel.reInterviewState.collectAsStateWithLifecycle()
 
             // 만약 피드백 데이터 삭제 시, DB 작업 딜레이가 있으므로 인덱스 값이 어긋남
             // 이 오류는 마지막 피드백 데이터만 해당되고 그 외에는 인덱스 허용범위이므로 오류 발생하지 않음

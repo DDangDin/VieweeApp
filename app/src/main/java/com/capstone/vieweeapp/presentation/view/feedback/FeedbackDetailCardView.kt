@@ -13,8 +13,11 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -75,7 +78,8 @@ fun FeedbackDetailCardView(
     isReInterview: Boolean = false,
     detailContent2: String = "",
     emotion: Emotion,
-    textSentiment: TextSentiment
+    textSentiment: TextSentiment,
+    textSentiment2: TextSentiment
 ) {
     var isExpanded by remember { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
@@ -175,7 +179,7 @@ fun FeedbackDetailCardView(
 //                                .padding(vertical = 15.dp),
                             imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_drop_down),
                             contentDescription = "arrowDropDown",
-                            tint = Color(0xCC92979F),
+                            tint = Color(0x1A92979F),
                         )
                         Text(
                             modifier = Modifier
@@ -276,10 +280,34 @@ fun FeedbackDetailCardView(
                                     .align(Alignment.End)
                                     .padding(end = 28.dp)
                             )
-                            TriangleGraphView(
-                                modifier = Modifier,
-                                intervieweeValues = textSentiment.toFloatList()
-                            )
+                            if (isReInterview) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(25.dp, alignment = Alignment.CenterHorizontally)
+                                ) {
+                                    TriangleGraphView(
+                                        modifier = Modifier.size(60.dp),
+                                        intervieweeValues = textSentiment.toFloatList()
+                                    )
+                                    Icon(
+                                        modifier = Modifier
+                                            .size(33.dp, 16.dp),
+                                        imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_right),
+                                        contentDescription = "arrowRight",
+                                        tint = Color(0x1A92979F),
+                                    )
+                                    TriangleGraphView(
+                                        modifier = Modifier.size(60.dp),
+                                        intervieweeValues = textSentiment2.toFloatList()
+                                    )
+                                }
+                            } else {
+                                TriangleGraphView(
+                                    modifier = Modifier,
+                                    intervieweeValues = textSentiment.toFloatList()
+                                )
+                            }
                         }
                     }
                 }
@@ -341,10 +369,10 @@ private fun FacialCircleShape(
     val rank3 = stringResource(id = R.string.feedback_detailcard_facialgraph_3rd_text)
 
     val fontSize = when (rankText) {
-        rank1 -> 15.sp
-        rank2 -> 12.sp
-        rank3 -> 12.sp
-        else -> 7.sp
+        rank1 -> 14.sp
+        rank2 -> 11.sp
+        rank3 -> 11.sp
+        else -> 11.sp
     }
 
     var shapeSize by remember { mutableStateOf(0.dp) }
@@ -359,18 +387,18 @@ private fun FacialCircleShape(
 
     val paddingValue = when (rankText) {
         rank1 -> PaddingValues(
-            bottom = 15.dp,
-            end = 10.dp
+            bottom = 17.dp,
+            end = 12.dp
         )
 
         rank2 -> PaddingValues(
-            bottom = 11.dp,
-            end = 8.dp
+            bottom = 13.dp,
+            end = 10.dp
         )
 
         rank3 -> PaddingValues(
-            bottom = 8.dp,
-            end = 5.dp
+            bottom = 10.dp,
+            end = 7.dp
         )
 
         else -> PaddingValues(bottom = 15.dp, end = 10.dp)
@@ -457,10 +485,14 @@ fun FeedFeedbackDetailCardViewPreview() {
         detailTitle = "팀에 갈등이 생길경우 어떻게 해결하나요?",
         detailContent = "DetailContentDetailContentDetailContentDetailContentDetailContentDetailContentDetailContentDetailContentDetailContentDetailContentDetailContent",
         feedbackContent = "피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분피드백 들어갈 부분",
-        isReInterview = false,
+        isReInterview = true,
         detailContent2 = "답변(2회차)",
         emotion = emotion,
         textSentiment = TextSentiment(
+            "",
+            Confidence(0.0, 0.0, 0.0)
+        ),
+        textSentiment2 = TextSentiment(
             "",
             Confidence(0.0, 0.0, 0.0)
         )

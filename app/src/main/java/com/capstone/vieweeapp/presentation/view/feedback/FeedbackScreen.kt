@@ -47,6 +47,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.capstone.viewee.data.source.network.clova_api.dto.Confidence
 import com.capstone.vieweeapp.R
 import com.capstone.vieweeapp.data.source.local.entity.Emotion
 import com.capstone.vieweeapp.data.source.local.entity.Feedbacks
@@ -337,7 +338,9 @@ private fun FeedbackDetailCardGrid(
                         answerList[index]
                     } else "",
                     emotion = emotionList[index],
-                    textSentiment = textSentimentList[index]
+                    textSentiment = textSentimentList[index],
+                    textSentiment2 = feedbackState.previousInterviewResult?.textSentiments?.get(index)
+                        ?: TextSentiment("", Confidence(0.0,0.0,0.0))
                 )
             }
     }
