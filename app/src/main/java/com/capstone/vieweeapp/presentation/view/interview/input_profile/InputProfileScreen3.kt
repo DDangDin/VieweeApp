@@ -63,15 +63,15 @@ fun InputProfileScreen3(
             contentDescription = "exit",
             tint = VieweeColorMain
         )
+        CustomTitleText(
+            modifier = Modifier.padding(top = 130.dp),
+            text = stringResource(id = R.string.input_profile_title_resume_text),
+        )
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.SpaceAround,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CustomTitleText(
-                modifier = Modifier.padding(top = 40.dp),
-                text = stringResource(id = R.string.input_profile_title_resume_text),
-            )
             Column(
                 modifier = Modifier.padding(vertical = 7.dp, horizontal = 30.dp),
                 verticalArrangement = Arrangement.spacedBy(
@@ -105,21 +105,23 @@ fun InputProfileScreen3(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 )
             }
-            NextButton(
-                modifier = Modifier.padding(horizontal = 30.dp),
-                onClick = {
-                    isEmptyValue_1 = inputProfileViewModel.inputResumeText.value.isEmpty()
-
-                    if (
-                        inputProfileViewModel.inputResumeText.value.isNotEmpty()
-                    ) {
-                        // 저장
-                        inputProfileViewModel.insertResume()
-                        onNavigateNext()
-                    }
-                }
-            )
         }
+        NextButton(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(start = 30.dp, end = 30.dp, bottom = 30.dp),
+            onClick = {
+                isEmptyValue_1 = inputProfileViewModel.inputResumeText.value.isEmpty()
+
+                if (
+                    inputProfileViewModel.inputResumeText.value.isNotEmpty()
+                ) {
+                    // 저장
+                    inputProfileViewModel.insertResume()
+                    onNavigateNext()
+                }
+            }
+        )
     }
 //        QuitButton(onClick = {})
 }

@@ -1,10 +1,14 @@
 package com.capstone.vieweeapp.presentation.view.interview.input_profile
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
@@ -55,15 +59,15 @@ fun InputProfileScreen2(
             contentDescription = "exit",
             tint = VieweeColorMain
         )
+        CustomTitleText(
+            modifier = Modifier.padding(top = 130.dp),
+            text = stringResource(id = R.string.input_profile_title),
+        )
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.SpaceAround,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CustomTitleText(
-                modifier = Modifier.padding(top = 40.dp),
-                text = stringResource(id = R.string.input_profile_title),
-            )
             Column(
                 modifier = Modifier.padding(vertical = 7.dp, horizontal = 30.dp),
                 verticalArrangement = Arrangement.spacedBy(
@@ -105,23 +109,25 @@ fun InputProfileScreen2(
                     }
                 )
             }
-            NextButton(
-                modifier = Modifier.padding(horizontal = 30.dp),
-                onClick = {
-                    isEmptyValue_1 = inputProfileViewModel.inputSupportJobs.value.isEmpty()
-                    isEmptyValue_2 = inputProfileViewModel.inputCertifications.value.isEmpty()
-                    isEmptyValue_3 = inputProfileViewModel.inputSkills.value.isEmpty()
-
-                    if (
-                        inputProfileViewModel.inputSupportJobs.value.isNotEmpty() &&
-                        inputProfileViewModel.inputCertifications.value.isNotEmpty() &&
-                        inputProfileViewModel.inputSkills.value.isNotEmpty()
-                    ) {
-                        onNavigateNext()
-                    }
-                }
-            )
         }
+        NextButton(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(start = 30.dp, end = 30.dp, bottom = 30.dp),
+            onClick = {
+                isEmptyValue_1 = inputProfileViewModel.inputSupportJobs.value.isEmpty()
+                isEmptyValue_2 = inputProfileViewModel.inputCertifications.value.isEmpty()
+                isEmptyValue_3 = inputProfileViewModel.inputSkills.value.isEmpty()
+
+                if (
+                    inputProfileViewModel.inputSupportJobs.value.isNotEmpty() &&
+                    inputProfileViewModel.inputCertifications.value.isNotEmpty() &&
+                    inputProfileViewModel.inputSkills.value.isNotEmpty()
+                ) {
+                    onNavigateNext()
+                }
+            }
+        )
     }
 //        QuitButton(onClick = {})
 }

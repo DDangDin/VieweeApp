@@ -32,4 +32,8 @@ class InterviewResultRepositoryImpl(
     override suspend fun getInterviewResultOnce(id: Int): InterviewResult {
         return dao.getInterviewResultOnce(id)
     }
+
+    override suspend fun getDateList(): List<String> {
+        return dao.getDateList()
+    }
 }

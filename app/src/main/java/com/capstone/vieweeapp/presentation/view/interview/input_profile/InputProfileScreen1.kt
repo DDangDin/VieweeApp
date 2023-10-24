@@ -57,15 +57,15 @@ fun InputProfileScreen1(
             contentDescription = "exit",
             tint = VieweeColorMain
         )
+        CustomTitleText(
+            modifier = Modifier.padding(top = 130.dp),
+            text = stringResource(id = R.string.input_profile_title),
+        )
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.SpaceAround,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CustomTitleText(
-                modifier = Modifier.padding(top = 40.dp),
-                text = stringResource(id = R.string.input_profile_title),
-            )
             Column(
                 modifier = Modifier.padding(vertical = 7.dp, horizontal = 30.dp),
                 verticalArrangement = Arrangement.spacedBy(
@@ -114,25 +114,27 @@ fun InputProfileScreen1(
                     }
                 )
             }
-            NextButton(
-                modifier = Modifier.padding(horizontal = 30.dp),
-                onClick = {
-                    isEmptyValue_1 = inputProfileViewModel.inputName.value.isEmpty()
-                    isEmptyValue_2 = inputProfileViewModel.inputBirthdate.value.isEmpty()
-                    isEmptyValue_3 = inputProfileViewModel.inputEducation.value.isEmpty()
-                    isEmptyValue_4 = inputProfileViewModel.inputCareer.value.isEmpty()
-
-                    if (
-                        inputProfileViewModel.inputName.value.isNotEmpty() &&
-                        inputProfileViewModel.inputBirthdate.value.isNotEmpty() &&
-                        inputProfileViewModel.inputEducation.value.isNotEmpty() &&
-                        inputProfileViewModel.inputCareer.value.isNotEmpty()
-                    ) {
-                        onNavigateNext()
-                    }
-                }
-            )
         }
+        NextButton(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(start = 30.dp, end = 30.dp, bottom = 30.dp),
+            onClick = {
+                isEmptyValue_1 = inputProfileViewModel.inputName.value.isEmpty()
+                isEmptyValue_2 = inputProfileViewModel.inputBirthdate.value.isEmpty()
+                isEmptyValue_3 = inputProfileViewModel.inputEducation.value.isEmpty()
+                isEmptyValue_4 = inputProfileViewModel.inputCareer.value.isEmpty()
+
+                if (
+                    inputProfileViewModel.inputName.value.isNotEmpty() &&
+                    inputProfileViewModel.inputBirthdate.value.isNotEmpty() &&
+                    inputProfileViewModel.inputEducation.value.isNotEmpty() &&
+                    inputProfileViewModel.inputCareer.value.isNotEmpty()
+                ) {
+                    onNavigateNext()
+                }
+            }
+        )
     }
 //        QuitButton(onClick = {})
 }

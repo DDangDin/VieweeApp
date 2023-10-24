@@ -21,4 +21,6 @@ interface InterviewResultRepository {
     suspend fun updateForReInterviewResult(interviewResult: InterviewResult)
 
     suspend fun getInterviewResultOnce(id: Int): InterviewResult
+
+    suspend fun getDateList(): List<String>
 }
