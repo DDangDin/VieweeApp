@@ -30,6 +30,6 @@ interface InterviewResultDao {
     @Query("SELECT * FROM interview_result_db WHERE id = :id")
     suspend fun getInterviewResultOnce(id: Int): InterviewResult
 
-    @Query("SELECT date FROM interview_result_db")
-    suspend fun getDateList(): List<String>
+    @Query("SELECT * FROM interview_result_db WHERE date LIKE '%' || :date || '%'")
+    suspend fun getInterviewResultsByDate(date: String): List<InterviewResult>
 }

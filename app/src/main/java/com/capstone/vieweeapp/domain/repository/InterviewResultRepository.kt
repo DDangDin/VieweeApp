@@ -22,5 +22,5 @@ interface InterviewResultRepository {
 
     suspend fun getInterviewResultOnce(id: Int): InterviewResult
 
-    suspend fun getDateList(): List<String>
+    suspend fun getInterviewResultsByDate(date: String): List<InterviewResult>
 }

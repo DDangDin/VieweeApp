@@ -1,5 +1,6 @@
 package com.capstone.vieweeapp.presentation.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -18,7 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val interviewResultRepository: InterviewResultRepository
-): ViewModel() {
+) : ViewModel() {
+    private val TAG = "HomeViewModel"
 
     private val _username = mutableStateOf("")
     val username: State<String> = _username
@@ -36,7 +38,19 @@ class HomeViewModel @Inject constructor(
         _searchText.value = value
         // Composable 에서는 스크롤 & 포커싱 관리가 필요 한가에 대해 생각 해보기
         viewModelScope.launch {
-            // 날짜로 검색
+            if (value.length >= 2) {
+                _interviewResultsState.update { it.copy(loading = true) }
+                val interviewResults = interviewResultRepository.getInterviewResultsByDate(value)
+                _interviewResultsState.update {
+                    it.copy(
+                        interviewResults = interviewResults,
+                        loading = false
+                    )
+                }
+            }
+            if (value.isEmpty()) {
+                getInterviewResults()
+            }
         }
     }
 
@@ -44,10 +58,12 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             _interviewResultsState.update { it.copy(loading = true) }
             val interviewResults = interviewResultRepository.getInterviewResults()
-            _interviewResultsState.update { it.copy(
-                interviewResults = interviewResults,
-                loading = false
-            ) }
+            _interviewResultsState.update {
+                it.copy(
+                    interviewResults = interviewResults,
+                    loading = false
+                )
+            }
         }
     }
 
