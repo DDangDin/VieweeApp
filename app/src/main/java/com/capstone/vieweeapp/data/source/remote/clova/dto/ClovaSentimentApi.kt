@@ -1,6 +1,5 @@
 package com.capstone.vieweeapp.data.source.remote.clova.dto
 
-import com.capstone.viewee.data.source.network.clova_api.dto.TextSentimentResDto
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Header

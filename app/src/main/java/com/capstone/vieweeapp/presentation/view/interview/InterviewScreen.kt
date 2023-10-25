@@ -58,9 +58,9 @@ fun InterviewScreen(
     }
 }
 
-enum class ButtonState { Pressed, Idle }
+private enum class ButtonState { Pressed, Idle }
 
-fun Modifier.bounceClick(onClick: () -> Unit) = composed {
+private fun Modifier.bounceClick(onClick: () -> Unit) = composed {
     var buttonState by remember { mutableStateOf(ButtonState.Idle) }
     val scale by animateFloatAsState(if (buttonState == ButtonState.Pressed) 0.85f else 1f)
 

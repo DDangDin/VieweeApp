@@ -5,14 +5,14 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.capstone.viewee.data.source.network.clova_api.dto.Confidence
-import com.capstone.viewee.data.source.network.clova_api.dto.toTextSentiment
 import com.capstone.vieweeapp.data.source.local.entity.Emotion
 import com.capstone.vieweeapp.data.source.local.entity.Feedbacks
 import com.capstone.vieweeapp.data.source.local.entity.InterviewResult
 import com.capstone.vieweeapp.data.source.local.entity.TextSentiment
 import com.capstone.vieweeapp.data.source.local.entity.toCreateQuestionReqDto
+import com.capstone.vieweeapp.data.source.remote.clova.dto.Confidence
 import com.capstone.vieweeapp.data.source.remote.clova.dto.TextSentimentReqDto
+import com.capstone.vieweeapp.data.source.remote.clova.dto.toTextSentiment
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.request.FeedbackReqDto
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.request.ReFeedbackReqDto
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.response.makeQuestionList

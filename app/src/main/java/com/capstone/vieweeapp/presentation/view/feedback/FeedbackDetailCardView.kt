@@ -6,6 +6,7 @@ import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,8 +40,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
@@ -53,12 +57,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.capstone.viewee.data.source.network.clova_api.dto.Confidence
 import com.capstone.vieweeapp.R
 import com.capstone.vieweeapp.data.source.local.entity.Emotion
 import com.capstone.vieweeapp.data.source.local.entity.TextSentiment
 import com.capstone.vieweeapp.data.source.local.entity.toFloatList
 import com.capstone.vieweeapp.data.source.local.entity.toPairList
+import com.capstone.vieweeapp.data.source.remote.clova.dto.Confidence
 import com.capstone.vieweeapp.presentation.view.feedback.graph.CircularGraphColor
 import com.capstone.vieweeapp.presentation.view.feedback.graph.ExplainTriangleGraph
 import com.capstone.vieweeapp.presentation.view.feedback.graph.TriangleGraphView
@@ -86,11 +90,19 @@ fun FeedbackDetailCardView(
     var isExpanded by remember { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
 
-    val extraPadding by animateDpAsState(
-        if (isExpanded) 48.dp else 0.dp,
-        animationSpec = tween(),
-        label = "extraPadding"
-    )
+//    val extraPadding by animateDpAsState(
+//        if (isExpanded) 48.dp else 0.dp,
+//        animationSpec = tween(),
+//        label = "extraPadding"
+//    )
+
+    // 긍정 부정 하이라이팅 팝업?을 위한 변수들
+    var tapPosition by remember { mutableStateOf(Offset.Zero) }
+    val density = LocalDensity.current
+    val (xDp, yDp) = with(density) {
+        (tapPosition.x.toDp()) to (tapPosition.y.toDp())
+    }
+    var tapDialogVisible by remember { mutableStateOf(false) }
 
     CompositionLocalProvider(LocalRippleTheme provides CustomRippleEffect.NoRippleTheme) {
         Box(
@@ -101,13 +113,15 @@ fun FeedbackDetailCardView(
                 .clickableWithoutRipple(
                     interactionSource = interactionSource,
                     onClick = { isExpanded = !isExpanded }
-                ),
+                )
+                .animateContentSize(tween()),
         ) {
             Column(
                 modifier = Modifier
                     .align(Alignment.Center)
                     .padding(start = 10.dp, end = 10.dp, top = 20.dp, bottom = 11.dp)
-                    .padding(bottom = extraPadding.coerceAtLeast(0.dp)),
+//                    .padding(bottom = extraPadding.coerceAtLeast(0.dp))
+                ,
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {

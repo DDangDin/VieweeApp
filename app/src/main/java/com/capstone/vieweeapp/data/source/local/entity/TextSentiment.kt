@@ -1,11 +1,12 @@
 package com.capstone.vieweeapp.data.source.local.entity
 
-import android.util.Log
-import com.capstone.viewee.data.source.network.clova_api.dto.Confidence
+import com.capstone.vieweeapp.data.source.remote.clova.dto.Confidence
+import com.capstone.vieweeapp.data.source.remote.clova.dto.Sentence
 
 data class TextSentiment(
     val sentiment: String,
     val confidence: Confidence,
+    val sentences: List<Sentence>? = null
 )
 
 fun TextSentiment.toFeedbackReq(): String {

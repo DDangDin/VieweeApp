@@ -1,4 +1,4 @@
-package com.capstone.viewee.data.source.network.clova_api.dto
+package com.capstone.vieweeapp.data.source.remote.clova.dto
 
 data class Highlight(
     val length: Int,

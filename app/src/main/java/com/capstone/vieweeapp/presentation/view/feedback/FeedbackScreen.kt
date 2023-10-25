@@ -47,13 +47,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.capstone.viewee.data.source.network.clova_api.dto.Confidence
 import com.capstone.vieweeapp.R
 import com.capstone.vieweeapp.data.source.local.entity.Emotion
 import com.capstone.vieweeapp.data.source.local.entity.Feedbacks
 import com.capstone.vieweeapp.data.source.local.entity.TextSentiment
 import com.capstone.vieweeapp.data.source.local.entity.average
 import com.capstone.vieweeapp.data.source.local.entity.toPercentages
+import com.capstone.vieweeapp.data.source.remote.clova.dto.Confidence
 import com.capstone.vieweeapp.presentation.state.FeedbackState
 import com.capstone.vieweeapp.presentation.state.QuestionsState
 import com.capstone.vieweeapp.presentation.view.feedback.graph.CircularGraphView

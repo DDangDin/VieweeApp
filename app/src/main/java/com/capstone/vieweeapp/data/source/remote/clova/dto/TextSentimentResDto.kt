@@ -1,4 +1,4 @@
-package com.capstone.viewee.data.source.network.clova_api.dto
+package com.capstone.vieweeapp.data.source.remote.clova.dto
 
 import com.capstone.vieweeapp.data.source.local.entity.TextSentiment
 
@@ -10,6 +10,7 @@ data class TextSentimentResDto(
 fun TextSentimentResDto.toTextSentiment(): TextSentiment {
     return TextSentiment(
         sentiment = document.sentiment,
-        confidence = document.confidence
+        confidence = document.confidence,
+        sentences = sentences
     )
 }
