@@ -40,6 +40,8 @@
 
     <string name="input_profile_resume_text_placeholder">자기소개서: 600자 제한</string>
 
+    <string name="input_profile_empty_error">유효하지 않은</string>
+
     <string name="input_profile_finish_btn">면접 시작</string>
     <string name="input_profile_finish_text">정보 입력 완료!</string>
 

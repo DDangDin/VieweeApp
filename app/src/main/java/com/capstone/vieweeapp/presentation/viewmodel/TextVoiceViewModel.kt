@@ -8,7 +8,6 @@ import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
-import android.speech.tts.Voice
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -26,7 +25,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class TextVoiceSpeechViewModel @Inject constructor(
+class TextVoiceViewModel @Inject constructor(
     private val application: Application,
 ) : ViewModel(), TextToSpeech.OnInitListener, RecognitionListener {
 

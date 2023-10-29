@@ -23,7 +23,7 @@ import com.capstone.vieweeapp.presentation.view.interview.real_interview.prepare
 import com.capstone.vieweeapp.presentation.view.interview.select_resume.SelectResumeScreen
 import com.capstone.vieweeapp.presentation.viewmodel.InputProfileViewModel
 import com.capstone.vieweeapp.presentation.viewmodel.InterviewViewModel
-import com.capstone.vieweeapp.presentation.viewmodel.TextVoiceSpeechViewModel
+import com.capstone.vieweeapp.presentation.viewmodel.TextVoiceViewModel
 import com.capstone.vieweeapp.utils.opencv.FacialExpressionRecognition
 
 @Composable
@@ -135,7 +135,7 @@ fun InterviewNavigationGraph(
 
             composable(route = Screen.RealInterview.route) {
 
-                val textVoiceSpeechViewModel: TextVoiceSpeechViewModel = hiltViewModel()
+                val textVoiceSpeechViewModel: TextVoiceViewModel = hiltViewModel()
                 val interviewTime = interviewViewModel.interviewTime.collectAsState()
                 val interviewerTurnState = interviewViewModel.interviewerTurnState.collectAsState()
                 val questionsState = interviewViewModel.questionsState.collectAsState()

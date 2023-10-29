@@ -397,7 +397,6 @@ private fun FacialCircleShape(
 
     var shapeSize by remember { mutableStateOf(0.dp) }
     LaunchedEffect(key1 = Unit) {
-        delay(300)
         shapeSize = when (rankText) {
             rank1 -> 80.dp
             rank2 -> 60.dp

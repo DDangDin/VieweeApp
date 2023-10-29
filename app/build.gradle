@@ -186,5 +186,6 @@ dependencies {
     testImplementation("androidx.room:room-testing:$room_version")
     kapt 'org.xerial:sqlite-jdbc:3.36.0'
 
-
+    // ExoPlayer
+    implementation 'com.google.android.exoplayer:exoplayer:2.19.1'
 }

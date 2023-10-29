@@ -38,8 +38,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontStyle
@@ -71,6 +73,7 @@ import com.capstone.vieweeapp.utils.CalculateDate
 import com.capstone.vieweeapp.utils.Constants
 import com.capstone.vieweeapp.utils.CustomRippleEffect
 import com.capstone.vieweeapp.utils.CustomRippleEffect.clickableWithoutRipple
+import com.capstone.vieweeapp.utils.CustomTouchEvent.addFocusCleaner
 
 @Preview(showBackground = true)
 @Composable
@@ -114,8 +117,9 @@ fun FeedbackScreenForHome(
 ) {
 
     val scrollState = rememberScrollState()
+    val focusManager = LocalFocusManager.current
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize().addFocusCleaner(focusManager)) {
         if (
             (interviewResult.answers.size + 1) == interviewResult.feedbacks.feedbacks.size ||
             (interviewResult.answers.size / 2 + 1) == interviewResult.feedbacks.feedbacks.size
@@ -276,7 +280,8 @@ fun FeedbackScreenForHome(
                         )
                     },
                     reInterviewState = eachReInterviewState,
-                    isReInterview = isReInterview
+                    isReInterview = isReInterview,
+                    focusManager = focusManager
                 )
 
                 Spacer(Modifier.height(100.dp))
@@ -379,7 +384,8 @@ private fun FeedbackDetailCardGridForHome(
     interviewResult: InterviewResult,
     onSubmit: (Int, Int, String) -> Unit,
     reInterviewState: ReInterviewState,
-    isReInterview: Boolean
+    isReInterview: Boolean,
+    focusManager: FocusManager
 ) {
 
     CustomTitleText(
@@ -431,7 +437,10 @@ private fun FeedbackDetailCardGridForHome(
                             )
                             .clickableWithoutRipple(
                                 interactionSource = MutableInteractionSource(),
-                                onClick = { reInterviewClick = true }
+                                onClick = {
+                                    reInterviewClick = true
+                                    focusManager.clearFocus()
+                                }
                             ),
                         reInterviewClick = reInterviewClick,
                         reInterviewState = reInterviewState,
@@ -443,7 +452,8 @@ private fun FeedbackDetailCardGridForHome(
                                 inputAnswer
                             )
                         },
-                        onClose = { reInterviewClick = false }
+                        onClose = { reInterviewClick = false },
+                        focusManager = focusManager
                     )
                 }
             }

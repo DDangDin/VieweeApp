@@ -1,25 +1,17 @@
 package com.capstone.vieweeapp.presentation.view.interview.real_interview
 
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Mic
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -29,12 +21,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.capstone.vieweeapp.R
 import com.capstone.vieweeapp.presentation.event.RealInterviewUiEvent
 import com.capstone.vieweeapp.presentation.state.InterviewTurnState
 import com.capstone.vieweeapp.presentation.state.QuestionsState
-import com.capstone.vieweeapp.presentation.viewmodel.TextVoiceSpeechViewModel
+import com.capstone.vieweeapp.presentation.viewmodel.TextVoiceViewModel
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
 import com.capstone.vieweeapp.utils.Constants
 import com.capstone.vieweeapp.utils.opencv.makeGrayMat
@@ -53,7 +47,7 @@ fun RealInterviewScreen(
     onStop: () -> Unit,
     uiEvent: (RealInterviewUiEvent) -> Unit,
     recognizeImage: (Mat, Mat, Int) -> Unit,
-    textVoiceSpeechViewModel: TextVoiceSpeechViewModel,
+    textVoiceSpeechViewModel: TextVoiceViewModel,
     onNavigateFeedbackScreen: () -> Unit,
     startFeedback: () -> Unit
 ) {
@@ -111,9 +105,13 @@ fun RealInterviewScreen(
             isFinish = questionsState.questions.size == interviewerTurnState.turnIndex,
         )
         LaunchedEffect(interviewerTurnState) {
-            Log.d("InterviewScreenTopBar", "questionSize: ${questionsState.questions.size}" +
-                    "turnIndex: ${interviewerTurnState.turnIndex - 1}")
+            Log.d(
+                "InterviewScreenTopBar", "questionSize: ${questionsState.questions.size}" +
+                        "turnIndex: ${interviewerTurnState.turnIndex - 1}"
+            )
         }
+
+        // InterviewerSection
         Image(
             modifier = Modifier
                 .weight(1f)
@@ -126,32 +124,8 @@ fun RealInterviewScreen(
             contentDescription = "interviewer"
         )
         Spacer(modifier = Modifier.height(10.dp))
-//        Box(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .weight(1f)
-//                .border(
-//                    color = if (!isInterviewerTurn) VieweeColorMain else Color.Transparent,
-//                    width = 4.5.dp,
-//                    shape = RoundedCornerShape(15.dp)
-//                ),
-//        ) {
-//            Icon(
-//                modifier = Modifier
-//                    .align(Alignment.Center)
-//                    .clip(CircleShape)
-//                    .size(50.dp)
-//                    .background(VieweeColorMain)
-//                    .clickable {
-//                        if (interviewerTurnState.turnIndex < questionsState.questions.size) {
-//                            textVoiceSpeechViewModel.startListening(Constants.VOICE_TO_TEXT_LANGUAGE)
-//                        }
-//                    },
-//                imageVector = Icons.Filled.Mic,
-//                contentDescription = "말하기",
-//                tint = Color.White
-//            )
-//        }
+
+        // ApplicantSection
         RealInterviewApplicantView(
             modifier = Modifier
                 .weight(1f)
@@ -213,12 +187,18 @@ fun RealInterviewScreen(
 //@Preview(showBackground = true)
 //@Composable
 //fun RealInterviewScreenPreview() {
+//
 //    RealInterviewScreen(
-//        interviewerTurn = false,
-//        time = "00:00",
-//        onStop = { /*TODO*/ },
+//        modifier = Modifier.fillMaxSize(),
+//        interviewerTurnState = InterviewTurnState(),
+//        questionsState = QuestionsState(),
+//        interviewFinishState = false,
+//        time = "53",
+//        onStop = {},
 //        uiEvent = {},
-//        recognizeImage = { a, b, c -> }
+//        recognizeImage = { a, b, c -> },
+//        onNavigateFeedbackScreen = {},
+//        startFeedback = {}
 //    )
 //}
 

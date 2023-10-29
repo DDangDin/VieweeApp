@@ -6,8 +6,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -39,6 +41,7 @@ import com.capstone.vieweeapp.R
 import com.capstone.vieweeapp.ui.theme.VieweeColorBackgroundGrey
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
 import com.capstone.vieweeapp.ui.theme.VieweeColorOrange
+import com.capstone.vieweeapp.ui.theme.VieweeEmptyError
 
 // 다음 버튼
 @Composable
@@ -103,21 +106,38 @@ fun DataInputCard(
         verticalArrangement = Arrangement.spacedBy(7.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = dataName,
+        Row(
             modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Left,
-            fontStyle = FontStyle.Normal,
-            fontSize = 13.sp,
-            color = Color.Gray,
-        )
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Text(
+                text = dataName,
+                fontStyle = FontStyle.Normal,
+                fontSize = 13.sp,
+                color = Color.Gray,
+            )
+            if (isEmptyValue) {
+                Text(
+                    modifier = Modifier
+                        .align(Alignment.Bottom)
+                        .fillMaxWidth()
+                        .padding(start = 10.dp),
+                    text = "${stringResource(id = R.string.input_profile_empty_error)} $dataName !",
+                    fontStyle = FontStyle.Normal,
+                    fontSize = 8.sp,
+                    textAlign = TextAlign.End,
+                    color = VieweeEmptyError,
+                )
+            }
+        }
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(10.dp))
                 .border(
                     1.dp,
-                    if (isEmptyValue) Color.Red else Color.Transparent,
+                    if (isEmptyValue) VieweeEmptyError else Color.Transparent,
                     RoundedCornerShape(10.dp)
                 ),
             value = dataValue,
@@ -166,4 +186,16 @@ fun NextButtonPreview() {
     NextButton {
 
     }
+}
+
+@Preview
+@Composable
+fun DataInputCardPreview() {
+    DataInputCard(
+        dataName = "이름",
+        dataValue = "이름2",
+        onTextChanged = {},
+        keyboardType = KeyboardType.Text,
+        isEmptyValue = true,
+    )
 }

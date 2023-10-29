@@ -23,3 +23,4 @@ val VieweeColorHomeSearchBarLeadingIcon = Color(0xFF4A5155)
 val VieweeColorBackgroundGrey = Color(0xFFF5F5F5)
 val VieweeColorOrange = Color(0xFFFF8057)
 
+val VieweeEmptyError = Color(0xFFFB5959)
