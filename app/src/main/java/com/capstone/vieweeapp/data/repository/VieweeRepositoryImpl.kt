@@ -1,6 +1,7 @@
 package com.capstone.vieweeapp.data.repository
 
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.VieweeApi
+import com.capstone.vieweeapp.data.source.remote.viewee.dto.VieweeMockApi
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.request.CreateQuestionReqDto
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.request.FeedbackReqDto
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.request.ReFeedbackReqDto
@@ -14,10 +15,26 @@ import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
 import retrofit2.await
 import java.io.IOException
+import java.security.PrivateKey
 
 class VieweeRepositoryImpl(
-    private val api: VieweeApi
+    private val api: VieweeApi,
+    private val mockApi: VieweeMockApi
 ): VieweeRepository {
+
+    override suspend fun getQuestionsFromMock(createQuestionReqDto: CreateQuestionReqDto): Flow<Resource<CreateQuestionResDto>> = flow {
+        emit(Resource.Loading())
+
+        try {
+            val call = mockApi.getQuestions(createQuestionReqDto)
+            val response = call.await()
+            emit(Resource.Success(response))
+        } catch (e: IOException) {
+            emit(Resource.Error(message = "error: ${e.localizedMessage ?: "internet connection error"}"))
+        } catch (e: HttpException) {
+            emit(Resource.Error(message = "error: ${e.localizedMessage ?: "unexpected error"}"))
+        }
+    }
 
     override suspend fun getQuestions(createQuestionReqDto: CreateQuestionReqDto): Flow<Resource<CreateQuestionResDto>> = flow {
         emit(Resource.Loading())

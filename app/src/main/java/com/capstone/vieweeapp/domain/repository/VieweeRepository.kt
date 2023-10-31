@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.Flow
 interface VieweeRepository {
 
     suspend fun getQuestions(createQuestionReqDto: CreateQuestionReqDto): Flow<Resource<CreateQuestionResDto>>
+    suspend fun getQuestionsFromMock(createQuestionReqDto: CreateQuestionReqDto): Flow<Resource<CreateQuestionResDto>>
 
     suspend fun getAnswerFeedback(feedbackReqDto: FeedbackReqDto): Flow<Resource<FeedbackResDto>>
 

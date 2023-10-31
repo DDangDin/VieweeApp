@@ -143,7 +143,7 @@ fun BottomNavigationGraph(
                     onNavigateHome = { navController.popBackStack() },
                     uiEvent = feedbackForHomeViewModel::uiEvent,
                     eachReInterviewState = reInterviewState.value,
-                    isReInterview = interviewResultState.value.interviewResults[interviewResultIndex].etc == "2",
+                    isReInterview = interviewResultState.value.interviewResults[interviewResultIndex].etc == "1",
                     onStartReInterview = { id ->
 //                        feedbackForHomeViewModel.requestServerForReInterview()
                         onStartReInterview(id)
@@ -151,7 +151,8 @@ fun BottomNavigationGraph(
                             delay(1500) // 바로 창이 사라 지는 부자연스러움을 위한 딜레이
                             navController.popBackStack()
                         }
-                    }
+                    },
+                    interviewResultIndex = interviewResultIndex
                 )
             } else {
                 Box(modifier = Modifier.fillMaxSize()) {

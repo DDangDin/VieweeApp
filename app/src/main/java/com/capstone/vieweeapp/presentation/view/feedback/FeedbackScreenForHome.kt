@@ -44,6 +44,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -101,7 +103,8 @@ fun FeedbackScreenForHomePreview() {
         onNavigateHome = { /*TODO*/ },
         uiEvent = { /*TODO*/ },
         eachReInterviewState = ReInterviewState(),
-        onStartReInterview = {}
+        onStartReInterview = {},
+        interviewResultIndex = 0
     )
 }
 
@@ -113,13 +116,16 @@ fun FeedbackScreenForHome(
     uiEvent: (FeedbackForHomeUiEvent) -> Unit,
     eachReInterviewState: ReInterviewState,
     isReInterview: Boolean = false,
-    onStartReInterview: (Int) -> Unit
+    onStartReInterview: (Int) -> Unit,
+    interviewResultIndex: Int
 ) {
 
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
 
-    Box(modifier = Modifier.fillMaxSize().addFocusCleaner(focusManager)) {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .addFocusCleaner(focusManager)) {
         if (
             (interviewResult.answers.size + 1) == interviewResult.feedbacks.feedbacks.size ||
             (interviewResult.answers.size / 2 + 1) == interviewResult.feedbacks.feedbacks.size
@@ -170,23 +176,34 @@ fun FeedbackScreenForHome(
                     }
                     // FeedbackTopBar
                     Text(
-                        text = AnnotatedString(
-                            buildString {
-                                append("${CalculateDate.dateFormatForFeedback(interviewResult.date)} 일자의")
-                                append("\n")
-                                append("${
-                                    interviewResult.etc.ifEmpty { "1" }
-                                }번째 면접 결과")
-                            }
-                        ),
+                        text = buildAnnotatedString {
+                            append(
+                                AnnotatedString(
+                                    text = "No.${interviewResultIndex+1} 피드백 ",
+                                    spanStyle = SpanStyle(
+                                        fontSize = 15.sp,
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = VieweeColorText.copy(alpha = 0.2f),
+                                    ),
+                                )
+                            )
+                            append("\n")
+                            append("${CalculateDate.dateFormatForFeedback(interviewResult.date)} 일자의")
+                            append("\n")
+                            append("면접 결과")
+                        },
                         modifier = modifier
                             .fillMaxWidth()
-                            .padding(top = 20.dp, bottom = 30.dp),
+                            .padding(top = 20.dp),
                         textAlign = TextAlign.Center,
                         fontStyle = FontStyle.Normal,
                         fontSize = 25.sp,
                         fontWeight = FontWeight.W800,
                         color = VieweeColorMain
+                    )
+                    ReFeedbackBadge(
+                        modifier = Modifier.padding(vertical = 20.dp),
+                        count = interviewResult.etc.ifEmpty { "0" }
                     )
 
                     Divider(color = Color.Gray, thickness = 1.dp)
@@ -221,7 +238,10 @@ fun FeedbackScreenForHome(
                                 verticalArrangement = Arrangement.Center,
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                ExplainTriangleGraph(Modifier.align(Alignment.End).padding(end = 28.dp))
+                                ExplainTriangleGraph(
+                                    Modifier
+                                        .align(Alignment.End)
+                                        .padding(end = 28.dp))
                                 TriangleGraphView(intervieweeValues = interviewResult.textSentiments.average(isReInterview))
                             }
                         }

@@ -21,6 +21,7 @@ import com.capstone.vieweeapp.data.source.local.db.UserDao
 import com.capstone.vieweeapp.data.source.local.db.UserDatabase
 import com.capstone.vieweeapp.data.source.remote.clova.dto.ClovaSentimentApi
 import com.capstone.vieweeapp.data.source.remote.viewee.dto.VieweeApi
+import com.capstone.vieweeapp.data.source.remote.viewee.dto.VieweeMockApi
 import com.capstone.vieweeapp.domain.repository.ClovaSentimentRepository
 import com.capstone.vieweeapp.domain.repository.InterviewResultRepository
 import com.capstone.vieweeapp.domain.repository.ResumeRepository
@@ -157,7 +158,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideVieweeApi(): VieweeApi {
+    fun provideVieweeMockApi(): VieweeMockApi {
         fun String?.isJsonObject(): Boolean {
             return this?.startsWith("{") == true && this.endsWith("}")
         }
@@ -197,13 +198,61 @@ object AppModule {
             .client(client.build())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+            .create(VieweeMockApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideVieweeApi(): VieweeApi {
+        fun String?.isJsonObject(): Boolean {
+            return this?.startsWith("{") == true && this.endsWith("}")
+        }
+
+        fun String?.isJsonArray(): Boolean {
+            return this?.startsWith("[") == true && this.endsWith("]")
+        }
+
+        val client = OkHttpClient
+            .Builder()
+            .readTimeout(60, TimeUnit.SECONDS)
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+
+        val loggingInterceptor = HttpLoggingInterceptor { message ->
+            when {
+                message.isJsonObject() ->
+                    Log.d("Retrofit_Log", JSONObject(message).toString(4))
+
+                message.isJsonArray() ->
+                    Log.d("Retrofit_Log", JSONObject(message).toString(4))
+
+                else -> {
+                    try {
+                        Log.d("Retrofit_Log", JSONObject(message).toString(4))
+                    } catch (e: Exception) {
+                        Log.d("Retrofit_Log", message)
+                    }
+                }
+            }
+        }
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+        client.addInterceptor(loggingInterceptor)
+
+        return Retrofit.Builder()
+            .baseUrl(Constants.VIEWEE_REAL_SERVER_BASE_URL)
+            .client(client.build())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
             .create(VieweeApi::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideVieweeRepository(api: VieweeApi): VieweeRepository {
-        return VieweeRepositoryImpl(api)
+    fun provideVieweeRepository(
+        api: VieweeApi,
+        mockApi: VieweeMockApi
+    ): VieweeRepository {
+        return VieweeRepositoryImpl(api, mockApi)
     }
 
     @Provides

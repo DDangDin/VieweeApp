@@ -2,6 +2,7 @@ package com.capstone.vieweeapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,6 +18,7 @@ import com.capstone.vieweeapp.utils.Constants
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.opencv.android.OpenCVLoader
+import java.io.File
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

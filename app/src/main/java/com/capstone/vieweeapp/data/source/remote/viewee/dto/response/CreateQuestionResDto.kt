@@ -14,7 +14,7 @@ fun CreateQuestionResDto.makeQuestionList(): List<String> {
         questions
             .split("\n")
             .filter { it.isNotEmpty() }
-            .map { it.substring(3) }
+            .map { it.split(":")[1] }
     } else {
         listOf(questions)
     }

@@ -99,7 +99,7 @@ fun ProfileScreen(
                 ),
                 onClick = { saveName() }
             ) {
-                Text(text = "임시 이름 변경")
+                Text(text = "사용자 이름 변경")
             }
         }
     }

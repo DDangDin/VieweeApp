@@ -40,6 +40,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -66,6 +67,7 @@ import com.capstone.vieweeapp.data.source.remote.clova.dto.Confidence
 import com.capstone.vieweeapp.presentation.view.feedback.graph.CircularGraphColor
 import com.capstone.vieweeapp.presentation.view.feedback.graph.ExplainTriangleGraph
 import com.capstone.vieweeapp.presentation.view.feedback.graph.TriangleGraphView
+import com.capstone.vieweeapp.presentation.view.feedback.graph.TwoTriangles
 import com.capstone.vieweeapp.presentation.view.interview.input_profile.CustomTitleText
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
 import com.capstone.vieweeapp.ui.theme.VieweeColorText
@@ -296,19 +298,23 @@ fun FeedbackDetailCardView(
                                     .align(Alignment.End)
                                     .padding(end = 28.dp)
                             )
-                            TriangleGraphView(
-                                modifier = Modifier,
-                                intervieweeValues = textSentiment.toFloatList()
-                            )
+//                            TriangleGraphView(
+//                                modifier = Modifier,
+//                                intervieweeValues = textSentiment.toFloatList()
+//                            )
 
-//                            if (isReInterview) {
+                            if (isReInterview) {
+                                TwoTriangles(
+                                    values1 = textSentiment.toFloatList(),
+                                    values2 = textSentiment2.toFloatList()
+                                )
 //                                Row(
 //                                    modifier = Modifier.fillMaxWidth(),
 //                                    verticalAlignment = Alignment.CenterVertically,
 //                                    horizontalArrangement = Arrangement.spacedBy(25.dp, alignment = Alignment.CenterHorizontally)
 //                                ) {
 //                                    TriangleGraphView(
-//                                        modifier = Modifier.size(60.dp),
+//                                        modifier = Modifier.size(60.dp).scale(0.8f),
 //                                        intervieweeValues = textSentiment.toFloatList()
 //                                    )
 //                                    Icon(
@@ -319,16 +325,16 @@ fun FeedbackDetailCardView(
 //                                        tint = Color(0x1A92979F),
 //                                    )
 //                                    TriangleGraphView(
-//                                        modifier = Modifier.size(60.dp),
+//                                        modifier = Modifier.size(60.dp).scale(0.8f),
 //                                        intervieweeValues = textSentiment2.toFloatList()
 //                                    )
 //                                }
-//                            } else {
-//                                TriangleGraphView(
-//                                    modifier = Modifier,
-//                                    intervieweeValues = textSentiment.toFloatList()
-//                                )
-//                            }
+                            } else {
+                                TriangleGraphView(
+                                    modifier = Modifier,
+                                    intervieweeValues = textSentiment.toFloatList()
+                                )
+                            }
                         }
                     }
                 }
@@ -439,7 +445,7 @@ private fun FacialCircleShape(
                     .clip(CircleShape)
                     .animateContentSize(
                         animationSpec = tween(
-                            durationMillis = 1500,
+                            durationMillis = 3000,
                             easing = LinearOutSlowInEasing
                         )
                     )

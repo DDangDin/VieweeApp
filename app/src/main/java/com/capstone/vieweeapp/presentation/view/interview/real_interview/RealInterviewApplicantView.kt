@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -131,10 +132,13 @@ fun RealInterviewApplicantView(
     ) {
         // CameraView, STT(VoiceToText)
         AndroidView(
-            { previewView },
+            factory = { previewView.also {
+//                it.clipToOutline = true
+                it.clipChildren = false
+            } },
             modifier = Modifier
                 .matchParentSize()
-                .align(Alignment.Center)
+                .align(Alignment.Center),
 //                .verticalScroll(scrollState)
         )
 

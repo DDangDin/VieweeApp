@@ -1,5 +1,6 @@
 package com.capstone.vieweeapp.presentation.view.interview.real_interview
 
+import android.os.Environment
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -31,6 +32,7 @@ import com.capstone.vieweeapp.presentation.state.QuestionsState
 import com.capstone.vieweeapp.presentation.viewmodel.TextVoiceViewModel
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
 import com.capstone.vieweeapp.utils.Constants
+import com.capstone.vieweeapp.utils.MediaSourcePath
 import com.capstone.vieweeapp.utils.opencv.makeGrayMat
 import com.capstone.vieweeapp.utils.opencv.makeRgbaMat
 import kotlinx.coroutines.delay
@@ -112,18 +114,35 @@ fun RealInterviewScreen(
         }
 
         // InterviewerSection
-        Image(
-            modifier = Modifier
-                .weight(1f)
-                .border(
-                    color = if (isInterviewerTurn) VieweeColorMain else Color.Transparent,
-                    width = 4.5.dp,
-                    shape = RoundedCornerShape(15.dp)
-                ),
-            painter = painterResource(id = R.drawable.img_interviewer),
-            contentDescription = "interviewer"
-        )
-        Spacer(modifier = Modifier.height(10.dp))
+//        Image(
+//            modifier = Modifier
+//                .weight(1f)
+//                .border(
+//                    color = if (isInterviewerTurn) VieweeColorMain else Color.Transparent,
+//                    width = 4.5.dp,
+//                    shape = RoundedCornerShape(15.dp)
+//                ),
+//            painter = painterResource(id = R.drawable.img_interviewer),
+//            contentDescription = "interviewer"
+//        )
+//
+//        RealInterviewerView(
+//            modifier = Modifier
+//                .weight(1f)
+//                .border(
+//                    color = if (isInterviewerTurn) VieweeColorMain else Color.Transparent,
+//                    width = 4.5.dp,
+//                    shape = RoundedCornerShape(15.dp)
+//                )
+//                .clip(RoundedCornerShape(15.dp)),
+//            filePath = if (isInterviewerTurn) {
+//                "${Environment.getExternalStorageDirectory().absolutePath}${MediaSourcePath.InterviewerTalking}"
+//            } else {
+//                "${Environment.getExternalStorageDirectory().absolutePath}${MediaSourcePath.InterviewerListening}"
+//            }
+//        )
+
+//        Spacer(modifier = Modifier.height(10.dp))
 
         // ApplicantSection
         RealInterviewApplicantView(

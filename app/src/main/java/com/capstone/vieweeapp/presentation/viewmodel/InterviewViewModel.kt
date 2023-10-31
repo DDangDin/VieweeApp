@@ -313,9 +313,11 @@ class InterviewViewModel @Inject constructor(
 //                                "\n"
                     }
 
-                    Log.d("reInterview_Log", "" +
-                            "isReInterview: ${uiEvent.isReInterview}\n" +
-                            "previousData: ${uiEvent.previousInterviewResultId}")
+                    Log.d(
+                        "reInterview_Log", "" +
+                                "isReInterview: ${uiEvent.isReInterview}\n" +
+                                "previousData: ${uiEvent.previousInterviewResultId}"
+                    )
 
                     if (uiEvent.isReInterview) {
                         vieweeRepository.getReInterviewFeedback(
@@ -412,7 +414,7 @@ class InterviewViewModel @Inject constructor(
                     emotions = editEmotions,
                     answers = editAnswers,
                     feedbackTotal = feedbackState.value.feedbacks.feedbacks.last(),
-                    etc = "2"
+                    etc = "1"
                 )
 
             interviewResultRepository.updateForReInterviewResult(reInterviewResult)

@@ -18,18 +18,18 @@ import com.capstone.vieweeapp.ui.theme.noToSansKr
 @Preview(showBackground = false)
 @Composable
 fun ReFeedbackBadgePreview() {
-    ReFeedbackBadge(count = 1)
+    ReFeedbackBadge(count = "1")
 }
 
 @Composable
 fun ReFeedbackBadge(
     modifier: Modifier = Modifier,
-    count: Int,
+    count: String,
 ) {
 
     Box(
         modifier = modifier
-            .background(VieweeColorMain, RoundedCornerShape(20.dp))
+            .background(Color(0x66D9D9D9), RoundedCornerShape(20.dp))
             .padding(10.dp)
     ) {
         Text(
@@ -37,7 +37,7 @@ fun ReFeedbackBadge(
             fontFamily = noToSansKr,
             fontWeight = FontWeight.Medium,
             fontSize = 12.sp,
-            color = Color.White
+            color = VieweeColorMain.copy(alpha = 0.8f)
         )
     }
 }
