@@ -76,7 +76,7 @@ fun BottomNavigationGraph(
         ) {
             val interviewResultsState = homeViewModel.interviewResultsState.collectAsState()
 
-            LaunchedEffect(Unit) {
+            LaunchedEffect(interviewResultsState) {
                 homeViewModel.getInterviewResults()
                 if (CustomSharedPreference(context).isContain(Constants.USER_SHARED_PREFERENCE)) {
                     val username =
@@ -175,14 +175,6 @@ fun BottomNavigationGraph(
             InterviewScreen(
                 startSelectResume = startSelectResume
             )
-        }
-
-        composable(
-            route = Screen.Calendar.route,
-            enterTransition = { EnterTransition.None },
-            exitTransition = { ExitTransition.None }
-            ) {
-            CalendarScreen()
         }
 
         composable(

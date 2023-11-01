@@ -45,6 +45,8 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
+// 채민지 학생 코드 (내가 애니메이션 추가)
+
 object TriangleGraphColor {
     val BlueGraph = Color(0xFF1F77B4)
     val UsOrange = Color(0xFFFF7F0E)
@@ -54,39 +56,73 @@ object TriangleGraphColor {
 data class TriangleGraphData(
     val values: List<Float>,
     val lineColor: Color = UsOrange,
-    val fillColor: Color = UsOrange.copy(alpha = 0.1f),
+    val fillColor: Color = UsOrange.copy(alpha = 0.25f),
     val maxValue: Float = 100f
 )
 
-//@Preview(showBackground = true)
+
+//@Preview
 //@Composable
-//fun OneTriangle() {
-//    val orangeData =
-//        TriangleGraphData(listOf(40f, 60f, 100f), UsOrange, UsOrange.copy(alpha = 0.1f))
-//    val blueData = TriangleGraphData(listOf(50f, 50f, 50f), BlueGraph, BlueGraph.copy(alpha = 0.1f))
-//    val maxValue = remember { Animatable(2000f) }
+//fun OneTrianglePreview() {
+//    OneTriangle(
+//        modifier = Modifier.fillMaxSize(),
+//        values = listOf(10f, 30f, 100f)
+//    )
+//}
 //
-//    LaunchedEffect(maxValue) {
-//        maxValue.animateTo(
-//            targetValue = 100f,
-//            animationSpec = tween(durationMillis = 3000, easing = LinearOutSlowInEasing)
-//        )
-//    }
+//@Preview
+//@Composable
+//fun TwoTriangles2Preview() {
+//    TwoTriangles(
+//        modifier = Modifier.fillMaxWidth(),
+//        values1 = listOf(10f, 10f, 80f),
+//        values2 = listOf(30f, 10f, 100f)
+//    )
+//}
 //
-//    Box(
-//        modifier = Modifier
-//            .size(200.dp)
-//            .padding(horizontal = 10.dp),
-//        contentAlignment = Alignment.Center
-//    ) {
-//        TriangleGraphDemo(orangeData, modifier = Modifier, showText = false)
-//        TriangleGraphDemo(blueData, modifier = Modifier.align(Alignment.Center))
-//    }
+//@Preview
+//@Composable
+//fun TriangleGraphViewPreview() {
+//    TriangleGraphView(
+//        modifier = Modifier.scale(0.8f),
+//        intervieweeValues = listOf(40f, 100f, 10f)
+//    )
 //}
 
+@Composable
+fun OneTriangle(
+    modifier: Modifier = Modifier,
+    values: List<Float>
+) {
+    val orangeData = TriangleGraphData(values, UsOrange, UsOrange.copy(alpha = 0.1f))
+    val blueData = TriangleGraphData(listOf(50f, 50f, 50f), BlueGraph, BlueGraph.copy(alpha = 0.1f))
+    val maxValue = remember { Animatable(2000f) }
 
+    LaunchedEffect(maxValue) {
+        maxValue.animateTo(
+            targetValue = 100f,
+            animationSpec = tween(durationMillis = 3000, easing = LinearOutSlowInEasing)
+        )
+    }
 
-//@Preview(showBackground = true)
+    Box(
+        modifier = Modifier,
+        contentAlignment = Alignment.Center
+    ) {
+        TriangleGraphDemo(
+            modifier = Modifier.align(Alignment.Center),
+            data = blueData,
+            maxValue = blueData.maxValue,
+        )
+        TriangleGraphDemo(
+            modifier = Modifier,
+            data = orangeData,
+            showText = false,
+            maxValue = maxValue.value,
+        )
+    }
+}
+
 @Composable
 fun TwoTriangles(
     modifier: Modifier = Modifier,
@@ -106,70 +142,76 @@ fun TwoTriangles(
         )
     }
 
-    Column(
-        modifier = modifier.fillMaxWidth().height(200.dp),//.scale(.8f)
-        verticalArrangement = Arrangement.SpaceEvenly
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(200.dp),//.scale(.8f)
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
     ) {
 
         Box(
-            modifier = Modifier
-                .size(200.dp)
-                .padding(horizontal = 10.dp),
+            modifier = Modifier.weight(1f),
             contentAlignment = Alignment.Center
         ) {
             TriangleGraphDemo(
-                data = orangeData1,
-                modifier = Modifier,
-                showText = false,
-                maxValue = maxValue.value
+                modifier = Modifier.align(Alignment.Center),
+                data = blueData,
+                maxValue = blueData.maxValue,
             )
             TriangleGraphDemo(
-                data = blueData,
-                modifier = Modifier.align(Alignment.Center),
-                maxValue = blueData.maxValue
-            )
-
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_replay_trianglegraph_triangle),
-                contentDescription = null,
-                tint = Color.Gray,
-                modifier = Modifier
-                    .size(30.dp)
-                    .offset(x = 80.dp)
+                modifier = Modifier,
+                data = orangeData1,
+                showText = false,
+                maxValue = maxValue.value,
             )
         }
 
-        Box(
+        Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_replay_trianglegraph_triangle),
+            contentDescription = "arrowRight",
+            tint = Color.Gray,
             modifier = Modifier
-                .size(200.dp)
-                .padding(horizontal = 10.dp)
-                .offset(x = 150.dp, y = -115.dp),
+                .size(30.dp)
+        )
+
+        Box(
+            modifier = Modifier.weight(1f),
             contentAlignment = Alignment.Center
         ) {
             TriangleGraphDemo(
-                data = orangeData2,
-                modifier = Modifier,
-                showText = false,
-                maxValue = maxValue.value
+                modifier = Modifier.align(Alignment.Center),
+                data = blueData,
+                maxValue = blueData.maxValue,
             )
             TriangleGraphDemo(
-                data = blueData,
-                modifier = Modifier.align(Alignment.Center),
-                maxValue = blueData.maxValue
+                modifier = Modifier,
+                data = orangeData2,
+                showText = false,
+                maxValue = maxValue.value,
             )
         }
     }
 }
 
 
-
 @Composable
 fun TriangleGraphDemo(
-    data: TriangleGraphData,
     modifier: Modifier = Modifier,
+    data: TriangleGraphData,
     showText: Boolean = true,
-    maxValue: Float
+    maxValue: Float,
 ) {
+
+    val context = LocalContext.current
+    val myTypeface by remember {
+        mutableStateOf(
+            Typeface.createFromAsset(
+                context.assets,
+                "noto_sans_kr_semi_bold.ttf"
+            )
+        )
+    }
 
     Box(
         modifier = modifier,
@@ -188,7 +230,7 @@ fun TriangleGraphDemo(
 
             data.values.forEachIndexed { index, value ->
                 val value2 = if (value < 10f) {
-                    value + 10f
+                    value + 20f
                 } else {
                     value
                 }
@@ -196,6 +238,8 @@ fun TriangleGraphDemo(
                 val angle = (index * step).toFloat() - (PI / 2).toFloat()
                 val x = centerX + radius * cos(angle) * (value2 / maxValue)
                 val y = centerY + radius * sin(angle) * (value2 / maxValue)
+                val x2 = centerX + radius * cos(angle) * (value2 / 100f)
+                val y2 = centerY + radius * sin(angle) * (value2 / 100f)
 
                 if (index == 0) {
                     path.moveTo(x, y)
@@ -223,15 +267,16 @@ fun TriangleGraphDemo(
                     drawIntoCanvas { canvas ->
                         val paint = android.graphics.Paint().apply {
                             color = Color.DarkGray.toArgb()
-                            textSize = 9.sp.toPx()
+                            textSize = 11.sp.toPx()
                             textAlign = android.graphics.Paint.Align.CENTER
                             isAntiAlias = true
+                            typeface = myTypeface
                         }
 
                         canvas.nativeCanvas.drawText(
                             label,
-                            x + textOffsetX,
-                            y + textOffsetY,
+                            x2 + textOffsetX,
+                            y2 + textOffsetY,
                             paint
                         )
                     }
@@ -242,7 +287,7 @@ fun TriangleGraphDemo(
             val lineAngle1 = -PI / 6 + PI / 3
             val lineAngle2 = PI / 2 + PI / 3
             val lineAngle3 = 7 * PI / 6 + PI / 3
-            val lineColor = Color.LightGray
+            val lineColor = Color.Gray.copy(alpha = 0.5f) // 원 및 원 내부 직선 색
             val lineWidth = 2f
 
             drawLine(
@@ -276,7 +321,7 @@ fun TriangleGraphDemo(
 
             repeat(circleCount) { i ->
                 drawCircle(
-                    color = Color.Gray.copy(alpha = 0.5f),
+                    color = lineColor,
                     center = Offset(centerX, centerY),
                     radius = maxCircleRadius - (i * circleSpacing),
                     style = Stroke(width = circleWidth)

@@ -30,6 +30,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -65,6 +66,7 @@ import com.capstone.vieweeapp.presentation.event.FeedbackForHomeUiEvent
 import com.capstone.vieweeapp.presentation.state.ReInterviewState
 import com.capstone.vieweeapp.presentation.view.feedback.graph.CircularGraphView
 import com.capstone.vieweeapp.presentation.view.feedback.graph.ExplainTriangleGraph
+import com.capstone.vieweeapp.presentation.view.feedback.graph.OneTriangle
 import com.capstone.vieweeapp.presentation.view.feedback.graph.TriangleGraphView
 import com.capstone.vieweeapp.presentation.view.interview.input_profile.CustomTitleText
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
@@ -89,14 +91,14 @@ fun FeedbackScreenForHomePreview() {
             feedbacks = Feedbacks(listOf("1", "2", "총평피드백")),
             feedbackTotal = "총평피드백 부분",
             emotions = listOf(
-                Emotion(1,1,1,1,1,1,1),
-                Emotion(1,1,1,1,1,1,1),
-                Emotion(1,1,1,1,1,1,1),
+                Emotion(1, 1, 1, 1, 1, 1, 1),
+                Emotion(1, 1, 1, 1, 1, 1, 1),
+                Emotion(1, 1, 1, 1, 1, 1, 1),
             ),
             textSentiments = listOf(
-                TextSentiment("", Confidence(0.0,0.0,0.0)),
-                TextSentiment("", Confidence(0.0,0.0,0.0)),
-                TextSentiment("", Confidence(0.0,0.0,0.0)),
+                TextSentiment("", Confidence(0.0, 0.0, 0.0)),
+                TextSentiment("", Confidence(0.0, 0.0, 0.0)),
+                TextSentiment("", Confidence(0.0, 0.0, 0.0)),
             ),
             etc = ""
         ),
@@ -123,137 +125,130 @@ fun FeedbackScreenForHome(
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .addFocusCleaner(focusManager)) {
-        if (
-            (interviewResult.answers.size + 1) == interviewResult.feedbacks.feedbacks.size ||
-            (interviewResult.answers.size / 2 + 1) == interviewResult.feedbacks.feedbacks.size
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .addFocusCleaner(focusManager)
+    ) {
+
+        Column(
+            modifier = modifier
+                .background(Color.White)
+                .fillMaxSize()
+                .verticalScroll(scrollState),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Column(
-                modifier = modifier
-                    .background(Color.White)
-                    .fillMaxSize()
-                    .verticalScroll(scrollState),
+                modifier = modifier.background(VieweeColorMain.copy(.2f)),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(
-                    modifier = modifier.background(VieweeColorMain.copy(.2f)),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Box(modifier = Modifier.fillMaxWidth()) {
-                        IconButton(
-                            modifier = Modifier.align(Alignment.CenterStart),
-                            onClick = { onNavigateHome() }
-                        ) {
-                            Icon(
-                                imageVector = ImageVector.vectorResource(R.drawable.ic_btn_home),
-                                contentDescription = "home",
-                                tint = VieweeColorMain.copy(alpha = 0.8f),
-                                modifier = Modifier
-                                    .alpha(.7f)
-                                    .padding(vertical = 20.dp, horizontal = 20.dp)
-                            )
-                        }
-                        IconButton(
-                            modifier = Modifier.align(Alignment.CenterEnd),
-                            onClick = {
-                                uiEvent(FeedbackForHomeUiEvent.DeleteFeedback(interviewResult))
-                                onNavigateHome()
-                            }
-                        ) {
-                            Icon(
-                                imageVector = ImageVector.vectorResource(R.drawable.ic_btn_trash),
-                                contentDescription = "delete",
-                                tint = VieweeColorMain.copy(alpha = 0.8f),
-                                modifier = Modifier
-                                    .alpha(.7f)
-                                    .padding(vertical = 20.dp, horizontal = 20.dp),
-                            )
-                        }
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    IconButton(
+                        modifier = Modifier.align(Alignment.CenterStart),
+                        onClick = { onNavigateHome() }
+                    ) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_btn_home),
+                            contentDescription = "home",
+                            tint = VieweeColorMain.copy(alpha = 0.8f),
+                            modifier = Modifier
+                                .alpha(.7f)
+                                .padding(vertical = 20.dp, horizontal = 20.dp)
+                        )
                     }
-                    // FeedbackTopBar
-                    Text(
-                        text = buildAnnotatedString {
-                            append(
-                                AnnotatedString(
-                                    text = "No.${interviewResultIndex+1} 피드백 ",
-                                    spanStyle = SpanStyle(
-                                        fontSize = 15.sp,
-                                        fontWeight = FontWeight.SemiBold,
-                                        color = VieweeColorText.copy(alpha = 0.2f),
-                                    ),
-                                )
-                            )
-                            append("\n")
-                            append("${CalculateDate.dateFormatForFeedback(interviewResult.date)} 일자의")
-                            append("\n")
-                            append("면접 결과")
-                        },
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .padding(top = 20.dp),
-                        textAlign = TextAlign.Center,
-                        fontStyle = FontStyle.Normal,
-                        fontSize = 25.sp,
-                        fontWeight = FontWeight.W800,
-                        color = VieweeColorMain
-                    )
-                    ReFeedbackBadge(
-                        modifier = Modifier.padding(vertical = 20.dp),
-                        count = interviewResult.etc.ifEmpty { "0" }
-                    )
-
-                    Divider(color = Color.Gray, thickness = 1.dp)
+                    IconButton(
+                        modifier = Modifier.align(Alignment.CenterEnd),
+                        onClick = {
+                            uiEvent(FeedbackForHomeUiEvent.DeleteFeedback(interviewResult))
+                            onNavigateHome()
+                        }
+                    ) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_btn_trash),
+                            contentDescription = "delete",
+                            tint = VieweeColorMain.copy(alpha = 0.8f),
+                            modifier = Modifier
+                                .alpha(.7f)
+                                .padding(vertical = 20.dp, horizontal = 20.dp),
+                        )
+                    }
                 }
+                // FeedbackTopBar
+                Text(
+                    text = buildAnnotatedString {
+                        append(
+                            AnnotatedString(
+                                text = "No.${interviewResultIndex + 1} 피드백 ",
+                                spanStyle = SpanStyle(
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = VieweeColorText.copy(alpha = 0.2f),
+                                ),
+                            )
+                        )
+                        append("\n")
+                        append("${CalculateDate.dateFormatForFeedback(interviewResult.date)} 일자의")
+                        append("\n")
+                        append("면접 결과")
+                    },
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.dp),
+                    textAlign = TextAlign.Center,
+                    fontStyle = FontStyle.Normal,
+                    fontSize = 25.sp,
+                    fontWeight = FontWeight.W800,
+                    color = VieweeColorMain
+                )
+                ReFeedbackBadge(
+                    modifier = Modifier.padding(vertical = 20.dp),
+                    count = interviewResult.etc.ifEmpty { "0" }
+                )
 
+                Divider(color = Color.Gray, thickness = 1.dp)
+            }
+
+            Column(
+                modifier = Modifier
+                    .background(Color.White),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
                 Column(
                     modifier = Modifier
-                        .background(Color.White),
+                        .fillMaxWidth()
+                        .padding(vertical = 30.dp, horizontal = 30.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                    verticalArrangement = Arrangement.spacedBy(
+                        30.dp,
+                        alignment = Alignment.CenterVertically
+                    )
                 ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 30.dp, horizontal = 30.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(
-                            30.dp,
-                            alignment = Alignment.CenterVertically
-                        )
-                    ) {
-                        CustomTitleText(
-                            text = "${
-                                CalculateDate.dateFormatForFeedback(
-                                    interviewResult.date
+                    CustomTitleText(
+                        text = "${
+                            CalculateDate.dateFormatForFeedback(
+                                interviewResult.date
+                            )
+                        } 면접의 감정 분석"
+                    )
+                    if (interviewResult.textSentiments.isNotEmpty()) {
+                        Column(
+                            modifier = Modifier,
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            ExplainTriangleGraph(
+                                Modifier
+                                    .align(Alignment.End)
+                                    .padding(end = 28.dp)
+                            )
+                            TriangleGraphView(
+                                intervieweeValues = interviewResult.textSentiments.average(
+                                    isReInterview
                                 )
-                            } 면접의 감정 분석"
-                        )
-                        if (interviewResult.textSentiments.isNotEmpty()) {
-                            Column(
-                                modifier = Modifier,
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                ExplainTriangleGraph(
-                                    Modifier
-                                        .align(Alignment.End)
-                                        .padding(end = 28.dp))
-                                TriangleGraphView(intervieweeValues = interviewResult.textSentiments.average(isReInterview))
-                            }
-                        }
-                        CustomTitleText(
-                            text = "${
-                                CalculateDate.dateFormatForFeedback(
-                                    interviewResult.date
-                                )
-                            } 면접의 표정 분석"
-                        )
-                        if (interviewResult.emotions.isNotEmpty()) {
-                            CircularGraphView(emotions = interviewResult.emotions.toPercentages().map { it.second })
+                            )
                         }
                     }
                     CustomTitleText(
@@ -261,138 +256,149 @@ fun FeedbackScreenForHome(
                             CalculateDate.dateFormatForFeedback(
                                 interviewResult.date
                             )
-                        } 면접의 총평 피드백"
+                        } 면접의 표정 분석"
                     )
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 27.dp, horizontal = 20.dp)
-                            .background(
-                                VieweeColorMain.copy(alpha = 0.08f),
-                                RoundedCornerShape(10.dp)
-                            )
-                    ) {
-                        Text(
-                            text = interviewResult.feedbackTotal,
-                            modifier = Modifier
-                                .padding(30.dp)
-                                .align(Alignment.Center),
-                            fontFamily = noToSansKr,
-                            fontWeight = FontWeight.Normal,
-                            fontSize = 12.sp,
-                            textAlign = TextAlign.Start,
-                            color = Color.Gray
-                        )
+                    if (interviewResult.emotions.isNotEmpty()) {
+                        CircularGraphView(
+                            emotions = interviewResult.emotions.toPercentages().map { it.second })
                     }
                 }
-                FeedbackDetailCardGridForHome(
-                    modifier = Modifier
-                        .padding(bottom = 30.dp)
-                        .background(Color.White),
-                    interviewResult = interviewResult,
-                    onSubmit = { index, maxIndex, inputAnswer ->
-                        uiEvent(
-                            FeedbackForHomeUiEvent.EachReInterview(
-                                index,
-                                maxIndex,
-                                inputAnswer
-                            )
+                CustomTitleText(
+                    text = "${
+                        CalculateDate.dateFormatForFeedback(
+                            interviewResult.date
                         )
-                    },
-                    reInterviewState = eachReInterviewState,
-                    isReInterview = isReInterview,
-                    focusManager = focusManager
+                    } 면접의 총평 피드백"
                 )
-
-                Spacer(Modifier.height(100.dp))
-            }
-            CompositionLocalProvider(LocalRippleTheme provides CustomRippleEffect.NoRippleTheme) {
-                OutlinedButton(
+                Box(
                     modifier = Modifier
-                        .align(Alignment.BottomCenter)
                         .fillMaxWidth()
-                        .height(80.dp)
-                        .padding(start = 24.dp, end = 24.dp, bottom = 24.dp)
-                        .shadow(
-                            elevation = 5.dp,
-                            spotColor = VieweeColorShadow,
-                            ambientColor = VieweeColorShadow,
-                            shape = RoundedCornerShape(10.dp)
-                        ),
-                    border = BorderStroke(0.dp, Color.Transparent),
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = VieweeColorMain.copy(alpha = 1f),
-                        contentColor = Color.Transparent,
-                    ),
-                    onClick = { onStartReInterview(interviewResult.id ?: 0) }
+                        .padding(vertical = 27.dp, horizontal = 20.dp)
+                        .background(
+                            VieweeColorMain.copy(alpha = 0.08f),
+                            RoundedCornerShape(10.dp)
+                        )
                 ) {
-                    Row(
-                        modifier = Modifier,
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(
-                            12.dp,
-                            alignment = Alignment.CenterHorizontally
-                        )
-                    ) {
-                        Text(
-                            text = "재면접 보러가기",
-                            fontFamily = noToSansKr,
-                            fontWeight = FontWeight.Medium,
-                            fontSize = 14.sp,
-                            color = Color.White
-                        )
-                        Icon(
-                            modifier = Modifier.size(25.dp),
-                            imageVector = Icons.Default.ArrowRightAlt,
-                            contentDescription = "download",
-                            tint = Color.White
-                        )
-                    }
+                    Text(
+                        text = interviewResult.feedbackTotal,
+                        modifier = Modifier
+                            .padding(30.dp)
+                            .align(Alignment.Center),
+                        fontFamily = noToSansKr,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 12.sp,
+                        textAlign = TextAlign.Start,
+                        color = Color.Gray
+                    )
                 }
             }
-        } else {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(
-                    10.dp,
-                    alignment = Alignment.CenterVertically
+            FeedbackDetailCardGridForHome(
+                modifier = Modifier
+                    .padding(bottom = 30.dp)
+                    .background(Color.White),
+                interviewResult = interviewResult,
+                onSubmit = { index, maxIndex, inputAnswer ->
+                    uiEvent(
+                        FeedbackForHomeUiEvent.EachReInterview(
+                            index,
+                            maxIndex,
+                            inputAnswer
+                        )
+                    )
+                },
+                reInterviewState = eachReInterviewState,
+                isReInterview = isReInterview,
+                focusManager = focusManager
+            )
+
+            Spacer(Modifier.height(100.dp))
+        }
+        CompositionLocalProvider(LocalRippleTheme provides CustomRippleEffect.NoRippleTheme) {
+            OutlinedButton(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .height(80.dp)
+                    .padding(start = 24.dp, end = 24.dp, bottom = 24.dp)
+                    .shadow(
+                        elevation = 5.dp,
+                        spotColor = VieweeColorShadow,
+                        ambientColor = VieweeColorShadow,
+                        shape = RoundedCornerShape(10.dp)
+                    ),
+                border = BorderStroke(0.dp, Color.Transparent),
+                shape = RoundedCornerShape(10.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = VieweeColorMain.copy(alpha = 1f),
+                    contentColor = Color.Transparent,
                 ),
+                onClick = { onStartReInterview(interviewResult.id ?: 0) }
             ) {
-                Text(
-                    text = Constants.COMMON_ERROR_MESSAGE,
-                    fontFamily = noToSansKr,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 15.sp,
-                    color = Color.Red.copy(alpha = 0.5f),
-                    textAlign = TextAlign.Center
-                )
-                Text(
-                    modifier = Modifier.clickable {
-                        uiEvent(FeedbackForHomeUiEvent.DeleteFeedback(interviewResult))
-                        onNavigateHome()
-                    },
-                    text = "면접 결과 지우기",
-                    fontFamily = noToSansKr,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 15.sp,
-                    color = VieweeColorText,
-                    textAlign = TextAlign.Center,
-                    textDecoration = TextDecoration.Underline
-                )
-                Text(
-                    modifier = Modifier.clickable { onNavigateHome() },
-                    text = "돌아가기",
-                    fontFamily = noToSansKr,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 15.sp,
-                    color = VieweeColorText,
-                    textAlign = TextAlign.Center,
-                    textDecoration = TextDecoration.Underline
-                )
+                Row(
+                    modifier = Modifier,
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(
+                        12.dp,
+                        alignment = Alignment.CenterHorizontally
+                    )
+                ) {
+                    Text(
+                        text = "재면접 보러가기",
+                        fontFamily = noToSansKr,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 14.sp,
+                        color = Color.White
+                    )
+                    Icon(
+                        modifier = Modifier.size(25.dp),
+                        imageVector = Icons.Default.ArrowRightAlt,
+                        contentDescription = "download",
+                        tint = Color.White
+                    )
+                }
             }
         }
+        // Error Screen
+//        Column(
+//            modifier = Modifier.fillMaxSize(),
+//            horizontalAlignment = Alignment.CenterHorizontally,
+//            verticalArrangement = Arrangement.spacedBy(
+//                10.dp,
+//                alignment = Alignment.CenterVertically
+//            ),
+//        ) {
+//            Text(
+//                text = Constants.COMMON_ERROR_MESSAGE,
+//                fontFamily = noToSansKr,
+//                fontWeight = FontWeight.SemiBold,
+//                fontSize = 15.sp,
+//                color = Color.Red.copy(alpha = 0.5f),
+//                textAlign = TextAlign.Center
+//            )
+//            Text(
+//                modifier = Modifier.clickable {
+//                    uiEvent(FeedbackForHomeUiEvent.DeleteFeedback(interviewResult))
+//                    onNavigateHome()
+//                },
+//                text = "면접 결과 지우기",
+//                fontFamily = noToSansKr,
+//                fontWeight = FontWeight.Medium,
+//                fontSize = 15.sp,
+//                color = VieweeColorText,
+//                textAlign = TextAlign.Center,
+//                textDecoration = TextDecoration.Underline
+//            )
+//            Text(
+//                modifier = Modifier.clickable { onNavigateHome() },
+//                text = "돌아가기",
+//                fontFamily = noToSansKr,
+//                fontWeight = FontWeight.Medium,
+//                fontSize = 15.sp,
+//                color = VieweeColorText,
+//                textAlign = TextAlign.Center,
+//                textDecoration = TextDecoration.Underline
+//            )
+//        }
     }
 
 }
@@ -422,6 +428,15 @@ private fun FeedbackDetailCardGridForHome(
         interviewResult.questions.forEachIndexed { index, question ->
 
             var reInterviewClick by remember { mutableStateOf(false) }
+            var feedbackContent by remember { mutableStateOf("") }
+
+            LaunchedEffect(index) {
+                feedbackContent = try {
+                    interviewResult.feedbacks.feedbacks[index]
+                } catch (e: IndexOutOfBoundsException) {
+                    "피드백 에러"
+                }
+            }
 
             Column(
                 modifier = Modifier.padding(bottom = 10.dp),
@@ -436,13 +451,13 @@ private fun FeedbackDetailCardGridForHome(
                     modifier = Modifier,
                     detailTitle = question,
                     detailContent = interviewResult.answers[index],
-                    feedbackContent = interviewResult.feedbacks.feedbacks[index],
+                    feedbackContent = feedbackContent,
                     isReInterview = isReInterview,
                     detailContent2 = if (isReInterview) interviewResult.answers[index + (interviewResult.answers.size / 2)] else "",
                     emotion = interviewResult.emotions[index],
                     textSentiment = interviewResult.textSentiments[index],
                     textSentiment2 = if (isReInterview) interviewResult.textSentiments[index + (interviewResult.textSentiments.size / 2)]
-                    else TextSentiment("", Confidence(0.0,0.0,0.0))
+                    else TextSentiment("", Confidence(0.0, 0.0, 0.0))
                 )
                 if (!isReInterview) {
                     EachReInterviewSection(

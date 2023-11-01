@@ -37,6 +37,5 @@ sealed class Screen(val route: String, val title: String, val icon: Int?) {
 val bottomNavItems = listOf(
     Screen.Home,
     Screen.Interview,
-    Screen.Calendar,
     Screen.Profile,
 )

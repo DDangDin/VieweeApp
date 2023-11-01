@@ -305,30 +305,10 @@ fun FeedbackDetailCardView(
 
                             if (isReInterview) {
                                 TwoTriangles(
+                                    modifier = Modifier.fillMaxWidth(),
                                     values1 = textSentiment.toFloatList(),
                                     values2 = textSentiment2.toFloatList()
                                 )
-//                                Row(
-//                                    modifier = Modifier.fillMaxWidth(),
-//                                    verticalAlignment = Alignment.CenterVertically,
-//                                    horizontalArrangement = Arrangement.spacedBy(25.dp, alignment = Alignment.CenterHorizontally)
-//                                ) {
-//                                    TriangleGraphView(
-//                                        modifier = Modifier.size(60.dp).scale(0.8f),
-//                                        intervieweeValues = textSentiment.toFloatList()
-//                                    )
-//                                    Icon(
-//                                        modifier = Modifier
-//                                            .size(33.dp, 16.dp),
-//                                        imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_right),
-//                                        contentDescription = "arrowRight",
-//                                        tint = Color(0x1A92979F),
-//                                    )
-//                                    TriangleGraphView(
-//                                        modifier = Modifier.size(60.dp).scale(0.8f),
-//                                        intervieweeValues = textSentiment2.toFloatList()
-//                                    )
-//                                }
                             } else {
                                 TriangleGraphView(
                                     modifier = Modifier,

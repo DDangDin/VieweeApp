@@ -35,10 +35,22 @@ android {
         buildConfigField "String", "CLOVA_SENTIMENT_API_KEY_ID", properties['x_ncp_apigw_api_key_id']
         buildConfigField "String", "CLOVA_SENTIMENT_API_KEY", properties['x_ncp_apigw_api_key']
 
-        ndk {
-            // Specifies the ABI configurations of your native
-            // libraries Gradle should build and package with your app.
-            abiFilters 'x86', 'x86_64', 'armeabi', 'armeabi-v7a', 'arm64-v8a'
+//        ndk {
+//            // Specifies the ABI configurations of your native
+//            // libraries Gradle should build and package with your app.
+//            abiFilters 'x86', 'x86_64', 'armeabi', 'armeabi-v7a', 'arm64-v8a'
+//        }
+
+        flavorDimensions "abi"
+
+        productFlavors {
+            arm {
+                flavorDimensions "abi"
+                ndk {
+                    abiFilters "armeabi-v7a", "arm64-v8a"
+                }
+            }
+            fat
         }
 
 //        externalNativeBuild{

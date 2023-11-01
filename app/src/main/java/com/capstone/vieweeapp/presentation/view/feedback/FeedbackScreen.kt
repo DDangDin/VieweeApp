@@ -25,6 +25,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -84,9 +85,9 @@ fun FeedbackScreenPreview() {
         onNavigateHome = {},
         saveInterviewResult = {},
         emotionList = listOf(
-            Emotion(1,1,1,1,1,1,1),
-            Emotion(1,1,1,1,1,1,1),
-            Emotion(1,1,1,1,1,1,1),
+            Emotion(1, 1, 1, 1, 1, 1, 1),
+            Emotion(1, 1, 1, 1, 1, 1, 1),
+            Emotion(1, 1, 1, 1, 1, 1, 1),
         ),
         textSentimentList = emptyList(),
     )
@@ -182,12 +183,25 @@ fun FeedbackScreen(
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            ExplainTriangleGraph(Modifier.align(Alignment.End).padding(end = 28.dp))
-                            TriangleGraphView(intervieweeValues = textSentimentList.average(isReInterview))
+                            ExplainTriangleGraph(
+                                Modifier
+                                    .align(Alignment.End)
+                                    .padding(end = 28.dp))
+                            TriangleGraphView(
+                                intervieweeValues = textSentimentList.average(
+                                    isReInterview
+                                )
+                            )
                         }
                         CustomTitleText(text = "$todayDate 면접의 표정 분석")
                         if (emotionList.isNotEmpty()) {
-                            CircularGraphView(emotions = emotionList.toPercentages().map { it.second })
+                            val emotionListTotal = if (isReInterview) {
+                                emotionList + (feedbackState.previousInterviewResult?.emotions ?: emptyList())
+                            } else {
+                                emotionList
+                            }
+                            CircularGraphView(
+                                emotions = emotionListTotal.toPercentages().map { it.second })
                         }
                     }
                     CustomTitleText(
@@ -324,44 +338,58 @@ private fun FeedbackDetailCardGrid(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        feedbackState.feedbacks.feedbacks.subList(0, feedbackState.feedbacks.feedbacks.size - 1)
-            .forEachIndexed { index, feedback ->
-                FeedbackDetailCardView(
-                    modifier = Modifier.padding(bottom = 10.dp),
-                    detailTitle = questionState.questions[index],
-                    detailContent = if (isReInterview) {
-                        feedbackState.previousInterviewResult?.answers?.get(index) ?: ""
-                    } else answerList[index],
-                    feedbackContent = feedback,
-                    isReInterview = isReInterview,
-                    detailContent2 = if (isReInterview) {
-                        answerList[index]
-                    } else "",
-                    emotion = emotionList[index],
-                    textSentiment = textSentimentList[index],
-                    textSentiment2 = feedbackState.previousInterviewResult?.textSentiments?.get(index)
-                        ?: TextSentiment("", Confidence(0.0,0.0,0.0))
-                )
-            }
-    }
-//    LazyColumn(
-//        contentPadding = PaddingValues(horizontal = 30.dp),
-//        verticalArrangement = Arrangement.spacedBy(10.dp),
-//        horizontalAlignment = Alignment.CenterHorizontally,
-//        // 그리드 각 항목들이 사이즈 비율이 안 맞았던 이유
-//        // -> LazyHorizontalGrid 높이에 고정 값 주려면 패딩 값이나 space 값 도 계산 해서 해줘야…
-//        modifier = modifier
-//            .height(500.dp)
-//            .disabledVerticalPointerInputScroll(),
-//        content = {
-//            items(answerFeedbackList.size) { index ->
+//        feedbackState.feedbacks.feedbacks.subList(0, feedbackState.feedbacks.feedbacks.size - 1)
+//            .forEachIndexed { index, feedback ->
 //                FeedbackDetailCardView(
-//                    modifier = Modifier,
-//                    DetailTitle = feedbackState.questionList[index],
-//                    DetailContent = answerFeedbackList[index]
+//                    modifier = Modifier.padding(bottom = 10.dp),
+//                    detailTitle = questionState.questions[index],
+//                    detailContent = if (isReInterview) {
+//                        feedbackState.previousInterviewResult?.answers?.get(index) ?: ""
+//                    } else answerList[index],
+//                    feedbackContent = feedback,
+//                    isReInterview = isReInterview,
+//                    detailContent2 = if (isReInterview) {
+//                        answerList[index]
+//                    } else "",
+//                    emotion = emotionList[index],
+//                    textSentiment = textSentimentList[index],
+//                    textSentiment2 = feedbackState.previousInterviewResult?.textSentiments?.get(index)
+//                        ?: TextSentiment("", Confidence(0.0,0.0,0.0))
 //                )
 //            }
-//        })
+        questionState.questions.forEachIndexed { index, question ->
+
+            var feedbackContent by remember { mutableStateOf("") }
+
+            LaunchedEffect(index) {
+                feedbackContent = try {
+                    feedbackState.feedbacks.feedbacks.subList(
+                        0,
+                        feedbackState.feedbacks.feedbacks.size - 1
+                    )[index]
+                } catch (e: IndexOutOfBoundsException) {
+                    "피드백 에러"
+                }
+            }
+
+            FeedbackDetailCardView(
+                modifier = Modifier.padding(bottom = 10.dp),
+                detailTitle = question,
+                detailContent = if (isReInterview) {
+                    feedbackState.previousInterviewResult?.answers?.get(index) ?: ""
+                } else answerList[index],
+                feedbackContent = feedbackContent,
+                isReInterview = isReInterview,
+                detailContent2 = if (isReInterview) {
+                    answerList[index]
+                } else "",
+                emotion = emotionList[index],
+                textSentiment = textSentimentList[index],
+                textSentiment2 = feedbackState.previousInterviewResult?.textSentiments?.get(index)
+                    ?: TextSentiment("", Confidence(0.0, 0.0, 0.0))
+            )
+        }
+    }
 }
 
 

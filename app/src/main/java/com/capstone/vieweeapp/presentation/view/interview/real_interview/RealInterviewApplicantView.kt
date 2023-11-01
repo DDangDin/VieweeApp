@@ -27,6 +27,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Mic
@@ -63,7 +64,9 @@ import kotlin.coroutines.suspendCoroutine
 fun RealInterviewApplicantView(
     modifier: Modifier = Modifier,
     onImageAnalysis: (ImageProxy) -> Unit,
-    startListening: () -> Unit
+    startListening: () -> Unit,
+    text: String,
+    onTextChanged: (String) -> Unit
 ) {
 
     // 이미지 캡처 시 필요한 변수,
@@ -153,6 +156,10 @@ fun RealInterviewApplicantView(
             contentDescription = "말하기",
             tint = Color.White
         )
+        TextField(
+            value = text,
+            onValueChange = { onTextChanged(it) }
+        )
     }
 }
 
@@ -199,6 +206,8 @@ private suspend fun Context.getCameraProvider(): ProcessCameraProvider =
 fun RealInterviewApplicantViewPreview() {
     RealInterviewApplicantView(
         onImageAnalysis = {},
-        startListening = {}
+        startListening = {},
+        text = "",
+        onTextChanged = {}
     )
 }
