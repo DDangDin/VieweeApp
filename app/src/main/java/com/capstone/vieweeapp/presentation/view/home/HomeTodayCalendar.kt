@@ -49,7 +49,7 @@ fun HomeTodayCalendar(
                 }
                 append(
                     AnnotatedString(
-                        text = stringResource(id = R.string.home_text_calendar_1),
+                        text = stringResource(id = R.string.home_calendar_1),
                         spanStyle = SpanStyle(
                             fontFamily = noToSansKr,
                             fontWeight = FontWeight.Normal,
@@ -64,7 +64,7 @@ fun HomeTodayCalendar(
         // 임시 (Calendar 데이터가 아직 없음)
         Text(
             modifier = Modifier.padding(top = 20.dp),
-            text = stringResource(id = R.string.home_text_calendar_2),
+            text = stringResource(id = R.string.home_calendar_2),
             fontFamily = noToSansKr,
             fontWeight = FontWeight.Normal,
             color = VieweeColorText.copy(0.7f)

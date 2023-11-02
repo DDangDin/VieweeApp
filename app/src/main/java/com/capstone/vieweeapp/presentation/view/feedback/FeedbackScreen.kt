@@ -67,6 +67,7 @@ import com.capstone.vieweeapp.ui.theme.noToSansKr
 import com.capstone.vieweeapp.utils.CalculateDate
 import com.capstone.vieweeapp.utils.Constants
 import com.capstone.vieweeapp.utils.CustomRippleEffect
+import timber.log.Timber
 
 @Preview
 @Composable
@@ -109,6 +110,7 @@ fun FeedbackScreen(
     val scrollState = rememberScrollState()
     var isSaveButtonClick by remember { mutableStateOf(false) }
     var todayDate by remember { mutableStateOf(CalculateDate.dateFormatForFeedback(CalculateDate.today())) }
+
 
     Box(modifier = Modifier.fillMaxSize()) {
         if (!feedbackState.loading) {
@@ -186,22 +188,40 @@ fun FeedbackScreen(
                             ExplainTriangleGraph(
                                 Modifier
                                     .align(Alignment.End)
-                                    .padding(end = 28.dp))
-                            TriangleGraphView(
-                                intervieweeValues = textSentimentList.average(
-                                    isReInterview
-                                )
+                                    .padding(end = 28.dp)
                             )
+                            if (textSentimentList.isNotEmpty()) {
+                                val textSentimentListTotal = if (isReInterview) {
+                                    textSentimentList + (feedbackState.previousInterviewResult?.textSentiments
+                                        ?: emptyList())
+                                } else {
+                                    textSentimentList
+                                }
+                                TriangleGraphView(
+                                    intervieweeValues = textSentimentListTotal.average(
+                                        isReInterview
+                                    )
+                                )
+                                LaunchedEffect(key1 = Unit) {
+                                    Timber.tag("feedback_screen_log").d("textSentimentListTotalSize: ${textSentimentListTotal.size}")
+                                }
+                            }
                         }
                         CustomTitleText(text = "$todayDate 면접의 표정 분석")
                         if (emotionList.isNotEmpty()) {
                             val emotionListTotal = if (isReInterview) {
-                                emotionList + (feedbackState.previousInterviewResult?.emotions ?: emptyList())
+                                emotionList + (feedbackState.previousInterviewResult?.emotions
+                                    ?: emptyList())
                             } else {
                                 emotionList
                             }
                             CircularGraphView(
-                                emotions = emotionListTotal.toPercentages().map { it.second })
+                                emotions = emotionListTotal.toPercentages().map { it.second }
+                            )
+
+                            LaunchedEffect(key1 = Unit) {
+                                Timber.tag("feedback_screen_log").d("emotionListTotalSize: ${emotionListTotal.size}")
+                            }
                         }
                     }
                     CustomTitleText(
@@ -384,9 +404,13 @@ private fun FeedbackDetailCardGrid(
                     answerList[index]
                 } else "",
                 emotion = emotionList[index],
-                textSentiment = textSentimentList[index],
-                textSentiment2 = feedbackState.previousInterviewResult?.textSentiments?.get(index)
-                    ?: TextSentiment("", Confidence(0.0, 0.0, 0.0))
+                textSentiment = if (isReInterview) {
+                    feedbackState.previousInterviewResult?.textSentiments?.get(index)
+                        ?: TextSentiment("", Confidence(0.0, 0.0, 0.0))
+                } else {
+                    textSentimentList[index]
+                },
+                textSentiment2 = textSentimentList[index]
             )
         }
     }

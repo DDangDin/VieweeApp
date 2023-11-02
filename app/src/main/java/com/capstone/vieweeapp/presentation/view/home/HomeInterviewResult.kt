@@ -47,7 +47,7 @@ fun HomeInterviewResultText(
                 }
                 append(
                     AnnotatedString(
-                        text = stringResource(id = R.string.home_text_interview_result_1),
+                        text = stringResource(id = R.string.home_interview_result_1),
                         spanStyle = SpanStyle(
                             fontFamily = noToSansKr,
                             fontWeight = FontWeight.Normal,

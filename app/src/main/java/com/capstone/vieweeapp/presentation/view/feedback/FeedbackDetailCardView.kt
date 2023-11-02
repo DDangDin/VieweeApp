@@ -1,12 +1,9 @@
 package com.capstone.vieweeapp.presentation.view.feedback
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,11 +12,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -35,16 +29,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -75,7 +66,6 @@ import com.capstone.vieweeapp.ui.theme.noToSansKr
 import com.capstone.vieweeapp.utils.CustomRippleEffect
 import com.capstone.vieweeapp.utils.CustomRippleEffect.clickableWithoutRipple
 import com.capstone.vieweeapp.utils.FacialEmotionNames
-import kotlinx.coroutines.delay
 
 @Composable
 fun FeedbackDetailCardView(
@@ -343,9 +333,9 @@ private fun FacialAnalyzedGraph(
         emotionTopThree.forEachIndexed { index, emo ->
 
             val rankText = when (index) {
-                0 -> stringResource(id = R.string.feedback_detailcard_facialgraph_1st_text)
-                1 -> stringResource(id = R.string.feedback_detailcard_facialgraph_2nd_text)
-                2 -> stringResource(id = R.string.feedback_detailcard_facialgraph_3rd_text)
+                0 -> stringResource(id = R.string.feedback_detailcard_facialgraph_1st)
+                1 -> stringResource(id = R.string.feedback_detailcard_facialgraph_2nd)
+                2 -> stringResource(id = R.string.feedback_detailcard_facialgraph_3rd)
                 else -> {
                     ""
                 }
@@ -370,9 +360,9 @@ private fun FacialCircleShape(
     // 1st -> 10.sp / 70.dp
     // 2nd -> 7.sp / 50.dp
     // 3rd -> 7.sp / 35.dp
-    val rank1 = stringResource(id = R.string.feedback_detailcard_facialgraph_1st_text)
-    val rank2 = stringResource(id = R.string.feedback_detailcard_facialgraph_2nd_text)
-    val rank3 = stringResource(id = R.string.feedback_detailcard_facialgraph_3rd_text)
+    val rank1 = stringResource(id = R.string.feedback_detailcard_facialgraph_1st)
+    val rank2 = stringResource(id = R.string.feedback_detailcard_facialgraph_2nd)
+    val rank3 = stringResource(id = R.string.feedback_detailcard_facialgraph_3rd)
 
     val fontSize = when (rankText) {
         rank1 -> 14.sp

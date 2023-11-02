@@ -26,7 +26,7 @@ fun HomeIntroductionText(
         text = buildAnnotatedString {
             append(
                 AnnotatedString(
-                    text = stringResource(id = R.string.home_text_title_1_1),
+                    text = stringResource(id = R.string.home_title_1_1),
                 )
             )
             if (username.isNotEmpty()) {
@@ -37,14 +37,14 @@ fun HomeIntroductionText(
                 )
                 append(
                     AnnotatedString(
-                        text = stringResource(id = R.string.home_text_title_1_2),
+                        text = stringResource(id = R.string.home_title_1_2),
                     )
                 )
             }
             append("\n")
             append(
                 AnnotatedString(
-                    text = stringResource(id = R.string.home_text_title_2),
+                    text = stringResource(id = R.string.home_title_2),
                     spanStyle = SpanStyle(
                         fontFamily = noToSansKr,
                         fontWeight = FontWeight.SemiBold,

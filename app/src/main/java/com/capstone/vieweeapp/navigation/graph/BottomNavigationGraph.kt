@@ -17,9 +17,11 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -29,12 +31,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.capstone.vieweeapp.data.source.local.entity.InterviewResult
 import com.capstone.vieweeapp.navigation.Screen
-import com.capstone.vieweeapp.presentation.view.calendar.CalendarScreen
 import com.capstone.vieweeapp.presentation.view.feedback.FeedbackScreenForHome
 import com.capstone.vieweeapp.presentation.view.home.HomeScreen
 import com.capstone.vieweeapp.presentation.view.interview.InterviewScreen
@@ -76,7 +74,7 @@ fun BottomNavigationGraph(
         ) {
             val interviewResultsState = homeViewModel.interviewResultsState.collectAsState()
 
-            LaunchedEffect(interviewResultsState) {
+            LaunchedEffect(Unit) {
                 homeViewModel.getInterviewResults()
                 if (CustomSharedPreference(context).isContain(Constants.USER_SHARED_PREFERENCE)) {
                     val username =
@@ -93,6 +91,16 @@ fun BottomNavigationGraph(
                 openInterviewResult = { index ->
                     navController.navigate("${Screen.FeedbackForHomeScreen.route}/$index")
                 },
+                onMenuClick = {
+                    navController.navigate(Screen.Profile.route) {
+                        navController.graph.startDestinationRoute?.let {
+                            // 첫번째 화면만 스택에 쌓이게 -> 백버튼 클릭 시 첫번째 화면으로 감
+                            popUpTo(it) { saveState = true }
+                        }
+                        launchSingleTop = true  // 화면 인스턴스 하나만 만들어지게
+                        restoreState = true     // 버튼을 재클릭했을 때 이전 상태가 남아있게
+                    }
+                }
             )
         }
 
@@ -185,19 +193,18 @@ fun BottomNavigationGraph(
 
             val profileViewModel: ProfileViewModel = viewModel()
 
-            var (text, onTextChanged) = remember { mutableStateOf("") }
+            var (name, onNameChanged) = remember { mutableStateOf(homeViewModel.username.value) }
 
             ProfileScreen(
-                text = text,
-                onTextChanged = onTextChanged,
-                saveName = {
-                    val username = text.trim()
+                name = name,
+                onNameChanged = onNameChanged,
+                saveName = { username ->
                     CustomSharedPreference(context).setUserPrefs(
                         Constants.USER_SHARED_PREFERENCE,
-                        username
+                        username.trim()
                     )
                     homeViewModel.updateUsername(username)
-                    text = ""
+                    name = ""
                 }
             )
         }

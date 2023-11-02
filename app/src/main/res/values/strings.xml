@@ -1,18 +1,18 @@
 <resources>
     <string name="app_name">VieweeApp</string>
 
-    <!-- 형식: (스크린/뷰)_(위젯)_(옵션) -->
+    <!-- 형식: (스크린/뷰)_(옵션) -->
 
     <!-- Home Screen -->
-    <string name="home_text_title_1_1">환영합니다.</string>
-    <string name="home_text_title_1_2">님!</string>
-    <string name="home_text_title_2">오늘도 좋은 기운 받아가세요!</string>
-    <string name="home_text_calendar_1">오늘 일정</string>
-    <string name="home_text_calendar_2">일정이 없습니다</string>
-    <string name="home_text_interview_result_1">면접 결과</string>
-    <string name="home_text_interview_result_2">면접 결과가 없습니다</string>
-    <string name="home_text_interview_result_card_1">일자\n면접 결과</string>
-    <string name="home_text_searchbar_placeholder">면접 날짜 입력</string>
+    <string name="home_title_1_1">환영합니다.</string>
+    <string name="home_title_1_2">님!</string>
+    <string name="home_title_2">오늘도 좋은 기운 받아가세요!</string>
+    <string name="home_calendar_1">오늘 일정</string>
+    <string name="home_calendar_2">일정이 없습니다</string>
+    <string name="home_interview_result_1">면접 결과</string>
+    <string name="home_interview_result_2">면접 결과가 없습니다</string>
+    <string name="home_interview_result_card_1">일자\n면접 결과</string>
+    <string name="home_searchbar_placeholder">면접 날짜 입력</string>
 
     <!-- Interview Screen -->
     <string name="interview_text_start">오늘의 면접 시작하기</string>
@@ -49,11 +49,12 @@
     <string name="interview_prepare_text_1">면접 화면은 어둡지 않은,\n밝은 환경에서 진행 해주세요</string>
     <string name="interview_prepare_text_2">면접 환경은 조용한 곳에서\n진행 해주세요!</string>
     <string name="interview_prepare_text_3">면접 화면에는 지원자만\n나오도록 해주세요!</string>
+    <string name="interview_question_finish">면접 종료</string>
 
     <!-- RealInterview Loading Screen -->
     <string name="interview_loading_error">다시 시도해주세요</string>
-    <string name="interview_loading_main_text">면접관 입장중</string>
-    <string name="interview_loading_exit_text">종료하기</string>
+    <string name="interview_loading_main">면접관 입장중</string>
+    <string name="interview_loading_exit">종료하기</string>
 
     <!-- Feedback Screen -->
 
@@ -63,9 +64,14 @@
 
     <!-- FeedbackDetailCardView Screen -->
     <string name="feedback_detail_card_facial_graph">해당 질문 시 표정 분석 TOP 3</string>
-    <string name="feedback_detailcard_facialgraph_1st_text">1st</string>
-    <string name="feedback_detailcard_facialgraph_2nd_text">2nd</string>
-    <string name="feedback_detailcard_facialgraph_3rd_text">3rd</string>
+    <string name="feedback_detailcard_facialgraph_1st">1st</string>
+    <string name="feedback_detailcard_facialgraph_2nd">2nd</string>
+    <string name="feedback_detailcard_facialgraph_3rd">3rd</string>
     <string name="feedback_detail_card_triangle_graph">해당 질문 시 텍스트 감정 분석 그래프</string>
     <string name="feedback_detail_card_triangle_graph2">텍스트 감정 분석 그래프 비교</string>
+
+
+    <!-- Profile screen -->
+    <string name="profile_title">마이페이지</string>
+    <string name="profile_title_resume">자기소개서 관리</string>
 </resources>

@@ -68,7 +68,7 @@ fun InterviewResultCardView(
                 text = buildAnnotatedString {
                     append(text = interviewResult.date)
                     append(" ")
-                    append(text = stringResource(id = R.string.home_text_interview_result_card_1))
+                    append(text = stringResource(id = R.string.home_interview_result_card_1))
                 },
                 fontSize = 14.sp,
                 fontFamily = noToSansKr,

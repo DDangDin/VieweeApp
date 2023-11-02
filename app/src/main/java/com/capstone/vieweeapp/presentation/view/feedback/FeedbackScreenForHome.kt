@@ -78,6 +78,7 @@ import com.capstone.vieweeapp.utils.Constants
 import com.capstone.vieweeapp.utils.CustomRippleEffect
 import com.capstone.vieweeapp.utils.CustomRippleEffect.clickableWithoutRipple
 import com.capstone.vieweeapp.utils.CustomTouchEvent.addFocusCleaner
+import timber.log.Timber
 
 @Preview(showBackground = true)
 @Composable
@@ -121,6 +122,11 @@ fun FeedbackScreenForHome(
     onStartReInterview: (Int) -> Unit,
     interviewResultIndex: Int
 ) {
+
+    LaunchedEffect(key1 = Unit) {
+        Timber.tag("feedback_screen_log").d("emotionListSize: ${interviewResult.emotions.size}\n" +
+                "textSentimentsSize: ${interviewResult.textSentiments.size}")
+    }
 
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current

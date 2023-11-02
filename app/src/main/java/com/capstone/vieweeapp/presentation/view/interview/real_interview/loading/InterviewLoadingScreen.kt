@@ -16,7 +16,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -100,7 +99,7 @@ fun InterviewLoadingScreen(
                 )
 
                 Text(
-                    text = stringResource(id = R.string.interview_loading_main_text),
+                    text = stringResource(id = R.string.interview_loading_main),
                     fontSize = 25.sp,
                     color = VieweeColorMain,
                     fontWeight = FontWeight.Bold
@@ -111,7 +110,7 @@ fun InterviewLoadingScreen(
                     modifier = Modifier.clickable {
                         backToMain()
                     },
-                    text = stringResource(id = R.string.interview_loading_exit_text),
+                    text = stringResource(id = R.string.interview_loading_exit),
                     fontSize = 12.sp,
                     color = VieweeColorOrange,
                     fontWeight = FontWeight.Light,

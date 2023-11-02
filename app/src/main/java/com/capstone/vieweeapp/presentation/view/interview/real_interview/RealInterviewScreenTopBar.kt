@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -76,7 +77,7 @@ fun RealInterviewScreenTopBar(
             )
         } else {
             Text(
-                text = Constants.INTERVIEW_QUESTION_FINISH,
+                text = stringResource(id = R.string.interview_question_finish),
                 fontFamily = noToSansKr,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.SemiBold,

@@ -21,7 +21,6 @@ object Constants {
     const val UNKNOWN_NAME = "Unknown"
     const val COMMON_ERROR_MESSAGE = "알 수 없는 오류"
     const val INTERVIEW_FINISH_MESSAGE = " 수고하셨습니다. 면접이 종료 되었습니다. 하단에 완료 버튼을 눌러, 결과를 기다려 주시기 바랍니다."
-    const val INTERVIEW_QUESTION_FINISH = "질문 종료"
 
     // Separator
     const val RESUME_SEPARATOR = ","
