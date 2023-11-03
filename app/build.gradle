@@ -10,12 +10,12 @@ properties.load(project.rootProject.file('local.properties').newDataInputStream(
 
 android {
     namespace 'com.capstone.vieweeapp'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.capstone.vieweeapp"
         minSdk 27
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -109,16 +109,16 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:5.0.1'
 
     // Material3
-    implementation("androidx.compose.material3:material3:1.0.1")
-    implementation("androidx.compose.material3:material3-window-size-class:1.0.1")
+    implementation("androidx.compose.material3:material3:1.1.2")
+    implementation("androidx.compose.material3:material3-window-size-class:1.1.2")
 
     implementation 'androidx.core:core-ktx:1.10.0'
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
     implementation 'androidx.activity:activity-compose:1.7.1'
     implementation "androidx.compose.ui:ui:$compose_ui_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_ui_version"
-    implementation 'androidx.compose.material:material:1.4.2'
-    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.compose.material:material:1.5.4'
+    implementation 'com.google.android.material:material:1.10.0'
     implementation platform('androidx.compose:compose-bom:2022.10.00')
     implementation 'androidx.compose.ui:ui-graphics'
     implementation platform('androidx.compose:compose-bom:2023.03.00')

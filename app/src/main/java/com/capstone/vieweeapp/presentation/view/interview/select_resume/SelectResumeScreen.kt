@@ -20,24 +20,31 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,6 +58,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.capstone.vieweeapp.R
@@ -61,7 +69,9 @@ import com.capstone.vieweeapp.ui.theme.VieweeColorMain
 import com.capstone.vieweeapp.ui.theme.VieweeColorOrange
 import com.capstone.vieweeapp.ui.theme.VieweeColorText
 import com.capstone.vieweeapp.utils.Constants
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SelectResumeScreen(
     modifier: Modifier = Modifier,
@@ -78,6 +88,42 @@ fun SelectResumeScreen(
     var selectedIndex by remember { mutableStateOf(-1) }
     var longClickSelectedIndex by remember { mutableStateOf(-1) }
     var isLongClick by remember { mutableStateOf(false) }
+
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
+    val scope = rememberCoroutineScope()
+    var showBottomSheet by remember { mutableStateOf(false) }
+
+    // BottomSheet
+    if (showBottomSheet) {
+        ModalBottomSheet(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            onDismissRequest = {
+                showBottomSheet = false
+            },
+            sheetState = sheetState,
+            containerColor = Color(0xFFF5F6F8),
+            contentColor = Color(0xFFF5F6F8)
+        ) {
+            SelectBottomSheet(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .padding(bottom = 30.dp),
+                backgroundColor = Color(0xFFF5F6F8),
+                prepareInterview = { engine ->
+                    scope.launch {
+                        sheetState.hide()
+                        prepareInterview()
+                    }
+                }
+            )
+        }
+    }
+
 
     Box(modifier.fillMaxSize()) {
         Column(
@@ -100,7 +146,7 @@ fun SelectResumeScreen(
                     onClick = onFinish
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.ArrowBack,
+                        imageVector = Icons.Default.ArrowBack,
                         contentDescription = "뒤로가기"
                     )
                 }
@@ -135,8 +181,12 @@ fun SelectResumeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 items(resumes.size) { idx ->
-                    val borderColor = if ((idx == selectedIndex)) VieweeColorOrange.copy(alpha = 0.8f) else VieweeColorMain.copy(0.8f)
-                    val backgroundColor = if (isLongClick && idx == longClickSelectedIndex) Color.Gray else Color.Transparent
+                    val borderColor =
+                        if ((idx == selectedIndex)) VieweeColorOrange.copy(alpha = 0.8f) else VieweeColorMain.copy(
+                            0.8f
+                        )
+                    val backgroundColor =
+                        if (isLongClick && idx == longClickSelectedIndex) Color.Gray else Color.Transparent
 
                     ResumeCardView(
                         modifier = Modifier
@@ -174,7 +224,7 @@ fun SelectResumeScreen(
                 onClick = {
                     Log.d("ShowNextButton_Click_Log", "selectedIndex: $selectedIndex")
                     selectResumeUiEvent(SelectResumeUiEvent.SelectedResume(resumes[selectedIndex]))
-                    prepareInterview()
+                    showBottomSheet = true
                 }
             )
         }
@@ -196,6 +246,7 @@ fun SelectResumeScreen(
             )
         }
     }
+
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -235,16 +286,17 @@ fun ResumeCardView(
                 modifier = Modifier.fillMaxWidth(),
                 changeExpanded = { expanded = !expanded },
                 expanded = expanded,
-                resumeName = "${resume.name} ${idx+1}",
+                resumeName = "${resume.name} ${idx + 1}",
             )
-            Text(
+            androidx.compose.material.Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = resume.resumeDetail.resumeText,
                 fontSize = 13.sp,
                 textAlign = TextAlign.Left,
                 color = VieweeColorText,
                 maxLines = if (expanded) 100 else 3,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                lineHeight = 19.sp
             )
         }
     }

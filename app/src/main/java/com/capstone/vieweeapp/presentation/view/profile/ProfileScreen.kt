@@ -1,6 +1,7 @@
 package com.capstone.vieweeapp.presentation.view.profile
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -45,6 +46,7 @@ import com.capstone.vieweeapp.R
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
 import com.capstone.vieweeapp.ui.theme.VieweeColorText
 import com.capstone.vieweeapp.ui.theme.noToSansKr
+import com.capstone.vieweeapp.utils.Constants
 import com.capstone.vieweeapp.utils.CustomTouchEvent.addFocusCleaner
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -61,38 +63,62 @@ fun ProfileScreen(
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    Column(
+    Box(
         modifier = modifier
             .fillMaxSize()
-            .padding(start = 30.dp, end = 30.dp, top = 45.dp, bottom = 10.dp)
-            .addFocusCleaner(focusManager),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(35.dp, alignment = Alignment.Top)
+            .padding(bottom = Constants.BOTTOM_NAV_BAR_PADDING.dp)
+            .addFocusCleaner(focusManager)
     ) {
+        Column(
+            modifier = modifier
+                .align(Alignment.Center)
+                .fillMaxSize()
+                .padding(start = 30.dp, end = 30.dp, top = 45.dp, bottom = 10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(35.dp, alignment = Alignment.Top)
+        ) {
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(id = R.string.profile_title),
+                fontFamily = noToSansKr,
+                fontSize = 35.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = VieweeColorMain,
+                textAlign = TextAlign.Start,
+                style = TextStyle(
+                    platformStyle = PlatformTextStyle(
+                        includeFontPadding = false
+                    )
+                )
+            )
+            ProfileSection(
+                modifier = Modifier.padding(top = 40.dp),
+                name = name,
+                onNameChanged = { onNameChanged(it) },
+                info = "개발자‧신입‧4년제 졸업",
+                saveName = { saveName(it) },
+                keyboardController = keyboardController,
+                focusManager = focusManager
+            )
+            Divider(
+                modifier = Modifier.fillMaxWidth(),
+                thickness = 1.dp,
+                color = VieweeColorText.copy(0.3f)
+            )
+            ResumeSection(
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
         Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = stringResource(id = R.string.profile_title),
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 10.dp),
+            text = "${stringResource(id = R.string.profile_title_version)} : ${stringResource(id = R.string.app_version)}",
             fontFamily = noToSansKr,
-            fontSize = 35.sp,
-            fontWeight = FontWeight.Normal,
-            color = VieweeColorText,
-            textAlign = TextAlign.Start
-        )
-        ProfileSection(
-            modifier = Modifier.padding(top = 40.dp),
-            name = name,
-            onNameChanged = { onNameChanged(it) },
-            info = "개발자‧신입‧4년제 졸업",
-            saveName = { saveName(it) },
-            keyboardController = keyboardController,
-            focusManager = focusManager
-        )
-        Divider(
-            modifier = Modifier.fillMaxWidth(),
-            thickness = 1.dp,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Light,
             color = VieweeColorText.copy(0.3f)
         )
-        ResumeSection()
     }
 }
 
@@ -172,7 +198,7 @@ private fun ProfileOutlinedTextField(
             fontFamily = noToSansKr,
             fontSize = 20.sp,
             fontWeight = FontWeight.ExtraBold,
-            color = VieweeColorMain.copy(alpha = 0.8f),
+            color = VieweeColorText.copy(0.8f),
             platformStyle = PlatformTextStyle(
                 includeFontPadding = false
             )
@@ -202,7 +228,7 @@ private fun ResumeSection(
             fontFamily = noToSansKr,
             fontSize = 20.sp,
             fontWeight = FontWeight.SemiBold,
-            color = VieweeColorText.copy(alpha = 0.7f),
+            color = VieweeColorMain,
             textAlign = TextAlign.Start,
             style = TextStyle(
                 platformStyle = PlatformTextStyle(

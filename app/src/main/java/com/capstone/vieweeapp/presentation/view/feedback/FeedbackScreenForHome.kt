@@ -158,7 +158,7 @@ fun FeedbackScreenForHome(
                         Icon(
                             imageVector = ImageVector.vectorResource(R.drawable.ic_btn_home),
                             contentDescription = "home",
-                            tint = VieweeColorMain.copy(alpha = 0.8f),
+                            tint = VieweeColorMain,
                             modifier = Modifier
                                 .alpha(.7f)
                                 .padding(vertical = 20.dp, horizontal = 20.dp)
@@ -174,7 +174,7 @@ fun FeedbackScreenForHome(
                         Icon(
                             imageVector = ImageVector.vectorResource(R.drawable.ic_btn_trash),
                             contentDescription = "delete",
-                            tint = VieweeColorMain.copy(alpha = 0.8f),
+                            tint = VieweeColorMain,
                             modifier = Modifier
                                 .alpha(.7f)
                                 .padding(vertical = 20.dp, horizontal = 20.dp),

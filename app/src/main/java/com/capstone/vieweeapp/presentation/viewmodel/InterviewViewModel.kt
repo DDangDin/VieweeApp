@@ -395,13 +395,14 @@ class InterviewViewModel @Inject constructor(
     fun saveReInterviewResult(interviewResult: InterviewResult) {
         viewModelScope.launch {
 
-            val textSentiments = interviewResult.textSentiments.toTypedArray()
-            val editTextSentiments = textSentiments.toCollection(ArrayList())
-            editTextSentiments.addAll(textSentimentList)
-
-            val emotions = interviewResult.emotions.toTypedArray()
-            val editEmotions = emotions.toCollection(ArrayList())
-            editEmotions.addAll(emotionList)
+            // 재 면접은 해당 회차 면접 데이터 만 통계 내기
+//            val textSentiments = interviewResult.textSentiments.toTypedArray()
+//            val editTextSentiments = textSentiments.toCollection(ArrayList())
+//            editTextSentiments.addAll(textSentimentList)
+//
+//            val emotions = interviewResult.emotions.toTypedArray()
+//            val editEmotions = emotions.toCollection(ArrayList())
+//            editEmotions.addAll(emotionList)
 
             val answers = interviewResult.answers.toTypedArray()
             val editAnswers = answers.toCollection(ArrayList())
@@ -410,8 +411,8 @@ class InterviewViewModel @Inject constructor(
             val reInterviewResult = interviewResult
                 .copy(
                     feedbacks = feedbackState.value.feedbacks,
-                    textSentiments = editTextSentiments,
-                    emotions = editEmotions,
+                    textSentiments = textSentimentList,
+                    emotions = emotionList,
                     answers = editAnswers,
                     feedbackTotal = feedbackState.value.feedbacks.feedbacks.last(),
                     etc = "1"

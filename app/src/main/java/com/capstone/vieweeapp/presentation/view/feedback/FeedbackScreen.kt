@@ -135,7 +135,7 @@ fun FeedbackScreen(
                             Icon(
                                 imageVector = ImageVector.vectorResource(R.drawable.ic_btn_home),
                                 contentDescription = "home",
-                                tint = VieweeColorMain.copy(alpha = 0.8f),
+                                tint = VieweeColorMain,
                                 modifier = Modifier
                                     .alpha(.7f)
                                     .padding(vertical = 20.dp, horizontal = 20.dp)
@@ -191,36 +191,36 @@ fun FeedbackScreen(
                                     .padding(end = 28.dp)
                             )
                             if (textSentimentList.isNotEmpty()) {
-                                val textSentimentListTotal = if (isReInterview) {
-                                    textSentimentList + (feedbackState.previousInterviewResult?.textSentiments
-                                        ?: emptyList())
-                                } else {
-                                    textSentimentList
-                                }
+//                                val textSentimentListTotal = if (isReInterview) {
+//                                    textSentimentList + (feedbackState.previousInterviewResult?.textSentiments
+//                                        ?: emptyList())
+//                                } else {
+//                                    textSentimentList
+//                                }
                                 TriangleGraphView(
-                                    intervieweeValues = textSentimentListTotal.average(
+                                    intervieweeValues = textSentimentList.average(
                                         isReInterview
                                     )
                                 )
                                 LaunchedEffect(key1 = Unit) {
-                                    Timber.tag("feedback_screen_log").d("textSentimentListTotalSize: ${textSentimentListTotal.size}")
+                                    Timber.tag("feedback_screen_log").d("textSentimentListTotalSize: ${textSentimentList.size}")
                                 }
                             }
                         }
                         CustomTitleText(text = "$todayDate 면접의 표정 분석")
                         if (emotionList.isNotEmpty()) {
-                            val emotionListTotal = if (isReInterview) {
-                                emotionList + (feedbackState.previousInterviewResult?.emotions
-                                    ?: emptyList())
-                            } else {
-                                emotionList
-                            }
+//                            val emotionListTotal = if (isReInterview) {
+//                                emotionList + (feedbackState.previousInterviewResult?.emotions
+//                                    ?: emptyList())
+//                            } else {
+//                                emotionList
+//                            }
                             CircularGraphView(
-                                emotions = emotionListTotal.toPercentages().map { it.second }
+                                emotions = emotionList.toPercentages().map { it.second }
                             )
 
                             LaunchedEffect(key1 = Unit) {
-                                Timber.tag("feedback_screen_log").d("emotionListTotalSize: ${emotionListTotal.size}")
+                                Timber.tag("feedback_screen_log").d("emotionListTotalSize: ${emotionList.size}")
                             }
                         }
                     }
