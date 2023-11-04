@@ -4,6 +4,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -101,6 +102,7 @@ fun FeedbackDetailCardView(
             modifier = modifier
                 .fillMaxWidth()
 //                .border(1.3.dp, (VieweeColorMain.copy(alpha = 0.5f)), RoundedCornerShape(10.dp))
+                .border(2.dp, if (isExpanded) Color.Transparent else VieweeColorMain.copy(0.5f), RoundedCornerShape(10.dp))
                 .background(VieweeColorText.copy(alpha = 0.05f), RoundedCornerShape(10.dp))
                 .clickableWithoutRipple(
                     interactionSource = interactionSource,
@@ -111,7 +113,7 @@ fun FeedbackDetailCardView(
             Column(
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .padding(start = 10.dp, end = 10.dp, top = 20.dp, bottom = 11.dp)
+                    .padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 11.dp)
 //                    .padding(bottom = extraPadding.coerceAtLeast(0.dp))
                 ,
                 verticalArrangement = Arrangement.Center,

@@ -187,8 +187,8 @@ fun RealInterviewScreen(
                 if (!ttsState.isSpeak && !interviewerTurnState.isInterviewerTurn) {
                     uiEvent(
                         RealInterviewUiEvent.NextQuestion(
-//                            answer = voiceToTextState.value.spokenText,
-                            answer = text,
+                            answer = voiceToTextState.value.spokenText,
+//                            answer = text,
                         )
                     )
 //                    if (voiceToTextState.value.spokenText.isEmpty()) {

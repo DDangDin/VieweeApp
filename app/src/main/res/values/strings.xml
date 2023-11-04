@@ -21,7 +21,7 @@
     <string name="title_activity_interview">InterviewActivity</string>
 
     <!--  SelectResume Screen  -->
-    <string name="select_resume_screen_title">자기소개서 선택</string>
+    <string name="select_resume_screen_title">자기소개서를 선택해 주세요</string>
     <string name="select_resume_screen_bottom_sheet_title">어떤 면접관에게\n면접을 보시겠습니까?</string>
     <string name="select_resume_screen_gpt_model">Chat GPT</string>
     <string name="select_resume_screen_gpt_company">Open AI</string>
@@ -63,6 +63,8 @@
     <!-- RealInterview Loading Screen -->
     <string name="interview_loading_error">다시 시도해주세요</string>
     <string name="interview_loading_main">면접관 입장중</string>
+    <string name="interview_loading_sub">앱을 종료하지 마시고 잠시만 기다려주세요</string>
+    <string name="interview_loading_sub_2">뷰이 면접관이 입장하는 데\n최대 1~3분이 걸릴 수 있습니다.</string>
     <string name="interview_loading_exit">종료하기</string>
 
     <!-- Feedback Screen -->

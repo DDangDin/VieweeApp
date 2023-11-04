@@ -14,9 +14,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,6 +32,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
@@ -53,6 +57,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -65,10 +71,13 @@ import com.capstone.vieweeapp.R
 import com.capstone.vieweeapp.data.source.local.entity.Resume
 import com.capstone.vieweeapp.presentation.event.SelectResumeUiEvent
 import com.capstone.vieweeapp.presentation.state.ResumeState
+import com.capstone.vieweeapp.ui.theme.VieweeColorBackgroundGrey
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
 import com.capstone.vieweeapp.ui.theme.VieweeColorOrange
 import com.capstone.vieweeapp.ui.theme.VieweeColorText
+import com.capstone.vieweeapp.ui.theme.noToSansKr
 import com.capstone.vieweeapp.utils.Constants
+import com.capstone.vieweeapp.utils.CustomRippleEffect.clickableWithoutRipple
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -147,18 +156,24 @@ fun SelectResumeScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "뒤로가기"
+                        contentDescription = "뒤로가기",
+                        tint = VieweeColorText.copy(0.8f)
                     )
                 }
                 Text(
                     text = stringResource(id = R.string.select_resume_screen_title),
                     modifier = Modifier
                         .padding(15.dp),
+                    fontFamily = noToSansKr,
                     textAlign = TextAlign.Center,
-                    fontStyle = FontStyle.Normal,
-                    fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = VieweeColorText
+                    fontSize = 18.sp,
+                    color = VieweeColorMain.copy(0.8f),
+                    style = TextStyle(
+                        platformStyle = PlatformTextStyle(
+                            includeFontPadding = false
+                        )
+                    )
                 )
                 IconButton(
                     modifier = Modifier
@@ -167,7 +182,8 @@ fun SelectResumeScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Add,
-                        contentDescription = "추가"
+                        contentDescription = "추가",
+                        tint = VieweeColorText.copy(0.8f)
                     )
                 }
             }
@@ -179,18 +195,27 @@ fun SelectResumeScreen(
                     alignment = Alignment.CenterVertically
                 ),
                 horizontalAlignment = Alignment.CenterHorizontally,
+                contentPadding = PaddingValues(vertical = 30.dp)
             ) {
                 items(resumes.size) { idx ->
                     val borderColor =
-                        if ((idx == selectedIndex)) VieweeColorOrange.copy(alpha = 0.8f) else VieweeColorMain.copy(
-                            0.8f
+                        if ((idx == selectedIndex)) VieweeColorMain.copy(alpha = 0.8f) else VieweeColorMain.copy(
+                            0.4f
                         )
+                    val borderStroke =
+                        if ((idx == selectedIndex)) 2.dp else 1.3.dp
                     val backgroundColor =
-                        if (isLongClick && idx == longClickSelectedIndex) Color.Gray else Color.Transparent
+                        if (idx == selectedIndex) {
+                            VieweeColorMain.copy(0.1f)
+                        } else if(isLongClick && idx == longClickSelectedIndex){
+                            Color.Gray
+                        } else {
+                            VieweeColorBackgroundGrey
+                        }
 
                     ResumeCardView(
                         modifier = Modifier
-                            .border(1.3.dp, borderColor, RoundedCornerShape(10.dp))
+                            .border(borderStroke, borderColor, RoundedCornerShape(10.dp))
                             .background(backgroundColor, RoundedCornerShape(10.dp)),
                         resume = resumes[idx],
                         onClick = {
@@ -267,9 +292,6 @@ fun ResumeCardView(
                 animationSpec = tween(100, easing = FastOutSlowInEasing)
             )
             .clip(RoundedCornerShape(10.dp))
-            .clickable {
-                onClick()
-            }
             .combinedClickable(
                 onClick = onClick,
                 onLongClick = onLongClick,
@@ -278,7 +300,7 @@ fun ResumeCardView(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(10.dp),
+                .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(7.dp, alignment = Alignment.Top),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -335,13 +357,13 @@ fun ResumeCardViewTopBar(
         ) {
             Icon(
                 modifier = Modifier.size(30.dp),
-                imageVector = if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
+                imageVector = if (expanded) Icons.Filled.ArrowDropUp else Icons.Filled.ArrowDropDown,
                 contentDescription = if (expanded) {
                     "더보기"
                 } else {
                     "요약하기"
                 },
-                tint = VieweeColorOrange.copy(alpha = 0.5f)
+                tint = Color(0xFF92979F).copy(0.8f)
             )
         }
     }

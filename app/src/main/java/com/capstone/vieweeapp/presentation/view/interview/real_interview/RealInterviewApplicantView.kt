@@ -156,10 +156,10 @@ fun RealInterviewApplicantView(
             contentDescription = "말하기",
             tint = Color.White
         )
-        TextField(
-            value = text,
-            onValueChange = { onTextChanged(it) }
-        )
+//        TextField(
+//            value = text,
+//            onValueChange = { onTextChanged(it) }
+//        )
     }
 }
 
