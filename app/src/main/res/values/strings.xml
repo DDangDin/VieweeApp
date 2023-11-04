@@ -73,6 +73,12 @@
     <!-- FeedbackForHome Screen -->
 
 
+    <!-- FeedbackForHome Screen -->
+    <string name="feedback_loading_main">피드백 준비중</string>
+    <string name="feedback_loading_sub">앱을 종료하지 마시고 잠시만 기다려주세요</string>
+    <string name="feedback_loading_sub_2">뷰이 면접관이 피드백을 작성하는 데\n최대 1~3분이 걸릴 수 있습니다. </string>
+
+
     <!-- FeedbackDetailCardView Screen -->
     <string name="feedback_detail_card_facial_graph">해당 질문 시 표정 분석 TOP 3</string>
     <string name="feedback_detailcard_facialgraph_1st">1st</string>

@@ -2,6 +2,7 @@ package com.capstone.vieweeapp.presentation.view.feedback
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,10 +41,14 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
@@ -61,8 +66,11 @@ import com.capstone.vieweeapp.presentation.view.feedback.graph.CircularGraphView
 import com.capstone.vieweeapp.presentation.view.feedback.graph.ExplainTriangleGraph
 import com.capstone.vieweeapp.presentation.view.feedback.graph.TriangleGraphView
 import com.capstone.vieweeapp.presentation.view.interview.input_profile.CustomTitleText
+import com.capstone.vieweeapp.presentation.view.interview.real_interview.loading.LoadingAnimation
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
+import com.capstone.vieweeapp.ui.theme.VieweeColorOrange
 import com.capstone.vieweeapp.ui.theme.VieweeColorShadow
+import com.capstone.vieweeapp.ui.theme.VieweeColorText
 import com.capstone.vieweeapp.ui.theme.noToSansKr
 import com.capstone.vieweeapp.utils.CalculateDate
 import com.capstone.vieweeapp.utils.Constants
@@ -324,13 +332,61 @@ fun FeedbackScreen(
                 }
             }
         } else {
-            CircularProgressIndicator(
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .size(50.dp),
-                strokeWidth = 2.dp,
-                color = VieweeColorMain
-            )
+            Column(
+                modifier = modifier
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(
+                    30.dp,
+                    alignment = Alignment.CenterVertically
+                ),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                LoadingAnimation(Modifier.fillMaxWidth())
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    androidx.compose.material3.Text(
+                        text = stringResource(id = R.string.feedback_loading_main),
+                        fontFamily = noToSansKr,
+                        fontSize = 25.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = VieweeColorMain.copy(0.8f),
+                        style = TextStyle(
+                            platformStyle = PlatformTextStyle(
+                                includeFontPadding = false
+                            )
+                        )
+                    )
+                    androidx.compose.material3.Text(
+                        modifier = Modifier.padding(top = 7.dp),
+                        text = stringResource(id = R.string.feedback_loading_sub),
+                        fontFamily = noToSansKr,
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = VieweeColorMain.copy(0.5f),
+                    )
+                }
+
+                androidx.compose.material3.Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(id = R.string.feedback_loading_sub_2),
+                    fontFamily = noToSansKr,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = VieweeColorText.copy(0.5f),
+                    style = TextStyle(
+                        platformStyle = PlatformTextStyle(
+                            includeFontPadding = false
+                        )
+                    ),
+                    textAlign = TextAlign.Center
+                )
+            }
         }
     }
 }

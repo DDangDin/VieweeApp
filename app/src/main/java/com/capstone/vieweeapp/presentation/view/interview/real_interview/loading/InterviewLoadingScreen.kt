@@ -206,7 +206,7 @@ fun LoadingAnimationPreview() {
 }
 
 @Composable
-private fun LoadingAnimation(modifier: Modifier = Modifier) {
+fun LoadingAnimation(modifier: Modifier = Modifier) {
 
     val pacmanAnimatedFloat = remember { Animatable(0f) }
 
