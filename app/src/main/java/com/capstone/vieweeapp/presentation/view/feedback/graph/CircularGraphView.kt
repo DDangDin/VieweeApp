@@ -1,5 +1,6 @@
 package com.capstone.vieweeapp.presentation.view.feedback.graph
 
+import android.util.Log
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
@@ -64,6 +65,8 @@ fun CircularGraphView(
 ) {
 //    val data = listOf(30f, 0f, 0f, 60f, 10f, 0f, 0f) // 각 섹션의 비율
     val colors = listOf(Surprise, Fear, Angry, Neutral, Sad, Disgust, Happy) // 각 섹션의 색상
+
+    Log.d("Graph_log", "CircularGraph: ${emotions}")
 
     Box(
         modifier = modifier

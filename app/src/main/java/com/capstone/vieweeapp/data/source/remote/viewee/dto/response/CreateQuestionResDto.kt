@@ -1,5 +1,7 @@
 package com.capstone.vieweeapp.data.source.remote.viewee.dto.response
 
+import android.util.Log
+
 data class CreateQuestionResDto(
     val questions: String
 )

@@ -444,7 +444,7 @@ private fun FeedbackDetailCardGrid(
                         feedbackState.feedbacks.feedbacks.size - 1
                     )[index]
                 } catch (e: IndexOutOfBoundsException) {
-                    "피드백 에러"
+                    "답변 분석에 어려움이 있어 피드백을 생성하지 못했습니다."
                 }
             }
 

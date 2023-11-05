@@ -135,6 +135,8 @@ fun TwoTriangles(
 
     val maxValue = remember { Animatable(2000f) }
 
+    Log.d("Graph_log", "TwoTriangles: ${values1}, ${values2}")
+
     LaunchedEffect(maxValue) {
         maxValue.animateTo(
             targetValue = 100f,
@@ -342,6 +344,8 @@ fun TriangleGraphView(
 //    val intervieweeValues = remember { listOf(60f, 100f, 30f) }
 
     // values 값 순서: 긍정-보통-부정
+
+    Log.d("Graph_log", "TriangleGraph: $intervieweeValues")
 
     Box(
         modifier = modifier.fillMaxSize(),

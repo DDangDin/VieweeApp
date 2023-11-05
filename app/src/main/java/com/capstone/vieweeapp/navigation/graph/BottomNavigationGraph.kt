@@ -158,6 +158,18 @@ fun BottomNavigationGraph(
                         scope.launch {
                             delay(1500) // 바로 창이 사라 지는 부자연스러움을 위한 딜레이
                             navController.popBackStack()
+                            /*TODO 임시*/
+                            // 밑에 코드 추가 이유:
+                            // 재면접 후 피드백 화면 에서 홈버튼 클릭 시(popBackStack()호출)
+                            // 첫번째 면접과 달리 홈 화면으로 나가지는데 이때 재면접 피드백이 업데이트 바로 안됨...
+                            navController.navigate(Screen.Interview.route) {
+                                navController.graph.startDestinationRoute?.let {
+                                    // 첫번째 화면만 스택에 쌓이게 -> 백버튼 클릭 시 첫번째 화면으로 감
+                                    popUpTo(it) { saveState = true }
+                                }
+                                launchSingleTop = true  // 화면 인스턴스 하나만 만들어지게
+                                restoreState = true     // 버튼을 재클릭했을 때 이전 상태가 남아있게
+                            }
                         }
                     },
                     interviewResultIndex = interviewResultIndex

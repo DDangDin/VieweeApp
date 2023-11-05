@@ -151,7 +151,7 @@ fun InterviewNavigationGraph(
 
                 RealInterviewScreen(
                     interviewerTurnState = interviewerTurnState.value,
-                    time = interviewTime.value.toString(),
+                    time = interviewTime.value,
                     onStop = onFinish,
                     uiEvent = interviewViewModel::realInterviewUiEvent,
                     recognizeImage = { mRgba, mGray, rotationDegrees ->

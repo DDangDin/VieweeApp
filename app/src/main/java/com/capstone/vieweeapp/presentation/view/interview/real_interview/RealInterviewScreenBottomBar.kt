@@ -28,12 +28,13 @@ import com.capstone.vieweeapp.R
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
 import com.capstone.vieweeapp.ui.theme.VieweeColorOrange
 import com.capstone.vieweeapp.ui.theme.noToSansKr
+import com.capstone.vieweeapp.utils.CalculateTime.timeWithMinute
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun RealInterviewScreenBottomBar(
     modifier: Modifier = Modifier,
-    time: String,
+    time: Int,
     onStop: () -> Unit,
     onNextTurn: () -> Unit,
     interviewFinishState: Boolean,
@@ -93,7 +94,15 @@ fun RealInterviewScreenBottomBar(
             tint = VieweeColorMain
         )
         Text(
-            text = "소요시간: $time",
+            text = "소요시간 ${
+                if (time.timeWithMinute().first == 0) {
+                    ""
+                } else {
+                    time.timeWithMinute().first.toString() + " : "
+                }
+            }${
+                time.timeWithMinute().second
+            }",
             fontFamily = noToSansKr,
             fontWeight = FontWeight.Light,
             fontSize = 20.sp,
@@ -154,7 +163,7 @@ fun RealInterviewScreenBottomBar(
 @Composable
 fun RealInterviewBottomBarPreview() {
     RealInterviewScreenBottomBar(
-        time = "00:00",
+        time = 0,
         onStop = {},
         onNextTurn = {},
         interviewFinishState = false,

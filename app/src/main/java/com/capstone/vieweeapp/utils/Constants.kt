@@ -24,7 +24,7 @@ object Constants {
 
     // Separator
     const val RESUME_SEPARATOR = ","
-    const val FEEDBACK_SEPARATOR = "#"
+    const val FEEDBACK_SEPARATOR = "\n"
 
     // PaddingValues
     const val HOME_PADDING_VALUE_HORIZONTAL = 30

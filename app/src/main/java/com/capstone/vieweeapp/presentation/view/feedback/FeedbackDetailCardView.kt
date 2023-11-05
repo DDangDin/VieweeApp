@@ -67,6 +67,7 @@ import com.capstone.vieweeapp.ui.theme.noToSansKr
 import com.capstone.vieweeapp.utils.CustomRippleEffect
 import com.capstone.vieweeapp.utils.CustomRippleEffect.clickableWithoutRipple
 import com.capstone.vieweeapp.utils.FacialEmotionNames
+import timber.log.Timber
 
 @Composable
 fun FeedbackDetailCardView(
@@ -90,19 +91,29 @@ fun FeedbackDetailCardView(
 //    )
 
     // 긍정 부정 하이라이팅 팝업?을 위한 변수들
-    var tapPosition by remember { mutableStateOf(Offset.Zero) }
-    val density = LocalDensity.current
-    val (xDp, yDp) = with(density) {
-        (tapPosition.x.toDp()) to (tapPosition.y.toDp())
+//    var tapPosition by remember { mutableStateOf(Offset.Zero) }
+//    val density = LocalDensity.current
+//    val (xDp, yDp) = with(density) {
+//        (tapPosition.x.toDp()) to (tapPosition.y.toDp())
+//    }
+//    var tapDialogVisible by remember { mutableStateOf(false) }
+    LaunchedEffect(key1 = Unit) {
+        Timber.tag("FeedbackDetailCardView_Log").d("" +
+                "sentiment: ${textSentiment.sentiment}\n" +
+                "sentences: ${textSentiment.sentences}" +
+                "")
     }
-    var tapDialogVisible by remember { mutableStateOf(false) }
 
     CompositionLocalProvider(LocalRippleTheme provides CustomRippleEffect.NoRippleTheme) {
         Box(
             modifier = modifier
                 .fillMaxWidth()
 //                .border(1.3.dp, (VieweeColorMain.copy(alpha = 0.5f)), RoundedCornerShape(10.dp))
-                .border(2.dp, if (isExpanded) Color.Transparent else VieweeColorMain.copy(0.5f), RoundedCornerShape(10.dp))
+                .border(
+                    2.dp,
+                    if (isExpanded) Color.Transparent else VieweeColorMain.copy(0.5f),
+                    RoundedCornerShape(10.dp)
+                )
                 .background(VieweeColorText.copy(alpha = 0.05f), RoundedCornerShape(10.dp))
                 .clickableWithoutRipple(
                     interactionSource = interactionSource,

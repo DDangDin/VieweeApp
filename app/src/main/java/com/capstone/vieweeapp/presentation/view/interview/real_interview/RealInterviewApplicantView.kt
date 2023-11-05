@@ -1,8 +1,10 @@
 package com.capstone.vieweeapp.presentation.view.interview.real_interview
 
 import android.content.Context
+import android.graphics.Rect
 import android.net.Uri
 import android.util.Log
+import android.view.ViewGroup
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
@@ -21,6 +23,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -44,9 +47,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
@@ -126,23 +132,34 @@ fun RealInterviewApplicantView(
         preview.setSurfaceProvider(previewView.surfaceProvider)
     }
 
+    var size by remember { mutableStateOf(IntSize.Zero) }
+
     Box(
         modifier = modifier
             .fillMaxSize()
             .background(Color.Transparent, RoundedCornerShape(15.dp))
-            .clipToBounds(),
+            .clipToBounds()
+            .onSizeChanged { size = it },
         contentAlignment = Alignment.Center
     ) {
+
         // CameraView, STT(VoiceToText)
         AndroidView(
-            factory = { previewView.also {
-//                it.clipToOutline = true
-                it.clipChildren = false
-            } },
+            factory = { previewView },
             modifier = Modifier
-                .matchParentSize()
+                .then(
+                    with(LocalDensity.current) {
+                        Modifier.size(
+                            width = size.width.toDp(),
+                            height = size.height.toDp()
+                        )
+                    }
+                )
                 .align(Alignment.Center),
-//                .verticalScroll(scrollState)
+            update = {
+                it.clipToOutline = true
+                it.clipChildren = false
+            }
         )
 
         // --- Test Block ---

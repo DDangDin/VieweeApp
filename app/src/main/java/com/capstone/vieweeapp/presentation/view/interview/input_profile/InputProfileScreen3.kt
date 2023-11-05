@@ -111,10 +111,10 @@ fun InputProfileScreen3(
                 .align(Alignment.BottomCenter)
                 .padding(start = 30.dp, end = 30.dp, bottom = 30.dp),
             onClick = {
-                isEmptyValue_1 = inputProfileViewModel.inputResumeText.value.isEmpty()
+                isEmptyValue_1 = inputProfileViewModel.inputResumeText.value.trim().isEmpty()
 
                 if (
-                    inputProfileViewModel.inputResumeText.value.isNotEmpty()
+                    inputProfileViewModel.inputResumeText.value.trim().isNotEmpty()
                 ) {
                     // 저장
                     inputProfileViewModel.insertResume()

@@ -115,14 +115,14 @@ fun InputProfileScreen2(
                 .align(Alignment.BottomCenter)
                 .padding(start = 30.dp, end = 30.dp, bottom = 30.dp),
             onClick = {
-                isEmptyValue_1 = inputProfileViewModel.inputSupportJobs.value.isEmpty()
-                isEmptyValue_2 = inputProfileViewModel.inputCertifications.value.isEmpty()
-                isEmptyValue_3 = inputProfileViewModel.inputSkills.value.isEmpty()
+                isEmptyValue_1 = inputProfileViewModel.inputSupportJobs.value.trim().isEmpty()
+                isEmptyValue_2 = inputProfileViewModel.inputCertifications.value.trim().isEmpty()
+                isEmptyValue_3 = inputProfileViewModel.inputSkills.value.trim().isEmpty()
 
                 if (
-                    inputProfileViewModel.inputSupportJobs.value.isNotEmpty() &&
-                    inputProfileViewModel.inputCertifications.value.isNotEmpty() &&
-                    inputProfileViewModel.inputSkills.value.isNotEmpty()
+                    inputProfileViewModel.inputSupportJobs.value.trim().isNotEmpty() &&
+                    inputProfileViewModel.inputCertifications.value.trim().isNotEmpty() &&
+                    inputProfileViewModel.inputSkills.value.trim().isNotEmpty()
                 ) {
                     onNavigateNext()
                 }
