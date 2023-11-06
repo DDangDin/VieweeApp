@@ -13,7 +13,9 @@ import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -47,16 +49,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import com.capstone.vieweeapp.R
+import com.capstone.vieweeapp.presentation.view.feedback.ReFeedbackBadge
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
+import com.capstone.vieweeapp.ui.theme.noToSansKr
 import org.opencv.core.Mat
 import java.io.File
 import java.text.SimpleDateFormat
@@ -72,7 +83,8 @@ fun RealInterviewApplicantView(
     onImageAnalysis: (ImageProxy) -> Unit,
     startListening: () -> Unit,
     text: String,
-    onTextChanged: (String) -> Unit
+    onTextChanged: (String) -> Unit,
+    isInterviewerTurn: Boolean
 ) {
 
     // 이미지 캡처 시 필요한 변수,
@@ -162,17 +174,49 @@ fun RealInterviewApplicantView(
             }
         )
 
-        // --- Test Block ---
-        Icon(
+        ReFeedbackBadge(
             modifier = Modifier
-                .clip(CircleShape)
-                .size(50.dp)
-                .background(VieweeColorMain)
-                .clickable { startListening() },
-            imageVector = Icons.Filled.Mic,
-            contentDescription = "말하기",
-            tint = Color.White
+                .align(Alignment.TopEnd)
+                .padding(10.dp),
+            count = "0",
+            backgroundColor = VieweeColorMain,
+            textColor = Color(0xFFD9D9D9),
+            forInterview = true
         )
+
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 65.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(
+                18.dp,
+                alignment = Alignment.CenterVertically
+            )
+        ) {
+            Text(
+                text = if (isInterviewerTurn) "" else "답변 시 클릭 후 말해주세요",
+                fontFamily = noToSansKr,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color(0xFFD9D9D9),
+                textAlign = TextAlign.Center
+            )
+            Image(
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .size(53.dp)
+                    .border(
+                        3.dp,
+                        if (isInterviewerTurn) Color.Transparent else VieweeColorMain,
+                        CircleShape
+                    )
+                    .clickable { startListening() },
+                painter = painterResource(id = R.drawable.ic_mic),
+                contentDescription = "말하기",
+            )
+        }
+
 //        TextField(
 //            value = text,
 //            onValueChange = { onTextChanged(it) }
@@ -225,6 +269,7 @@ fun RealInterviewApplicantViewPreview() {
         onImageAnalysis = {},
         startListening = {},
         text = "",
-        onTextChanged = {}
+        onTextChanged = {},
+        isInterviewerTurn = true
     )
 }

@@ -170,7 +170,7 @@ class InterviewViewModel @Inject constructor(
     fun createLocalQuestions(id: Int) {
         viewModelScope.launch {
             _questionsState.update { it.copy(loading = true) }
-            delay(3000L)
+            delay(4500L)
             _questionsState.update {
                 it.copy(
                     questions = interviewResultRepository.getInterviewResultOnce(id).questions,

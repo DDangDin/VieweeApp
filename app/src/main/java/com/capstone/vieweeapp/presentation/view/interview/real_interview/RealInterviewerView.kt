@@ -3,47 +3,30 @@ package com.capstone.vieweeapp.presentation.view.interview.real_interview
 import android.net.Uri
 import android.os.Build.VERSION.SDK_INT
 import android.os.Environment
-import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.net.toUri
 import coil.ImageLoader
-import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
-import coil.request.ImageRequest
-import coil.size.OriginalSize
-import coil.size.Size
-import com.capstone.vieweeapp.R
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
@@ -113,7 +96,7 @@ fun RealInterviewerView(
                 }
             },
             modifier = Modifier
-                .matchParentSize()
+                .size(200.dp)
                 .align(Alignment.Center)
         )
     }
@@ -122,7 +105,7 @@ fun RealInterviewerView(
 @Composable
 fun RealInterviewerView2(
     modifier: Modifier = Modifier,
-    filePath: String
+    filePath: Int
 ) {
 
     val context = LocalContext.current
@@ -138,19 +121,28 @@ fun RealInterviewerView2(
 
 //    val cacheFile = File(context.cacheDir, filePath)
 
-    val gifFile = rememberAsyncImagePainter(model = File(filePath))
+//    val gifFile = rememberAsyncImagePainter(model = File(filePath))
 //    val gifUrl = Uri.parse("file://$filePath") // 파일 경로를 Uri로 변환
 //    val gifUriFromFile = Uri.fromFile(gifFile)
 
 
-    AsyncImage(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(R.drawable.sample)
-            .build(),
-        contentDescription = "gif",
-        contentScale = ContentScale.Inside,
-        modifier = modifier.size(200.dp)
-    )
+//    AsyncImage(
+//        model = ImageRequest.Builder(LocalContext.current)
+//            .data(R.drawable.sample)
+//            .build(),
+//        contentDescription = "gif",
+//        contentScale = ContentScale.Inside,
+//        modifier = modifier.size(200.dp)
+//    )
 
     // test url: "https://i0.wp.com/www.printmag.com/wp-content/uploads/2021/02/4cbe8d_f1ed2800a49649848102c68fc5a66e53mv2.gif?fit=476%2C280&ssl=1"
+
+
+//     Success
+    Image(
+        painter = rememberAsyncImagePainter(filePath, imageLoader),
+        contentDescription = "gif",
+        contentScale = ContentScale.Crop,
+        modifier = modifier.fillMaxSize()
+    )
 }

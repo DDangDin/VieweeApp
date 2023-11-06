@@ -16,6 +16,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -161,188 +162,61 @@ fun RealInterviewScreen(
 //        )
 //
 
-// ------------------------------------------------------------------------------------------
-//        val TAG = "VideoView"
-//
-//        val mContext = LocalContext.current
-//        val filePath =
-//            "${Environment.getExternalStorageDirectory().absolutePath}${MediaSourcePath.InterviewerTalking}"
-////    val videoFilePath = "/storage/emulated/0/Download/talking.mp4" // 동영상 파일 경로
-////    val videoFilePath = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" // 동영상 파일 경로
-//        val videoFile = File(filePath)
-//        val videoUri = Uri.parse("file://$filePath") // 파일 경로를 Uri로 변환
-//        val videoUriFromFile = Uri.fromFile(videoFile)
-//        val mediaItem = MediaItem.fromUri(videoUriFromFile)
-//
-//        LaunchedEffect(key1 = true) {
-//            Timber.tag(TAG).d(filePath)
-//            Timber.tag(TAG).d(videoUri.path)
-//            Timber.tag(TAG).d(File(filePath).exists().toString())
-//        }
-//
-//        // 재생관련 설정
-//        val mExoPlayer = remember(mContext) {
-//            ExoPlayer.Builder(mContext).build().apply {
-//                setMediaItem(mediaItem)
-//                playWhenReady = true
-//                prepare()
-//                volume = 0f
-//                repeatMode = Player.REPEAT_MODE_ALL
-//            }
-//        }
-//
-//
-//        // 이미지 캡처 시 필요한 변수,
-//        // 사용하게 된다면 onDestroy 생명주기나 면접화면이 끝났을 때
-//        // cameraExecutor.shutdown() -> 필요
-//        val cameraExecutor = Executors.newSingleThreadExecutor()
-//
-//        val scrollState = rememberScrollState()
-//        val context = LocalContext.current
-//        val lifecycleOwner = LocalLifecycleOwner.current
-//
-//        DisposableEffect(Unit) {
-//            onDispose {
-//                cameraExecutor.shutdown()
-//            }
-//        }
-//
-//        // camera settings
-//        var lensFacing by remember {
-//            mutableStateOf(CameraSelector.LENS_FACING_FRONT)
-//        }
-//        val preview = androidx.camera.core.Preview.Builder().build()
-//        val previewView = remember { PreviewView(context) }
-//        val imageCapture: ImageCapture = remember { ImageCapture.Builder().build() }
-//        val cameraSelector = CameraSelector.Builder()
-//            .requireLensFacing(lensFacing)
-//            .build()
-//
-//        val imageAnalysis = ImageAnalysis.Builder()
-//            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-//            .build()
-//        imageAnalysis.setAnalyzer(cameraExecutor) { imageProxy ->
-//            // 로직 처리 끝나고 반드시
-//
-//            // open cv 적용 할 곳
-//            val mRgba = makeRgbaMat(imageProxy.image!!)
-//            val mGray = makeGrayMat(imageProxy.image!!)
-//            val rotationDegrees = imageProxy.imageInfo.rotationDegrees
-//
-//            recognizeImage(mRgba!!, mGray!!, rotationDegrees)
-////        Log.d(
-////            "ApplicantScreen" + "_onImageAnalysis",
-////            "mRgba: ${mRgba.width()}, ${mRgba.height()}"
-////        )
-//
-//            imageProxy.close()
-//        }
-//
-//        LaunchedEffect(key1 = lensFacing) {
-//            Log.d("LensFacing_Log", "Change LensFacing")
-//            val cameraProvider = context.getCameraProvider()
-//            cameraProvider.unbindAll()
-//            cameraProvider.bindToLifecycle(
-//                lifecycleOwner,
-//                cameraSelector,
-//                preview,
-//                imageCapture,
-//                imageAnalysis
-//            )
-//
-//            preview.setSurfaceProvider(previewView.surfaceProvider)
-//        }
-//
-//        var size by remember { mutableStateOf(IntSize.Zero) }
-//
-//        AndroidView(
-//            factory = {
-//                StyledPlayerView(context).apply {
-//                    player = mExoPlayer
-//                    useController = false
-//                    resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM
-//                    layoutParams = FrameLayout.LayoutParams(
-//                        ViewGroup.LayoutParams.WRAP_CONTENT,
-//                        ViewGroup.LayoutParams.WRAP_CONTENT
-//                    )
-//                    clipToOutline = true
-//                    clipBounds = Rect(10, 10, 10, 10)
-//                    clipChildren = false
-//                }
-//            },
-//            modifier = Modifier
-//                .weight(1f)
-//                .clip(RoundedCornerShape(10.dp))
-//                .clipToBounds()
-//        )
-//        AndroidView(
-//            factory = {
-//                previewView.apply {
-//                    clipToOutline = true
-//                    clipBounds = Rect(10, 10, 10, 10)
-//                    clipChildren = false
-//                    layoutParams = FrameLayout.LayoutParams(
-//                        ViewGroup.LayoutParams.WRAP_CONTENT,
-//                        ViewGroup.LayoutParams.WRAP_CONTENT
-//                    )
-//                }
-//            },
-//            modifier = Modifier
-//                .weight(1f)
-//                .clip(RoundedCornerShape(10.dp))
-//                .clipToBounds()
-//        )
-// ------------------------------------------------------------------------------------------
-
-//        RealInterviewerView2(
-//            modifier = Modifier
-//                .weight(1f)
-//                .border(
-//                    color = if (isInterviewerTurn) VieweeColorMain else Color.Transparent,
-//                    width = 4.5.dp,
-//                    shape = RoundedCornerShape(15.dp)
-//                )
-//                .clip(RoundedCornerShape(15.dp)),
-//            filePath = if (isInterviewerTurn) {
-//                "${Environment.getExternalStorageDirectory().absolutePath}${MediaSourcePath.GIF_SAMPLE}"
-//            } else {
-//                "${Environment.getExternalStorageDirectory().absolutePath}${MediaSourcePath.GIF_SAMPLE}"
-//            }
-//        )
-
 //        Spacer(modifier = Modifier.height(10.dp))
 
         // 임시
         val (text, onTextChanged) = remember { mutableStateOf("") }
 
         // ApplicantSection
-        RealInterviewApplicantView(
-            modifier = Modifier
-                .weight(1f)
-                .border(
-                    color = if (!isInterviewerTurn) VieweeColorMain else Color.Transparent,
-                    width = 4.5.dp,
-                    shape = RoundedCornerShape(15.dp)
-                )
-                .clip(RoundedCornerShape(15.dp)),
-            onImageAnalysis = { imageProxy ->
-                val mRgba = makeRgbaMat(imageProxy.image!!)
-                val mGray = makeGrayMat(imageProxy.image!!)
-                val rotationDegrees = imageProxy.imageInfo.rotationDegrees
+        Box(
+            modifier = Modifier.weight(1f)
+        ) {
+            RealInterviewApplicantView(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .border(
+                        color = if (!isInterviewerTurn) VieweeColorMain else Color.Transparent,
+                        width = 4.5.dp,
+                        shape = RoundedCornerShape(15.dp)
+                    )
+                    .clip(RoundedCornerShape(15.dp)),
+                onImageAnalysis = { imageProxy ->
+                    val mRgba = makeRgbaMat(imageProxy.image!!)
+                    val mGray = makeGrayMat(imageProxy.image!!)
+                    val rotationDegrees = imageProxy.imageInfo.rotationDegrees
 
-                recognizeImage(mRgba!!, mGray!!, rotationDegrees)
-            },
-            startListening = {
-                if (interviewerTurnState.turnIndex < questionsState.questions.size &&
-                    !ttsState.isSpeak &&
-                    !interviewerTurnState.isInterviewerTurn
-                ) {
-                    textVoiceSpeechViewModel.startListening(Constants.VOICE_TO_TEXT_LANGUAGE)
-                }
-            },
-            text = text,
-            onTextChanged = { onTextChanged(it) }
-        )
+                    recognizeImage(mRgba!!, mGray!!, rotationDegrees)
+                },
+                startListening = {
+                    if (interviewerTurnState.turnIndex < questionsState.questions.size &&
+                        !ttsState.isSpeak &&
+                        !interviewerTurnState.isInterviewerTurn
+                    ) {
+                        textVoiceSpeechViewModel.startListening(Constants.VOICE_TO_TEXT_LANGUAGE)
+                    }
+                },
+                text = text,
+                onTextChanged = { onTextChanged(it) },
+                isInterviewerTurn = isInterviewerTurn
+            )
+
+//            RealInterviewerView(
+//                modifier = Modifier
+//                    .size(200.dp)
+//                    .align(Alignment.TopEnd)
+//                    .border(
+//                        color = if (isInterviewerTurn) VieweeColorMain else Color.Transparent,
+//                        width = 4.5.dp,
+//                        shape = RoundedCornerShape(15.dp)
+//                    )
+//                    .clip(RoundedCornerShape(15.dp)),
+//                filePath = if (isInterviewerTurn) {
+//                    "${Environment.getExternalStorageDirectory().absolutePath}${MediaSourcePath.InterviewerListening}"
+//                } else {
+//                    "${Environment.getExternalStorageDirectory().absolutePath}${MediaSourcePath.InterviewerTalking}"
+//                }
+//            )
+        }
 
         // BottomBar
         RealInterviewScreenBottomBar(

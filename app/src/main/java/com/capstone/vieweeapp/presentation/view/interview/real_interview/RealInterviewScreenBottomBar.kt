@@ -97,11 +97,17 @@ fun RealInterviewScreenBottomBar(
             text = "소요시간 ${
                 if (time.timeWithMinute().first == 0) {
                     ""
+                } else if (time.timeWithMinute().first <= 9) {
+                  "0" + time.timeWithMinute().first.toString() + " : "
                 } else {
                     time.timeWithMinute().first.toString() + " : "
                 }
             }${
-                time.timeWithMinute().second
+                if (time.timeWithMinute().second <= 9) {
+                    "0" + time.timeWithMinute().second.toString()
+                } else {
+                    time.timeWithMinute().second
+                }
             }",
             fontFamily = noToSansKr,
             fontWeight = FontWeight.Light,
