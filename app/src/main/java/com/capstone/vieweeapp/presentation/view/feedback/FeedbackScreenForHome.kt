@@ -200,8 +200,7 @@ fun FeedbackScreenForHome(
                         append("면접 결과")
                     },
                     modifier = modifier
-                        .fillMaxWidth()
-                        .padding(top = 20.dp),
+                        .fillMaxWidth(),
                     textAlign = TextAlign.Center,
                     fontStyle = FontStyle.Normal,
                     fontSize = 25.sp,

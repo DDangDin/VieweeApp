@@ -160,7 +160,7 @@ fun FeedbackScreen(
                                 "수고하셨습니다",
                         modifier = modifier
                             .fillMaxWidth()
-                            .padding(top = 40.dp, bottom = 60.dp),
+                            .padding(bottom = 60.dp),
                         textAlign = TextAlign.Center,
                         fontStyle = FontStyle.Normal,
                         fontSize = 25.sp,
@@ -239,7 +239,7 @@ fun FeedbackScreen(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 27.dp, horizontal = 20.dp)
+                            .padding(vertical = 27.dp, horizontal = 24.dp)
                             .background(
                                 VieweeColorMain.copy(alpha = 0.08f),
                                 RoundedCornerShape(10.dp)

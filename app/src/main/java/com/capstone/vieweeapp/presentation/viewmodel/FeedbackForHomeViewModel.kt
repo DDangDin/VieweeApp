@@ -106,9 +106,9 @@ class FeedbackForHomeViewModel @Inject constructor(
         }
     }
 
-    fun requestServerForReInterview() {
-        viewModelScope.launch {
-            vieweeRepository.requestServerForReInterview(TempRequest(""))
-        }
-    }
+//    fun requestServerForReInterview() {
+//        viewModelScope.launch {
+//            vieweeRepository.requestServerForReInterview(TempRequest(""))
+//        }
+//    }
 }

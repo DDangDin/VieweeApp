@@ -1,31 +1,45 @@
 package com.capstone.vieweeapp.presentation.view.profile
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
@@ -39,10 +53,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.capstone.vieweeapp.R
+import com.capstone.vieweeapp.data.source.local.entity.Resume
+import com.capstone.vieweeapp.presentation.view.interview.select_resume.ResumeCardViewTopBar
+import com.capstone.vieweeapp.ui.theme.VieweeColorBackgroundGrey
 import com.capstone.vieweeapp.ui.theme.VieweeColorMain
 import com.capstone.vieweeapp.ui.theme.VieweeColorText
 import com.capstone.vieweeapp.ui.theme.noToSansKr
@@ -55,13 +73,16 @@ fun ProfileScreen(
     modifier: Modifier = Modifier,
     name: String,
     onNameChanged: (String) -> Unit,
-    saveName: (String) -> Unit
+    saveName: (String) -> Unit,
+    resumes: List<Resume>
 ) {
 
     val context = LocalContext.current
 
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    var selectedIndex by remember { mutableStateOf(-1) }
 
     Box(
         modifier = modifier
@@ -108,6 +129,48 @@ fun ProfileScreen(
             ResumeSection(
                 modifier = Modifier.fillMaxWidth()
             )
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(
+                    17.dp,
+                    alignment = Alignment.CenterVertically
+                ),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                contentPadding = PaddingValues(vertical = 1.dp)
+            ) {
+                itemsIndexed(resumes) { idx, resume ->
+
+                    val borderColor =
+                        if ((idx == selectedIndex)) {
+                            VieweeColorMain.copy(alpha = 0.8f)
+                        } else {
+                            VieweeColorMain.copy(0.4f)
+                        }
+                    val borderStroke =
+                        if ((idx == selectedIndex)) 2.dp else 1.3.dp
+                    val backgroundColor =
+                        if (idx == selectedIndex) {
+                            VieweeColorMain.copy(0.1f)
+                        } else {
+                            VieweeColorBackgroundGrey
+                        }
+
+                    ResumeCardView(
+                        modifier = Modifier
+                            .border(borderStroke, borderColor, RoundedCornerShape(10.dp))
+                            .background(backgroundColor, RoundedCornerShape(10.dp)),
+                        resume = resume,
+                        idx = idx,
+                        onClick = {
+                            if (selectedIndex == idx) {
+                                selectedIndex = -1
+                            } else {
+                                selectedIndex = idx
+                            }
+                        },
+                    )
+                }
+            }
         }
         Text(
             modifier = Modifier
@@ -119,6 +182,54 @@ fun ProfileScreen(
             fontWeight = FontWeight.Light,
             color = VieweeColorText.copy(0.3f)
         )
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun ResumeCardView(
+    modifier: Modifier = Modifier,
+    resume: Resume,
+    idx: Int,
+    onClick: () -> Unit,
+) {
+
+    var expanded by remember { mutableStateOf(false) }
+
+    Box(
+        modifier = modifier
+            .animateContentSize(
+                animationSpec = tween(100, easing = FastOutSlowInEasing)
+            )
+            .clip(RoundedCornerShape(10.dp))
+            .combinedClickable(
+                onClick = onClick,
+            )
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(7.dp, alignment = Alignment.Top),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            ResumeCardViewTopBar(
+                modifier = Modifier.fillMaxWidth(),
+                changeExpanded = { expanded = !expanded },
+                expanded = expanded,
+                resumeName = "${resume.name} ${idx + 1}",
+            )
+            androidx.compose.material.Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = resume.resumeDetail.resumeText,
+                fontSize = 13.sp,
+                textAlign = TextAlign.Left,
+                color = VieweeColorText,
+                maxLines = if (expanded) 100 else 3,
+                overflow = TextOverflow.Ellipsis,
+                lineHeight = 19.sp
+            )
+        }
     }
 }
 
@@ -265,6 +376,7 @@ fun ProfileScreenPreview() {
         modifier = Modifier.fillMaxWidth(),
         name = "",
         onNameChanged = {},
-        saveName = {}
+        saveName = {},
+        resumes = emptyList()
     )
 }

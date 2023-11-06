@@ -103,12 +103,21 @@ fun HomeScreen(
                 )
             }
             // Today's Calendar Section
-            HomeTodayCalendar(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = Constants.HOME_PADDING_VALUE_HORIZONTAL.dp),
-                username = username
-            )
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(
+                    20.dp,
+                    alignment = Alignment.CenterVertically
+                ),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                HomeTodayCalendar(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = Constants.HOME_PADDING_VALUE_HORIZONTAL.dp),
+                    username = username
+                )
+            }
             // InterviewResult Section
             Column(
                 modifier = Modifier.fillMaxWidth(),
