@@ -84,7 +84,8 @@ fun RealInterviewApplicantView(
     startListening: () -> Unit,
     text: String,
     onTextChanged: (String) -> Unit,
-    isInterviewerTurn: Boolean
+    isInterviewerTurn: Boolean,
+    isReInterview: Boolean
 ) {
 
     // 이미지 캡처 시 필요한 변수,
@@ -146,6 +147,14 @@ fun RealInterviewApplicantView(
 
     var size by remember { mutableStateOf(IntSize.Zero) }
 
+    var isMicClick by remember { mutableStateOf(false) }
+
+    LaunchedEffect(key1 = isInterviewerTurn) {
+        if (isInterviewerTurn) {
+            isMicClick = false
+        }
+    }
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -174,15 +183,17 @@ fun RealInterviewApplicantView(
             }
         )
 
-        ReFeedbackBadge(
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(10.dp),
-            count = "0",
-            backgroundColor = VieweeColorMain,
-            textColor = Color(0xFFD9D9D9),
-            forInterview = true
-        )
+        if (isReInterview) {
+            ReFeedbackBadge(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(10.dp),
+                count = "0",
+                backgroundColor = VieweeColorMain,
+                textColor = Color(0xFFD9D9D9),
+                forInterview = true
+            )
+        }
 
         Column(
             modifier = Modifier
@@ -195,7 +206,12 @@ fun RealInterviewApplicantView(
             )
         ) {
             Text(
-                text = if (isInterviewerTurn) "" else "답변 시 클릭 후 말해주세요",
+//                text = if (isInterviewerTurn) "" else "답변 시 클릭 후 말해주세요",
+                text = if (!isInterviewerTurn && !isMicClick) {
+                    "답변 시 클릭 후 말해주세요"
+                } else {
+                    ""
+                },
                 fontFamily = noToSansKr,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.SemiBold,
@@ -211,7 +227,10 @@ fun RealInterviewApplicantView(
                         if (isInterviewerTurn) Color.Transparent else VieweeColorMain,
                         CircleShape
                     )
-                    .clickable { startListening() },
+                    .clickable {
+                        startListening()
+                        isMicClick = true
+                    },
                 painter = painterResource(id = R.drawable.ic_mic),
                 contentDescription = "말하기",
             )
@@ -270,6 +289,7 @@ fun RealInterviewApplicantViewPreview() {
         startListening = {},
         text = "",
         onTextChanged = {},
-        isInterviewerTurn = true
+        isInterviewerTurn = true,
+        isReInterview = true
     )
 }

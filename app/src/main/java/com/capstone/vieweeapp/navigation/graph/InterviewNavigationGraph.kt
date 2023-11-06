@@ -179,7 +179,8 @@ fun InterviewNavigationGraph(
                                 previousInterviewResultId = previousInterviewResultId
                             )
                         )
-                    }
+                    },
+                    isReInterview = isReInterview
                 )
             }
         }

@@ -160,7 +160,7 @@ fun FeedbackScreen(
                                 "수고하셨습니다",
                         modifier = modifier
                             .fillMaxWidth()
-                            .padding(bottom = 60.dp),
+                            .padding(bottom = 30.dp),
                         textAlign = TextAlign.Center,
                         fontStyle = FontStyle.Normal,
                         fontSize = 25.sp,

@@ -10,6 +10,7 @@ import com.capstone.vieweeapp.data.source.local.entity.Feedbacks
 import com.capstone.vieweeapp.data.source.local.entity.InterviewResult
 import com.capstone.vieweeapp.data.source.local.entity.TextSentiment
 import com.capstone.vieweeapp.data.source.local.entity.toCreateQuestionReqDto
+import com.capstone.vieweeapp.data.source.local.entity.toKorean
 import com.capstone.vieweeapp.data.source.remote.clova.dto.Confidence
 import com.capstone.vieweeapp.data.source.remote.clova.dto.TextSentimentReqDto
 import com.capstone.vieweeapp.data.source.remote.clova.dto.toTextSentiment
@@ -304,13 +305,18 @@ class InterviewViewModel @Inject constructor(
             is RealInterviewUiEvent.StartFeedback -> {
                 viewModelScope.launch {
                     var answerRequest = ""
+//                    var facialEmotionRequest = ""
+//                    var textSentimentRequest = ""
 
                     for (idx in answerList.indices) {
+                        // 답변 만
                         answerRequest += "${idx + 1}. ${answerList[idx]}"
+
+                        // 분석데이터 포함 버전
 //                        answerRequest += "${idx + 1}. ${answerList[idx]}, (" +
-//                                "질문에 대한 답변 분석 데이터 결과: " +
-//                                "표정 분석 결과(${feedbackState.value.emotionList[idx]})," +
-//                                "답변 텍스트 감정 분석 결과(${feedbackState.value.textSentimentList.response[idx]?.document?.sentiment ?: ""})" +
+//                                "표정 감정 분석 데이터 결과(${emotionList[idx].toKorean()})," +
+//                                "답변 텍스트 감정 분석 결과(${textSentimentList[idx].sentiment}" +
+//                                ")" +
 //                                "\n"
                     }
 

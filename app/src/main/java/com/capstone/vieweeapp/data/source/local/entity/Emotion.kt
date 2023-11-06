@@ -47,3 +47,13 @@ fun Emotion.toPairList(): List<Pair<String, Int>> {
         Pair(FacialEmotionNames.en[6], happy),
     )
 }
+
+fun Emotion.toKorean(): String {
+    return "${FacialEmotionNames.ko[0]}: ${this.surprise} / " +
+            "${FacialEmotionNames.ko[1]}: ${this.fear} / " +
+            "${FacialEmotionNames.ko[2]}: ${this.angry} / " +
+            "${FacialEmotionNames.ko[3]}: ${this.neutral} / " +
+            "${FacialEmotionNames.ko[4]}: ${this.sad} / " +
+            "${FacialEmotionNames.ko[5]}: ${this.disgust} / " +
+            "${FacialEmotionNames.ko[6]}: ${this.happy}"
+}
