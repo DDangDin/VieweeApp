@@ -465,7 +465,8 @@ private fun FeedbackDetailCardGridForHome(
                     textSentiment2 = if (isReInterview && (index + (interviewResult.textSentiments.size / 2)) < interviewResult.textSentiments.size) {
                         interviewResult.textSentiments[index + (interviewResult.textSentiments.size / 2)]
                     }
-                    else TextSentiment("", Confidence(0.0, 0.0, 0.0))
+                    else TextSentiment("", Confidence(0.0, 0.0, 0.0)),
+                    index = index
                 )
                 if (!isReInterview) {
                     EachReInterviewSection(

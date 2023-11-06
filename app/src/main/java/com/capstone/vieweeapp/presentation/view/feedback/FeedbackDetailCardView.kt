@@ -79,7 +79,8 @@ fun FeedbackDetailCardView(
     detailContent2: String = "",
     emotion: Emotion,
     textSentiment: TextSentiment,
-    textSentiment2: TextSentiment
+    textSentiment2: TextSentiment,
+    index: Int
 ) {
     var isExpanded by remember { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
@@ -132,7 +133,7 @@ fun FeedbackDetailCardView(
             ) {
                 Text(
                     modifier = Modifier.padding(bottom = 11.dp),
-                    text = "질문: $detailTitle",
+                    text = "질문${index+1}: $detailTitle",
                     textAlign = TextAlign.Center,
                     fontFamily = noToSansKr,
                     fontWeight = FontWeight.SemiBold,
@@ -504,6 +505,7 @@ fun FeedFeedbackDetailCardViewPreview() {
         textSentiment2 = TextSentiment(
             "",
             Confidence(0.0, 0.0, 0.0)
-        )
+        ),
+        index = 0
     )
 }

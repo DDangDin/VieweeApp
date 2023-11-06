@@ -466,7 +466,8 @@ private fun FeedbackDetailCardGrid(
                 } else {
                     textSentimentList[index]
                 },
-                textSentiment2 = textSentimentList[index]
+                textSentiment2 = textSentimentList[index],
+                index = index
             )
         }
     }

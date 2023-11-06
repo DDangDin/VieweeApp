@@ -11,10 +11,25 @@ data class FeedbackResDto(
 
 fun FeedbackResDto.toFeedbacks(): Feedbacks {
     return Feedbacks(
+        // version 1
+//        feedbacks = feedbacks
+//            .split(Constants.FEEDBACK_SEPARATOR)
+//            .filter { it.isNotEmpty() }
+//            .filter { it.length >= 11 }
+//            .map { it.substring(7) }
+////            .map { it.replace("\n", "") }
+
+        // version 2
         feedbacks = feedbacks
             .split(Constants.FEEDBACK_SEPARATOR)
             .filter { it.isNotEmpty() }
-            .map { it.substring(7) }
-//            .map { it.replace("\n", "") }
+            .filter { it.length >= 11 }
+            .map {
+                if (it.contains(":")) {
+                    it.split(":")[1]
+                } else {
+                    it
+                }
+            }
     )
 }
