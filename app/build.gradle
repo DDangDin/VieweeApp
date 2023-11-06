@@ -164,7 +164,8 @@ dependencies {
     // Glide
 //    implementation "com.github.bumptech.glide:compose:1.0.0-alpha.1"
     // Coil
-    implementation "io.coil-kt:coil-compose:2.3.0"
+    implementation "io.coil-kt:coil-compose:2.5.0"
+    implementation "io.coil-kt:coil-gif:2.5.0"
 
     // CameraX
     implementation "androidx.camera:camera-core:${camerax_version}"

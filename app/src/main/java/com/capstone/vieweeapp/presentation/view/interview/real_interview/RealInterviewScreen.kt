@@ -294,21 +294,21 @@ fun RealInterviewScreen(
 //        )
 // ------------------------------------------------------------------------------------------
 
-        RealInterviewerView(
-            modifier = Modifier
-                .weight(1f)
-                .border(
-                    color = if (isInterviewerTurn) VieweeColorMain else Color.Transparent,
-                    width = 4.5.dp,
-                    shape = RoundedCornerShape(15.dp)
-                )
-                .clip(RoundedCornerShape(15.dp)),
-            filePath = if (isInterviewerTurn) {
-                "${Environment.getExternalStorageDirectory().absolutePath}${MediaSourcePath.InterviewerTalking}"
-            } else {
-                "${Environment.getExternalStorageDirectory().absolutePath}${MediaSourcePath.InterviewerListening}"
-            }
-        )
+//        RealInterviewerView2(
+//            modifier = Modifier
+//                .weight(1f)
+//                .border(
+//                    color = if (isInterviewerTurn) VieweeColorMain else Color.Transparent,
+//                    width = 4.5.dp,
+//                    shape = RoundedCornerShape(15.dp)
+//                )
+//                .clip(RoundedCornerShape(15.dp)),
+//            filePath = if (isInterviewerTurn) {
+//                "${Environment.getExternalStorageDirectory().absolutePath}${MediaSourcePath.GIF_SAMPLE}"
+//            } else {
+//                "${Environment.getExternalStorageDirectory().absolutePath}${MediaSourcePath.GIF_SAMPLE}"
+//            }
+//        )
 
 //        Spacer(modifier = Modifier.height(10.dp))
 

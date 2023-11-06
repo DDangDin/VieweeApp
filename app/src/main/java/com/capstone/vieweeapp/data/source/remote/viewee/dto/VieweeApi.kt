@@ -35,6 +35,26 @@ interface VieweeApi {
         @Body feedbackReq: ReFeedbackReqDto
     ): Call<FeedbackResDto>
 
+    @POST("gpt/interview/feedback/re_answer_feedback_2")
+    fun getReAnswerFeedback2(
+        @Body feedbackReq: ReFeedbackReqDto
+    ): Call<FeedbackResDto>
+
+    @POST("gpt/interview/feedback/re_answer_feedback_3")
+    fun getReAnswerFeedback3(
+        @Body feedbackReq: ReFeedbackReqDto
+    ): Call<FeedbackResDto>
+
+    @POST("gpt/interview/feedback/re_answer_feedback_4")
+    fun getReAnswerFeedback4(
+        @Body feedbackReq: ReFeedbackReqDto
+    ): Call<FeedbackResDto>
+
+    @POST("gpt/interview/feedback/re_answer_feedback_5")
+    fun getReAnswerFeedback5(
+        @Body feedbackReq: ReFeedbackReqDto
+    ): Call<FeedbackResDto>
+
     // 재면접 피드백 주는
     @POST("gpt/re_Interview/feedback")
     fun getReInterviewFeedback(

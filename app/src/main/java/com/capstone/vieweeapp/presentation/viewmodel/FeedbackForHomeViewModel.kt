@@ -61,13 +61,14 @@ class FeedbackForHomeViewModel @Inject constructor(
             is FeedbackForHomeUiEvent.EachReInterview -> {
                 viewModelScope.launch {
                     vieweeRepository.getReAnswerFeedback1(
-                        ReFeedbackReqDto(
+                        feedbackReqDto = ReFeedbackReqDto(
                             facialExpressionAnalysisData = "",
                             textSentimentAnalysisData = "",
                             allAnswersFeedback = "",
                             answerFeedback = "",
                             reAnswer = uiEvent.answer
-                        )
+                        ),
+                        index = uiEvent.index
                     ).onEach { result ->
                         when (result) {
                             is Resource.Success -> {

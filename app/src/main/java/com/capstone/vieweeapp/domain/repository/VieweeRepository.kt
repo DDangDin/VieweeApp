@@ -18,7 +18,7 @@ interface VieweeRepository {
 
     suspend fun getAllAnswersFeedback(feedbackReqDto: FeedbackReqDto): Flow<Resource<FeedbackResDto>>
 
-    suspend fun getReAnswerFeedback1(feedbackReqDto: ReFeedbackReqDto): Flow<Resource<FeedbackResDto>>
+    suspend fun getReAnswerFeedback1(feedbackReqDto: ReFeedbackReqDto, index: Int): Flow<Resource<FeedbackResDto>>
 
     suspend fun getReInterviewFeedback(feedbackReqDto: ReFeedbackReqDto): Flow<Resource<FeedbackResDto>>
 

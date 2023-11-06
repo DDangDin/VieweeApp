@@ -279,7 +279,7 @@ fun FeedbackScreenForHome(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 27.dp, horizontal = 20.dp)
+                        .padding(vertical = 27.dp, horizontal = 24.dp)
                         .background(
                             VieweeColorMain.copy(alpha = 0.08f),
                             RoundedCornerShape(10.dp)

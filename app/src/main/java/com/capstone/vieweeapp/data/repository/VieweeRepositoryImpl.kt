@@ -78,11 +78,18 @@ class VieweeRepositoryImpl(
         }
     }
 
-    override suspend fun getReAnswerFeedback1(feedbackReqDto: ReFeedbackReqDto): Flow<Resource<FeedbackResDto>> = flow {
+    override suspend fun getReAnswerFeedback1(feedbackReqDto: ReFeedbackReqDto, index: Int): Flow<Resource<FeedbackResDto>> = flow {
         emit(Resource.Loading())
 
         try {
-            val call = api.getReAnswerFeedback1(feedbackReqDto)
+            val call = when(index) {
+                0 -> api.getReAnswerFeedback1(feedbackReqDto)
+                1 -> api.getReAnswerFeedback2(feedbackReqDto)
+                2 -> api.getReAnswerFeedback3(feedbackReqDto)
+                3 -> api.getReAnswerFeedback4(feedbackReqDto)
+                4 -> api.getReAnswerFeedback5(feedbackReqDto)
+                else -> api.getReAnswerFeedback1(feedbackReqDto)
+            }
             val response = call.await()
             emit(Resource.Success(response))
         } catch (e: IOException) {
