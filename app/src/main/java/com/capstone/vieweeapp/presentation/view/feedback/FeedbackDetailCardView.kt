@@ -22,6 +22,7 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.runtime.Composable
@@ -34,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -78,6 +80,7 @@ fun FeedbackDetailCardView(
     isReInterview: Boolean = false,
     detailContent2: String = "",
     emotion: Emotion,
+    emotion2: Emotion,
     textSentiment: TextSentiment,
     textSentiment2: TextSentiment,
     index: Int
@@ -100,8 +103,7 @@ fun FeedbackDetailCardView(
 //    var tapDialogVisible by remember { mutableStateOf(false) }
     LaunchedEffect(key1 = Unit) {
         Timber.tag("FeedbackDetailCardView_Log").d("" +
-                "sentiment: ${textSentiment.sentiment}\n" +
-                "sentences: ${textSentiment.sentences}" +
+                "emotion: ${emotion}\n" +
                 "")
     }
 
@@ -277,16 +279,53 @@ fun FeedbackDetailCardView(
                             text = stringResource(id = R.string.feedback_detail_card_facial_graph),
                             fontSize = 17.sp
                         )
-                        FacialAnalyzedGraph(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            emotionTopThree = emotion
-                                .toPairList()
-                                .sortedBy { it.second }
-                                .reversed()
-                                .subList(0, 3)
-                                .map { it.first }
-                        )
+                        if (isReInterview) {
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy(19.dp, alignment = Alignment.CenterVertically)
+                            ) {
+                                FacialAnalyzedGraph(
+                                    modifier = Modifier
+                                        .fillMaxWidth(),
+                                    emotionTopThree = emotion
+                                        .toPairList()
+                                        .sortedBy { it.second }
+                                        .reversed()
+                                        .subList(0, 3)
+                                        .map { it.first }
+                                )
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_replay_trianglegraph_triangle),
+                                    contentDescription = "arrowRight",
+                                    tint = Color.Gray,
+                                    modifier = Modifier
+                                        .size(30.dp)
+                                        .rotate(90f)
+                                )
+                                FacialAnalyzedGraph(
+                                    modifier = Modifier
+                                        .fillMaxWidth(),
+                                    emotionTopThree = emotion2
+                                        .toPairList()
+                                        .sortedBy { it.second }
+                                        .reversed()
+                                        .subList(0, 3)
+                                        .map { it.first }
+                                )
+                            }
+                        } else {
+                            FacialAnalyzedGraph(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                emotionTopThree = emotion
+                                    .toPairList()
+                                    .sortedBy { it.second }
+                                    .reversed()
+                                    .subList(0, 3)
+                                    .map { it.first }
+                            )
+                        }
                         CustomTitleText(
                             modifier = Modifier.padding(top = 15.dp),
                             text = stringResource(id = R.string.feedback_detail_card_triangle_graph),
@@ -498,6 +537,7 @@ fun FeedFeedbackDetailCardViewPreview() {
         isReInterview = true,
         detailContent2 = "답변(2회차)",
         emotion = emotion,
+        emotion2 = emotion,
         textSentiment = TextSentiment(
             "",
             Confidence(0.0, 0.0, 0.0)

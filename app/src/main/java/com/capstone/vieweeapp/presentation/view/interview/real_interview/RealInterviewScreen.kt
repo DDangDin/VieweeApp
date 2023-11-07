@@ -194,6 +194,7 @@ fun RealInterviewScreen(
                         !interviewerTurnState.isInterviewerTurn
                     ) {
                         textVoiceSpeechViewModel.startListening(Constants.VOICE_TO_TEXT_LANGUAGE)
+                        Log.d("STT_LOG", "Start Listening")
                     }
                 },
                 text = text,

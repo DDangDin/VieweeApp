@@ -117,7 +117,7 @@ fun EachReInterviewSection(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .padding(horizontal = 25.dp, vertical = 10.dp),
+                    .padding(start = 25.dp, end = 25.dp, top = 21.dp, bottom = 23.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(
                     7.dp,

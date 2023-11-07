@@ -211,7 +211,8 @@ fun FeedbackScreen(
                                     )
                                 )
                                 LaunchedEffect(key1 = Unit) {
-                                    Timber.tag("feedback_screen_log").d("textSentimentListTotalSize: ${textSentimentList.size}")
+                                    Timber.tag("feedback_screen_log")
+                                        .d("textSentimentListTotalSize: ${textSentimentList.size}")
                                 }
                             }
                         }
@@ -228,7 +229,8 @@ fun FeedbackScreen(
                             )
 
                             LaunchedEffect(key1 = Unit) {
-                                Timber.tag("feedback_screen_log").d("emotionListTotalSize: ${emotionList.size}")
+                                Timber.tag("feedback_screen_log")
+                                    .d("emotionListTotalSize: ${emotionList.size}")
                             }
                         }
                     }
@@ -459,7 +461,12 @@ private fun FeedbackDetailCardGrid(
                 detailContent2 = if (isReInterview) {
                     answerList[index]
                 } else "",
-                emotion = emotionList[index],
+                emotion = if (isReInterview) {
+                    feedbackState.previousInterviewResult?.emotions?.get(index) ?: Emotion(1, 1, 1, 1, 1, 1, 1)
+                } else {
+                  emotionList[index]
+                },
+                emotion2 = emotionList[index],
                 textSentiment = if (isReInterview) {
                     feedbackState.previousInterviewResult?.textSentiments?.get(index)
                         ?: TextSentiment("", Confidence(0.0, 0.0, 0.0))

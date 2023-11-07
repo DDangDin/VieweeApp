@@ -124,8 +124,10 @@ fun FeedbackScreenForHome(
 ) {
 
     LaunchedEffect(key1 = Unit) {
-        Timber.tag("feedback_screen_log").d("emotionListSize: ${interviewResult.emotions.size}\n" +
-                "textSentimentsSize: ${interviewResult.textSentiments.size}")
+        Timber.tag("feedback_screen_log").d(
+            "emotionListSize: ${interviewResult.emotions.size}\n" +
+                    "textSentimentsSize: ${interviewResult.textSentiments.size}"
+        )
     }
 
     val scrollState = rememberScrollState()
@@ -460,11 +462,15 @@ private fun FeedbackDetailCardGridForHome(
                     isReInterview = isReInterview,
                     detailContent2 = if (isReInterview) interviewResult.answers[index + (interviewResult.answers.size / 2)] else "",
                     emotion = interviewResult.emotions[index],
+                    emotion2 = if (isReInterview && (index + (interviewResult.emotions.size / 2)) < interviewResult.emotions.size) {
+                        interviewResult.emotions[index + (interviewResult.emotions.size / 2)]
+                    } else {
+                        Emotion(1, 1, 1, 1, 1, 1, 1)
+                    },
                     textSentiment = interviewResult.textSentiments[index],
                     textSentiment2 = if (isReInterview && (index + (interviewResult.textSentiments.size / 2)) < interviewResult.textSentiments.size) {
                         interviewResult.textSentiments[index + (interviewResult.textSentiments.size / 2)]
-                    }
-                    else TextSentiment("", Confidence(0.0, 0.0, 0.0)),
+                    } else TextSentiment("", Confidence(0.0, 0.0, 0.0)),
                     index = index
                 )
                 if (!isReInterview) {
