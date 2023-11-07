@@ -116,7 +116,7 @@ fun ProfileScreen(
                 modifier = Modifier.padding(top = 40.dp),
                 name = name,
                 onNameChanged = { onNameChanged(it) },
-                info = "개발자‧신입‧4년제 졸업",
+                info = "제품디자이너‧신입‧4년제 졸업",
                 saveName = { saveName(it) },
                 keyboardController = keyboardController,
                 focusManager = focusManager
